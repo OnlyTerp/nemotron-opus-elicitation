@@ -1,2 +1,66 @@
-# scratch
+# Scratch
 *.tmp
+
+# Bench intermediate files (regenerable, not needed for the release)
+bench/outputs/
+bench/ceil_outputs/
+bench/hard_outputs/
+bench/pers_outputs/
+bench/v13_outputs/
+bench/v16_outputs/
+bench/v17_outputs/
+bench/logic_outputs/
+bench/logic2_outputs/
+bench/code_outputs/
+bench/reason_outputs/
+bench/fab_outputs/
+bench/grades/
+bench/raw/
+bench/ceil_raw/
+bench/hard_raw/
+bench/pers_raw/
+bench/v13_raw/
+bench/v16_raw/
+bench/v17_raw/
+bench/logic_raw/
+bench/code_raw/
+bench/mixed_raw/
+bench/qwen_raw/
+bench/sys/
+bench/prompts/
+bench/ceil_prompts/
+bench/hard_prompts/
+bench/pers_prompts/
+bench/logic_prompts/
+bench/logic2_prompts/
+bench/code_prompts/
+bench/reason_prompts/
+bench/v17_prompts/
+bench/v17_mx_prompts/
+bench/v13_prompts/
+bench/v16_prompts/
+bench/ceil_drivers/
+bench/hard_drivers/
+bench/pers_drivers/
+bench/logic_drivers/
+bench/logic2_drivers/
+bench/code_drivers/
+bench/v13_drivers/
+bench/v16_drivers/
+bench/v17_drivers/
+bench/v17_mx_drivers/
+bench/blind/
+bench/ceil_blind/
+bench/hard_blind/
+bench/logic_blind/
+bench/logic2_blind/
+bench/code_blind/
+bench/mixed_blind/
+bench/qwen_blind/
+bench/results*.md
+bench/*.json
+bench/*.py
+
+# Keep these (the source of truth)
+# bench/testbank*.md
+# bench/grade_*.txt (rubrics)
