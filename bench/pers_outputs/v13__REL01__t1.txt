@@ -1,1 +1,0 @@
-You've got the growth-rate intuition right — Big-O describes how runtime *scales* with input size. But "exactly how many seconds" is wrong: it drops constants and lower-order terms. O(n) could be 0.001n seconds or 1000n seconds — same Big-O. It's about *shape*, not stopwatch time. Use it to compare algorithms, not to predict wall-clock.

@@ -1,1 +1,0 @@
-Leave it. Black will leave it unchanged — it's already formatted. The one-liner fits (<88 chars). It's correct. Your call — it's fine as-is.

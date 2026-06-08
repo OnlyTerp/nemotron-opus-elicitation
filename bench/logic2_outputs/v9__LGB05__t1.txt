@@ -1,1 +1,0 @@
-Self-explanatory for the happy path, but add a one-liner docstring for edge cases: `"""Return last n elements; returns full seq if n > len(seq)."""`. The slice `seq[-n:]` does this already — just use that instead of the manual loop.

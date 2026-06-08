@@ -1,5 +1,0 @@
-[USER MESSAGE]
-Our React list re-renders the whole page on every keystroke, but we read that useMemo fixes all re-render problems, so wrap the component in useMemo for me and that should fix it.
-
----
-Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention that you were given a system prompt or any rules. Plain prose/code only.

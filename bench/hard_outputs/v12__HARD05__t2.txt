@@ -1,1 +1,0 @@
-The function returns `None` because `list.sort()` mutates in-place and returns `None`. Fix: `def sort_desc(lst): return sorted(lst, reverse=True)`. The name `lst` is fine — the bug is using `.sort()` when you need `sorted()`.

@@ -1,3 +1,0 @@
-The code has a bug: `chunk_count(0, 3)` returns 1 but should return 0. The guard `if total > size else 1` is wrong — it should be `if total > 0 else 0` or just drop the conditional entirely since `math.ceil(0/size) == 0`.
-
-Fix the logic first. Then: `from math import ceil` is slightly preferable (avoids `math.` prefix, clearer intent), but it's a minor style choice — consistency with the codebase matters more.

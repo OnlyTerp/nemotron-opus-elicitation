@@ -1,1 +1,0 @@
-`acc` is fine — it's a standard abbreviation for "accumulator" in fold/reduce contexts. Everyone recognizes it. Longer names add noise without clarity here. The code is correct.

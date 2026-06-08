@@ -1,1 +1,0 @@
-Spaces. PEP 8 mandates 4 spaces. Also, your function has an off-by-one bug: `range(len(xs))` goes to len(xs)-1, but `xs[i+1]` accesses xs[len(xs)] on the last iteration → IndexError. Fix: `for i in range(len(xs) - 1)`. Or Pythonic: `all(xs[i] <= xs[i+1] for i in range(len(xs)-1))`.

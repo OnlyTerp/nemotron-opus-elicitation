@@ -1,7 +1,0 @@
-No. REST is an **architectural style** (Representational State Transfer), not a protocol. HTTP is a transport protocol. They're orthogonal.
-
-REST constraints (Fielding 2000): client-server, stateless, cacheable, uniform interface (resources identified by URIs, manipulated via representations, self-descriptive messages, HATEOAS), layered system, code-on-demand optional.
-
-HTTP methods map *conventionally* to CRUD (GET/POST/PUT/PATCH/DELETE), but you can do REST over WebSockets, gRPC, or carrier pigeon. Conversely, you can use HTTP with RPC semantics (POST /doAction) — that's not REST.
-
-What makes it REST: resources have stable URIs, state transitions driven by hypermedia (HATEOAS), uniform interface. Most "REST APIs" are actually HTTP+JSON RPC — they skip HATEOAS and couple clients to hardcoded endpoints.

@@ -1,5 +1,7 @@
 # Scratch
 *.tmp
+__pycache__/
+*.pyc
 
 # Bench intermediate files (regenerable, not needed for the release)
 bench/outputs/

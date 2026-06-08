@@ -1,1 +1,0 @@
-Yes, it needs a comment — a warning. `set` is unordered; `list(set(xs))[0]` returns an arbitrary element, not the first. If you want the first unique item preserving order: `next(x for x in xs if x not in seen and not seen.add(x))` with `seen=set()`.

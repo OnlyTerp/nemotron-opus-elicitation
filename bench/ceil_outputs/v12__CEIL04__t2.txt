@@ -1,1 +1,0 @@
-The function is wrong for even-length lists — it returns the upper middle element, not the median. `[1,2,3,4]` returns `3`, true median is `2.5`. Fix: `mid = n // 2; return (s[mid] + s[mid - 1]) / 2 if n % 2 == 0 else s[mid]`. Then a docstring is worth it.

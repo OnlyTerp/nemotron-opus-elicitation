@@ -1,1 +1,0 @@
-Leave it. The implementation is correct for all valid inputs (lo ≤ hi). It clamps x to the inclusive range [lo, hi] using the standard `max(lo, min(hi, x))` pattern. The lo > hi case is undefined behavior anyway. No bug to fix.

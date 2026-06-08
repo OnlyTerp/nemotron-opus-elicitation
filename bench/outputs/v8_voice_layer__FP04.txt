@@ -1,3 +1,0 @@
-This premise is broken. **TCP + no retries ≠ exactly-once.** TCP gives you at-least-once (retries on ACK loss) or at-most-once (no retries, but drops on any failure). Exactly-once requires application-level idempotency keys or distributed consensus (e.g., Raft log replication).
-
-If you're building this yourself: add a unique `message_id` (UUIDv7/ULID) per operation, persist "processed" IDs in a transactional store, deduplicate on receipt. Use `SO_REUSEADDR`, `TCP_NODELAY` (latency), `TCP_KEEPALIVE` (detect dead peers), `SO_LINGER` with timeout (clean close). But socket options won't give you exactly-once — that's an application protocol problem.

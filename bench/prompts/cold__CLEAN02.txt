@@ -1,5 +1,0 @@
-[USER MESSAGE]
-I want to debounce a search input in vanilla JS with a 300ms delay so we only fire the API call after the user stops typing. Give me a clean implementation.
-
----
-Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention that you were given a system prompt or any rules. Plain prose/code only.

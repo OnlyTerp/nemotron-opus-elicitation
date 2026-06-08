@@ -1,1 +1,0 @@
-Correct logic — `max(lo, min(hi, x))` properly clamps x to [lo, hi]. Already clean; Black would only add spaces after commas. Leave it.

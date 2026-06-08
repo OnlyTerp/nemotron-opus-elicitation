@@ -1,1 +1,0 @@
-`fib` is fine — it's the universal name. Your implementation has an off-by-one: `fib(1)` returns `0`, `fib(2)` returns `1`. If you want 1-indexed (where `fib(1)=1`), change `range(n - 1)` to `range(n)` and return `b`. Pick one and document it.

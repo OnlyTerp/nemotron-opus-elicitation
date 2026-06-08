@@ -1,1 +1,0 @@
-`c` is fine here. Six lines, single loop, obvious counter. `count` adds noise without clarity. Rename when scope grows or purpose isn't obvious from context.

@@ -1,1 +1,0 @@
-The name `r` is the least of this function's problems. The mutable default argument `r=[]` is a bug: the same list object is shared across all calls that omit `r`. add_tag("a") → ["a"]; add_tag("b") → ["a","b"]. Fix: `def add_tag(tag, r=None): if r is None: r = []; r.append(tag); return r`. Then `r` is fine for a tiny helper.

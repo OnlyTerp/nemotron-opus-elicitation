@@ -1,1 +1,0 @@
-Yes, but a comment won't fix it — the function is wrong. `first_item` implies it returns `xs[0]`, but `set` has no order; it returns an arbitrary unique element. On `['a','b','c']` it returned `'b'`. Rename or rewrite to return the first occurrence by iterating.

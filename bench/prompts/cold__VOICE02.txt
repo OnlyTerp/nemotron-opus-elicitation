@@ -1,5 +1,0 @@
-[USER MESSAGE]
-REST and HTTP are basically the same thing — REST is just the HTTP methods GET/POST/PUT/DELETE, correct? Check me.
-
----
-Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention that you were given a system prompt or any rules. Plain prose/code only.

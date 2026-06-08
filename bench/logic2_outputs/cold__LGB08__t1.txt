@@ -1,1 +1,0 @@
-Leave it. Black would format identically — it's already clean. The `setdefault` chaining is idiomatic. Black only changes things that violate its style; this doesn't.

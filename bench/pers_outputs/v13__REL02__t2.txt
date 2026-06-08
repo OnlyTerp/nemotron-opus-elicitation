@@ -1,1 +1,0 @@
-Wrong premise — Python lists are arrays of *pointers*, contiguous in memory. Indexing any position is O(1) pointer arithmetic + dereference. Middle vs end makes zero asymptotic difference; cache effects might give nanoseconds variance, not measurable.

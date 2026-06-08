@@ -1,1 +1,0 @@
-Not strictly needed — `dict.fromkeys(xs)` is a well-known idiom for order-preserving dedup. But a one-line docstring helps: `"""Return list with duplicates removed, preserving first occurrence order."""` In Python 3.7+ `dict` preserves insertion order so this works.

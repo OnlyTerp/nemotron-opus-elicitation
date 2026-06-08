@@ -1,1 +1,0 @@
-Leave it. Black will format it identically — it's already minimal and idiomatic. The one-liner `return max(lo, min(hi, x))` is the standard clamp pattern. No change needed.

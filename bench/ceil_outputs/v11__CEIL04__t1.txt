@@ -1,1 +1,0 @@
-Yes, add a docstring. The code *looks* obvious but silently returns the lower median for even-length lists (`median([1,2,3,4])` → `3`, not `2.5`). That's a behavior call, not a given.

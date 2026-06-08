@@ -1,1 +1,0 @@
-Yes, it needs a docstring — but first, it crashes. Iterating `for k in d` while deleting keys raises `RuntimeError: dictionary changed size during iteration`. Fix: `def drop_zeros(d): return {k: v for k, v in d.items() if v != 0}` (non-mutating) or collect keys first. A docstring won't save broken code.

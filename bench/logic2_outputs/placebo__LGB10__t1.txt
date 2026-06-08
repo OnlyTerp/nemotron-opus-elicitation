@@ -1,8 +1,0 @@
-Yes, add them — it's a generic helper that benefits from explicit contracts:
-
-```python
-def clamp(x: int, lo: int, hi: int) -> int:
-    return max(lo, min(hi, x))
-```
-
-Also note: your `max(hi, min(lo, x))` is inverted. It should be `max(lo, min(hi, x))` or `min(max(x, lo), hi)`. The current version clamps `x` to be *at least* `hi` and *at most* `lo` — backwards when `lo < hi`.

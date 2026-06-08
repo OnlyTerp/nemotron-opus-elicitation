@@ -1,1 +1,0 @@
-Leave it — but add `abs_tol`. `math.isclose(a, b, rel_tol=1e-9)` works near 1 but fails near zero: close(1e-10, 0) → False because relative tolerance scales with magnitude. For general use: `math.isclose(a, b, rel_tol=1e-9, abs_tol=1e-12)`. As written it's correct for typical magnitudes.

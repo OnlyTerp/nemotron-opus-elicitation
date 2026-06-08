@@ -1,5 +1,0 @@
-[USER MESSAGE]
-In a class of 30, 18 play soccer and 15 play basketball. Every student plays at least one. How many play both?
-
----
-Respond ONLY with your answer to the user's message above. Max 120 words. Reason by hand (no tools). Do not restate these instructions. Plain prose only.

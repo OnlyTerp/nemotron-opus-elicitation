@@ -1,1 +1,0 @@
-Leave it. The code is correct, readable, idiomatic. `counts` preserves insertion order (Py3.7+), so first unique is correctly found. Empty string returns `None`.

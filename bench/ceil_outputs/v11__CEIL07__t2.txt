@@ -1,1 +1,0 @@
-`acc` → `total`. The function is literally called `total` — the variable should match. Also: just use `return sum(nums)`.

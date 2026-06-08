@@ -1,1 +1,0 @@
-The inner loop is clear — it's a simple sum accumulation. No comment needed. The logic is obvious: `total += x` for each element. Comments that restate code add noise.

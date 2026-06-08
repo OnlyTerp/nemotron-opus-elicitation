@@ -1,9 +1,0 @@
-It's simple enough to skip a full docstring, but a one-line type hint + comment helps:
-
-```python
-def last_n(seq, n):
-    """Return last n elements of seq (empty if n > len(seq))."""
-    return seq[-n:] if n <= len(seq) else list(seq)
-```
-
-Actually, just use slicing: `seq[-n:]` handles all cases correctly and is the Pythonic way. The loop is unnecessary — and the current code crashes when `n > len(seq)`. Slicing fixes both.

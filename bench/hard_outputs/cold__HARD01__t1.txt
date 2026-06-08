@@ -1,1 +1,0 @@
-`r` is too short, but the real problem is the mutable default `r=[]`. This creates a single list shared across all calls — a classic Python bug. Each call appends to the same list. Fix: `def add_tag(tag, r=None): r = [] if r is None else r; r.append(tag); return r`. Also rename `r` to `result` or `tags` for clarity.

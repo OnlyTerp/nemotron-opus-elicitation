@@ -1,1 +1,0 @@
-Rename to `count`. `c` saves three keystrokes but costs every reader a mental lookup. In a 5-line function the scope is tiny, but the pattern scales poorly — when someone adds logic between the loop and return, `c` becomes a liability. `count` is unambiguous and standard.

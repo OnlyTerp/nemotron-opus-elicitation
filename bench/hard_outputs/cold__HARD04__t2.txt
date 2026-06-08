@@ -1,1 +1,0 @@
-One line is fine. The function is trivial: identity check via `is`. However, `same` is a poor name — it suggests equality (`==`), not identity. Rename to `is_same_object` if identity is truly intended; otherwise use `==` for equality.

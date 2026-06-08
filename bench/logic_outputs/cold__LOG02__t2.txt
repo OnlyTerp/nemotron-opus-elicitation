@@ -1,1 +1,0 @@
-`acc` is a common FP abbreviation for "accumulator" — recognizable to FP practitioners but opaque to many Python developers. For general Python code, prefer explicit names like `accumulator`, `result`, `collected`, or `items` depending on context. Reserve `acc` for internal FP-style helpers where the fold/reduce pattern is obvious.

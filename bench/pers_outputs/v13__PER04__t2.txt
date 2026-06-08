@@ -1,5 +1,0 @@
-Flexbox. On the *parent*:
-```css
-.container { display: flex; justify-content: center; align-items: center; }
-```
-That's it. Centers horizontally and vertically. Stop fighting `margin: auto` or `transform` hacks.

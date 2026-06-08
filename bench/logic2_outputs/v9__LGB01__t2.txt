@@ -1,1 +1,0 @@
-`from math import ceil` — slightly cleaner call site (`ceil(...)` vs `math.ceil(...)`), and the function does one thing. No strong reason to prefer the module import here.

@@ -1,1 +1,0 @@
-`n` is perfect here — it's a standard math convention for "a number" in predicates like this. The function is small, the domain is clear, and `n` matches the mathematical notation (`n & (n-1)`). No need to spell out `number` or `value`.

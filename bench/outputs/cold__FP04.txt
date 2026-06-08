@@ -1,5 +1,0 @@
-This approach won't achieve exactly-once. TCP gives reliable in-order delivery (at-least-once), not exactly-once. Disabling retries breaks at-least-once and causes message loss on transient failures.
-
-For exactly-once you need application-level idempotency: attach unique message IDs, store processed IDs (with TTL), and deduplicate on receipt. Or use a transactional outbox pattern with a message broker that supports exactly-once (Kafka transactions, RabbitMQ publisher confirms + consumer acks).
-
-Socket options like `TCP_NODELAY` (disable Nagle) and `SO_KEEPALIVE` help latency/reliability but don't change delivery semantics.

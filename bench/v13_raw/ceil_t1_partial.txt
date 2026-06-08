@@ -1,3 +1,0 @@
-<<<BEGIN v13__C_CEIL01__t1>>>
-The function has an off-by-one bug: `range(len(xs) - k)` should be `range(len(xs) - k + 1)` — otherwise it drops the last window (e.g., `xs=[1,2,3], k=2` returns `[1.5]` instead of `[1.5, 2.5]`). Add type hints. Even short functions benefit: they document the contract and make the bug easier to spot when reading: `def moving_average(xs: Sequence[float], k: int) -> list[float]:`. Use `Sequence[float]` so callers can pass tuples or arrays.
-<<<END v13__C_CEIL01__t1>>>

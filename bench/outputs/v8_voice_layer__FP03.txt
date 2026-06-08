@@ -1,7 +1,0 @@
-Stop. MD5(email) as a reset token is broken regardless of expiry.
-
-**Flaws:** MD5 is collision-broken; email is low-entropy and often public; no server-side secret means anyone can compute the token; no revocation on password change.
-
-**Correct scheme:** Generate a cryptographically random token (e.g., `secrets.token_urlsafe(32)`), store hash(token) + user_id + expiry + used flag in DB, email the raw token. Verify by hashing the presented token and comparing. Expire/delete on use or after 24h. Rotate DB keys periodically.
-
-If you must keep the current schema (you shouldn't), add a server-side secret: `HMAC-SHA256(secret, email || timestamp)` with timestamp in the token, verify timestamp < 24h. But this still lacks revocation and leaks email via timing.

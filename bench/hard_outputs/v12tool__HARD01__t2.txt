@@ -1,1 +1,0 @@
-`r` is too short — it's opaque. Call it `result` or `tags`. But the real problem is the mutable default: `r=[]` creates one list shared across all calls. Your second call returns `['a', 'b']` instead of `['b']`. Fix: `def add_tag(tag, result=None): if result is None: result = []; result.append(tag); return result`.

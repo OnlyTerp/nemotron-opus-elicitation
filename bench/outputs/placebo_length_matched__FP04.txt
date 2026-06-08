@@ -1,5 +1,0 @@
-This won't give you exactly-once — TCP provides reliable, ordered delivery but doesn't solve application-level duplicates. Network partitions, process crashes mid-handling, or client retries will still cause duplicates. "Disabling retries" just moves the problem to the caller.
-
-For exactly-once semantics you need idempotency keys or deduplication at the application layer: attach a unique message ID (UUIDv7/ULID), persist "processed" IDs (with TTL) before handling, and reject duplicates. Use a transactional outbox pattern for your own publishes.
-
-If you're using a message broker (Kafka, RabbitMQ, NATS JetStream), enable exactly-once / idempotent producer settings and consumer-side deduplication. For raw sockets: implement a request/response with IDs, persist state durably before ACK, and handle redelivery gracefully. There's no socket option for this — it's an application protocol concern.

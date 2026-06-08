@@ -1,1 +1,0 @@
-Leave it. This is the canonical one-liner for clamping. It's correct, branchless. Formatting adds zero value.

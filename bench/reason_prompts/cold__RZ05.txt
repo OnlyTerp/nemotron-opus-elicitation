@@ -1,5 +1,0 @@
-[USER MESSAGE]
-If 8 painters paint 8 fences in 8 hours, how many hours for 40 painters to paint 40 fences?
-
----
-Respond ONLY with your answer to the user's message above. Max 120 words. Reason by hand (no tools). Do not restate these instructions. Plain prose only.

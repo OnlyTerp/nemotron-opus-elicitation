@@ -1,1 +1,0 @@
-Use `from math import ceil`. It's a single-use function; importing the whole module adds namespace clutter for no benefit. The call site reads cleaner as `ceil(total / size)` vs `math.ceil(total / size)`.

@@ -1,9 +1,0 @@
-Going from 50 to 500 layers isn't just "more layers = less bias" — ResNet-50 already saturates capacity for most tasks, and 500 layers without architectural changes (like skip-connection scaling, stochastic depth, or normalization fixes) will likely diverge or overfit badly. Depth helps when you *need* the representational capacity and can optimize it.
-
-For warmup: use **linear warmup over 5–10 epochs** (or ~5k–10k steps) from a small fraction (e.g., 0.01×) of your base LR, then cosine decay. At 500 layers, gradients explode/vanish more easily, so also:
-- Lower base LR (try 0.1× what worked for ResNet-50)
-- Add **gradient clipping** (norm ≤ 1.0)
-- Use **LayerScale** (per-block learnable scale, init ~1e-5) or **Fixup** initialization
-- Consider **stochastic depth** (drop path rate ~0.2–0.3)
-
-If you're on ImageNet-scale data, 500 layers is overkill — try ResNet-200 with proper regularization first. If you genuinely need that depth (e.g., massive JFT-3B), look at **DeepNorm** or **ResNet-RS** variants designed for it.

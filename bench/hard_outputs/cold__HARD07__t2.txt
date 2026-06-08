@@ -1,1 +1,0 @@
-A docstring is useful but not critical. `dict.fromkeys(xs)` preserves insertion order (Python 3.7+) and dedupes efficiently. The behavior is clear. No mutation, no side effects. Correct.

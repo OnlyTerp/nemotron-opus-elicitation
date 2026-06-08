@@ -1,1 +1,0 @@
-No comment needed. The retry loop is a standard, recognizable pattern: counter increments on each `TransientError`, loops until `max_retries`, then raises. Any experienced reader recognizes this pattern instantly. A comment would be noise.

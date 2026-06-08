@@ -1,6 +1,0 @@
-The logic is wrong — it returns `True` on the *first* positive number, not "all positive." That's the real issue. Assuming you meant `all(n > 0 for n in nums)`: no comment needed, the name and implementation are clear. If you keep the loop, fix it:
-```python
-def all_positive(nums):
-    return all(n > 0 for n in nums)
-```
-A comment on a broken return doesn't help — fix the logic first.

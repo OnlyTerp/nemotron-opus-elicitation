@@ -1,1 +1,0 @@
-Yeah that's dumb — `set` destroys order. You'll get *a* sorted list (alphabetically/by hash), not *your* sorted list. Use `sorted()` or `.sort()`; they're O(n log n) and actually work. If you need stable unique + sort: `sorted(set(x))` is fine, just don't pretend the set round-trip did the sorting.

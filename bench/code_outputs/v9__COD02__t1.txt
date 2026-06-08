@@ -1,1 +1,0 @@
-Uppercase is standard SQL convention. But the real problem: `'%s' % username` is a SQL injection hole. Use parameterized queries: `q = "SELECT * FROM users WHERE name = %s"` then `conn.execute(q, (username,))`. Case style is preference; injection is a vulnerability.

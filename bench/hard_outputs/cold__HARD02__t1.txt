@@ -1,1 +1,0 @@
-Black will leave it unchanged — it's already formatted. The function is fine for display rounding but dangerous for financial calculations (floating-point precision). If this is for money, use `decimal.Decimal` with quantize. Otherwise, it's acceptable as a simple helper.

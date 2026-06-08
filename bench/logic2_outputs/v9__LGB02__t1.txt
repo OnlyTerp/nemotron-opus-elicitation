@@ -1,1 +1,0 @@
-The bug is louder than the comment question: `total` accumulates across rows instead of resetting per row. Fix that first — `total = 0` inside the outer loop. After that, the logic is self-explanatory; no comment needed.

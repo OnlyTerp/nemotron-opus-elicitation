@@ -1,1 +1,0 @@
-Yes, rename `lst`. The function also has a bug: `list.sort()` returns `None`, mutating in-place. So `sort_desc` returns `None`, not the sorted list. Fix: return `sorted(lst, reverse=True)`.

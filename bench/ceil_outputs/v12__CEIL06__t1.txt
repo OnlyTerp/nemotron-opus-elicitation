@@ -1,3 +1,0 @@
-No bugs — logic is correct. `counts` dict preserves insertion order (Py3.7+), so second loop finds first unique character in string order.
-
-Code is already clean. Black would make only trivial whitespace changes. Run it if the project enforces Black; otherwise leave it.

@@ -1,1 +1,0 @@
-`from math import ceil` is slightly cleaner here since you only use `ceil` once — avoids the `math.` prefix. But both are fine; follow your project's existing style.

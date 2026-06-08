@@ -1,1 +1,0 @@
-Leave it. Black would change nothing meaningful here — the function is already one expression. Formatting tools earn their keep on larger files where consistency reduces cognitive load. For a three-line helper, the diff noise isn't worth it. If you're running Black on the whole project, let it touch this file too; just don't run it *for* this file.

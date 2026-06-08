@@ -1,1 +1,0 @@
-Type hint is the least of your problems — line 5 has `total = total`, a no-op. You meant `total = n`. The function returns the first element regardless of input. Fix the bug first.

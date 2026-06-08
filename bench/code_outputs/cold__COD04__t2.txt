@@ -1,3 +1,0 @@
-1024 bytes (1 KiB) is very small for modern disks — you'll make ~1M syscalls per GB. Use **64 KiB–1 MiB** (e.g., `65536` or `1048576`). Python's `shutil.copyfileobj` defaults to 64 KiB; `shutil.copy` uses `os.sendfile` (kernel zero-copy) when available, which is fastest.
-
-Also: use `with open(...)` for both files to ensure they close on error.

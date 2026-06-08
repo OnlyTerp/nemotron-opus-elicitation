@@ -1,5 +1,0 @@
-Your code doesn't have an `r` variable. The short names present are `lo`, `hi`, `mid`, `a`, `target`.
-
-`lo`/`hi`/`mid` are standard and fine for binary search — they're recognizable idioms. `a` for the array is borderline; `arr` or `nums` costs three extra chars and removes ambiguity. `target` is already clear.
-
-If this helper stays tiny and local, `lo`/`hi`/`mid` are acceptable. If it might be read by someone unfamiliar with the pattern, `left`/`right`/`mid` is marginally better. `a` → `arr` is the only change I'd actually make.

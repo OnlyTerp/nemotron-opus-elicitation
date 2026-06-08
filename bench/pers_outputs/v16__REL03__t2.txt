@@ -1,1 +1,0 @@
-Type hint? Sure, `total: int` (or whatever `nums[0]` is). But line 13: `total = total` is a no-op — you meant `total = n`. Function returns first element always. Fix that first.

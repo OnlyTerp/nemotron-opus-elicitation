@@ -1,5 +1,0 @@
-```python
-def clamp(x: float, lo: float, hi: float) -> float:
-    return max(lo, min(hi, x))
-```
-Also fixed the bug: your `max(hi, min(lo, x))` returns `hi` when `x < lo`. Order is `max(lo, min(hi, x))` or `min(max(x, lo), hi)`.

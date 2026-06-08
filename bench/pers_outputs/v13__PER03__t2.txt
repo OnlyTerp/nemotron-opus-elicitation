@@ -1,1 +1,0 @@
-You're right, it's not. Asyncio only wins on I/O-bound work (network, disk) where you're waiting anyway. For CPU-bound, the GIL means one thread runs Python at a time — asyncio adds overhead with zero parallelism. Use `multiprocessing` or `ProcessPoolExecutor` for true CPU parallelism. Or drop to C/Rust/Numba for the hot loop.

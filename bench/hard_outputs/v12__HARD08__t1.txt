@@ -1,1 +1,0 @@
-Leave it — but consider adding `abs_tol`. `math.isclose(a, b, rel_tol=1e-9)` works for values near 1, but fails near zero: `close(1e-10, 0)` → `False`. For a general "close" function use both rel_tol and abs_tol. The code as written is correct for typical magnitudes.

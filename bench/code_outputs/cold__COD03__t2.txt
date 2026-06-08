@@ -1,3 +1,0 @@
-`getData` is too generic — it doesn't convey *what* data or *from where*. Since it fetches JSON from multiple URLs, prefer `fetchJsonFromUrls`, `getJsonFromUrls`, or `fetchMultipleJson`.
-
-Also, the function has a bug: `forEach` doesn't await the async callbacks, so it returns an empty array. Use `Promise.all(urls.map(u => fetch(u).then(r => r.json())))` instead.

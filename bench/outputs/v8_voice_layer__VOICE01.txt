@@ -1,5 +1,0 @@
-No. Big-O describes *asymptotic growth rate* — how runtime scales as input size → ∞, ignoring constants and lower-order terms. It does not predict seconds.
-
-Example: both `1000n` and `0.001n²` are O(n) and O(n²) respectively, but for n=100 the quadratic one (10ms) beats the linear one (100s). Constants matter in practice.
-
-Big-O tells you: "if I 10x the input, this algorithm gets ~10x slower (linear) vs ~100x slower (quadratic)." Use it to compare algorithms at scale, not to estimate wall-clock time. For actual seconds: benchmark on your hardware with realistic data.

@@ -1,1 +1,0 @@
-`acc` is fine. Clear, idiomatic for "accumulator." Rename only if the function does something non-obvious (e.g., `weighted_sum` → `weighted_total`). No bug here.

@@ -1,1 +1,0 @@
-Rename to `items` or `seq`, but the real bug: `list.sort()` returns None and mutates in place. sort_desc([3,1,2]) returns None. Fix: `def sort_desc(items): return sorted(items, reverse=True)`.

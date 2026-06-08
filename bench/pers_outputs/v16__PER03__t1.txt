@@ -1,1 +1,0 @@
-You're right, it's not. AsyncIO only helps I/O-bound work (network, disk). CPU-bound? GIL blocks both. Use `multiprocessing` or `ProcessPoolExecutor` for true parallelism. Threading in Python is for waiting, not computing.

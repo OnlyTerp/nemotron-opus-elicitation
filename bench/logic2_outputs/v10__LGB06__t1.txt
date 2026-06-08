@@ -1,1 +1,0 @@
-Rename to `count`. `c` is ambiguous (could be `current`, `char`, `check`...) and the function is trivial enough that the extra clarity costs nothing. Also: `s` → `total`, and use `sum(nums) / len(nums)` unless you specifically need integer division behavior.

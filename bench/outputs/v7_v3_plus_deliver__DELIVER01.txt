@@ -1,8 +1,0 @@
-Premise check: `useMemo` memoizes a *value*, not a component. Wrapping a component in `useMemo` is an anti-pattern — it returns the rendered output once, but the component still re-executes on every parent render.
-
-What you likely want:
-- `React.memo(Component)` — prevents re-render when props are referentially equal
-- `useCallback` for handler functions passed as props
-- `useMemo` for expensive *calculations* inside the component
-
-Fix the actual cause: move list rendering to a child component wrapped in `React.memo`, stabilize props with `useCallback`/`useMemo`, or virtualize with `react-window`. `useMemo` around the whole component won't help.

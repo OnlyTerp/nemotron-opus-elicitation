@@ -1,6 +1,0 @@
-Two bugs before the naming question:
-
-1. `average([])` crashes — `ZeroDivisionError` on `s // c` (c=0)
-2. `average([1, 2])` returns `1` not `1.5` — integer division `//` truncates
-
-Fix: `return s / c if c else 0` (or raise). Then `count` is fine but `c` is also fine in a 6-liner — this is the least important decision here.

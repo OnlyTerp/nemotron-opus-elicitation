@@ -1,1 +1,0 @@
-Rename it to `count`. Single-letter names are only defensible for loop indices or throwaway variables in tight scopes. Here `c` lives across 4 lines and represents a semantic concept — the element count — so `count` pays for itself in readability with zero cost.

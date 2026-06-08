@@ -1,1 +1,0 @@
-The code has a bug — `total` accumulates across rows instead of resetting per row. Fix that first. After fixing, the inner loop is clear enough; a comment would just restate the obvious. What needs a comment is *why* you're summing rows this way if there's a non-obvious reason.

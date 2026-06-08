@@ -1,1 +1,0 @@
-`from math import ceil` is slightly preferable here — avoids the `math.` prefix for a single function, reads cleaner. If you need multiple math functions, `import math` wins. Personal/team style either works; just be consistent.

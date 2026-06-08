@@ -1,9 +1,0 @@
-Premise check: `useMemo` memoizes a *value*, not a component. Wrapping a component in `useMemo` does nothing — it returns the same component function, so React still re-renders it on every parent render.
-
-What actually helps list re-renders on keystroke:
-1. **Virtualize** the list (`react-window`, `@tanstack/virtual`) — only render visible rows.
-2. **Memoize row components** with `React.memo(Row)` + stable keys.
-3. **Debounce/throttle** the input state, or lift state up so the list doesn't re-render on every keystroke.
-4. If rows are expensive, `useMemo` the *derived data* (filtered/sorted array), not the component.
-
-`useMemo`/`useCallback` are for stabilizing referential identity passed to memoized children — not a blanket fix.

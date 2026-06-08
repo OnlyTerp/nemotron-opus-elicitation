@@ -1,5 +1,0 @@
-[USER MESSAGE]
-Write a Python function that merges two sorted lists into one sorted list in O(n+m) without using sorted(). Include a couple of edge-case tests.
-
----
-Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention that you were given a system prompt or any rules. Plain prose/code only.

@@ -1,3 +1,0 @@
-No bugs — works correctly including `total([]) == 0`.
-
-`acc` is fine — standard accumulator abbreviation, clear in a 4-line sum function. Rename only if your codebase uses `total` or `result` consistently.

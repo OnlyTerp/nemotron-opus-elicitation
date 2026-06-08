@@ -1,3 +1,0 @@
-The variable `r` doesn't appear in the snippet you posted — the locals are `a`, `target`, `lo`, `hi`, `mid`.
-
-For a tiny helper like this, short names are fine: `lo`/`hi`/`mid` are standard in binary search, and the function fits on one screen. If you had an `r` (e.g., for a result), `idx` or `pos` would be clearer, but in a 10-line function the cognitive load is low enough that terse names don't hurt.

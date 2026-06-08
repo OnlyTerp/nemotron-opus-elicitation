@@ -1,1 +1,0 @@
-Leave it. Black would keep this identical. The `max(lo, min(hi, x))` idiom is standard and readable. Formatting a 2-line function that's already idiomatic is pointless.

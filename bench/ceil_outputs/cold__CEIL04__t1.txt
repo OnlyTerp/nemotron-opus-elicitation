@@ -1,1 +1,0 @@
-Add a one-line docstring. The implementation returns the lower middle for even-length lists (`n // 2`), not the average of the two middle values. That's a valid definition but not the statistical median. A docstring prevents callers from assuming standard median behavior.

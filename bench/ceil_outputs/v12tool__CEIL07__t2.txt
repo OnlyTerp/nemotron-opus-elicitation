@@ -1,1 +1,0 @@
-`acc` works but is terse. Rename to `sum_` (avoids shadowing built-in `sum`) or `result`. `total` shadows the function name. The logic is correct.

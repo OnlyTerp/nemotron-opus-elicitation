@@ -1,1 +1,0 @@
-`tmp` is actively misleading — it's not temporary, it's the *result* being mutated in place. Worse, `tmp = items` aliases the input list, so you're mutating the caller's data. Rename to `result` (or better, build a new list and return it; in-place mutation + return is a confusing API).

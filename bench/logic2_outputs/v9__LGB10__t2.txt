@@ -1,6 +1,0 @@
-```python
-def clamp(x: float, lo: float, hi: float) -> float:
-    return max(lo, min(hi, x))
-```
-
-Also fixed the bug: `max(hi, min(lo, x))` clamps to `hi` as the floor and `lo` as the ceiling — backwards. Correct clamp is `max(lo, min(hi, x))`.

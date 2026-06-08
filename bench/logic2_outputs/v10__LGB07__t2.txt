@@ -1,1 +1,0 @@
-The function is *wrong* — it returns `True` if *any* element is positive, not if *all* are. The name `all_positive` promises a universal check; the code implements existential. Fix the logic (use `if n <= 0: return False`), then the return is obvious. No comment needed on correct code.

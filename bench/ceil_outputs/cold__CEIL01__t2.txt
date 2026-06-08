@@ -1,1 +1,0 @@
-Add type hints — it's a 5-line function with non-obvious types (sequence in, list of floats out). `def moving_average(xs: Sequence[float], k: int) -> list[float]:` is clean and pays off immediately.

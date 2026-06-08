@@ -1,1 +1,0 @@
-Yes, worth a docstring. The function mutates the input dict in-place while also returning it — this dual behavior is surprising. A docstring should warn: "Removes keys with value 0 from dict `d` in-place and returns `d`." Better: return a new dict `{k:v for k,v in d.items() if v != 0}` to avoid mutation surprises.

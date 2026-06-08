@@ -1,1 +1,0 @@
-Rename to `count`. Single-letter names are fine for tight loops or math contexts (`i`, `x`, `n`), but `c` for a counter in a readable function adds cognitive load for zero benefit. `count` (or `length`) is instantly clear. Same for `s` → `total` or `sum_`. The function is also better written as `return sum(nums) // len(nums)` with a guard for empty input.

@@ -1,8 +1,0 @@
-The import is purely style — both work. Your code has a bug though: `chunk_count(0, 5)` returns `1` but should return `0`. The condition `total > size` is wrong; it should be `total > 0`.
-
-```python
-from math import ceil
-
-def chunk_count(total, size):
-    return ceil(total / size) if total > 0 else 0
-```

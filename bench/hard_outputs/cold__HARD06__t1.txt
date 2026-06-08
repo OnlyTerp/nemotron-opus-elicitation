@@ -1,1 +1,0 @@
-Yes, needs a comment — and likely a fix. `list(set(xs))[0]` returns an arbitrary element (set order is arbitrary), not the "first" in any meaningful sense. It also raises `IndexError` on empty input. If you want the first unique item preserving order: `next(x for x in xs if xs.count(x) == 1)` or use `dict.fromkeys(xs)` to dedupe then take first.

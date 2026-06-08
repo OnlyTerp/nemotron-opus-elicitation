@@ -1,9 +1,0 @@
-The return is **not obvious** — the function is buggy. `all_positive` suggests "all numbers are positive," but the logic returns `True` if *any* number is positive. It should return `False` immediately on any `n <= 0` and only return `True` after the loop completes.
-
-```python
-def all_positive(nums):
-    for n in nums:
-        if n <= 0:
-            return False
-    return True
-```

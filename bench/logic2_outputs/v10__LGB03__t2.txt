@@ -1,8 +1,0 @@
-Two lines, and add parentheses to fix the precedence bug (`age == 0` binds tighter than `or`):
-
-```python
-def is_valid_age(age):
-    return (age > 0 and age < 150) or age == 0
-```
-
-The extra line prevents the exact misreading that's currently in your code.

@@ -1,1 +1,0 @@
-Add a one-line docstring. The implementation has a subtle bug (even-length lists return upper median, not average of two middle values) — the docstring makes the behavior explicit so callers know what they're getting.

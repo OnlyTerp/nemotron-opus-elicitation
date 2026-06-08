@@ -1,1 +1,0 @@
-Leave it. `math.isclose` with explicit `rel_tol=1e-9` is good practice. Consider adding `abs_tol` for near-zero values. No formatting changes needed.

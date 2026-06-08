@@ -1,3 +1,0 @@
-`n` is fine here — it's the conventional math notation for "an integer" and the function is small, self-contained, and implements a well-known bit trick. Anyone reading this will recognize the pattern instantly.
-
-If this lived in a larger module with multiple numeric parameters, or if the function did more than one thing, I'd want `value` or `number` for clarity. But for a pure predicate this size? `n` is the right call.

@@ -1,1 +1,0 @@
-`fib` is fine — it's the universal shorthand for Fibonacci. Spelling out `fibonacci` adds 7 characters for zero clarity gain. Keep `fib`.

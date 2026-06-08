@@ -1,1 +1,0 @@
-`fib` is fine. The real issue: your function returns F(n-1), not F(n). `fib(1)` returns 0, `fib(2)` returns 1. Standard: F(0)=0, F(1)=1. Fix the loop to `range(n)` and return `a`. Also add a guard for `n <= 0`.

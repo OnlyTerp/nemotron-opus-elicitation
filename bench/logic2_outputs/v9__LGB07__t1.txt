@@ -1,1 +1,0 @@
-The function is *wrong* — returns `True` if *any* element is positive, not *all*. Fix: `if n <= 0: return False` then `return True` after the loop. Once fixed, the logic is obvious; no comment needed.

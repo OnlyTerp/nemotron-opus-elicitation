@@ -1,1 +1,0 @@
-Wrong. Python lists are arrays of pointers to objects, stored contiguously. Indexing is O(1) — `list[i]` is pointer arithmetic. Middle vs. end makes zero difference. Your real problem: if you're doing `pop(0)` or `insert(0, x)`, that's O(n) because everything shifts. If you need fast front operations, use `collections.deque`. Don't optimize indexing — it's already optimal.

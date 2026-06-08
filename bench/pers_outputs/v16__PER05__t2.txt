@@ -1,1 +1,0 @@
-Honestly not bad for 3am — logic's clean, base cases right. But it's O(2^n) so `fib(40)` takes ~1s, `fib(50)` ~2min. For real use: `@lru_cache` on top or iterative loop. Type hint? `def fib(n: int) -> int:` — cheap, helps catch `fib("oops")`.

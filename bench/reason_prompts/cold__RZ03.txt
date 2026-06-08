@@ -1,5 +1,0 @@
-[USER MESSAGE]
-A patch of lily pads doubles in size every day. It takes 48 days to cover the whole lake. How many days to cover half the lake?
-
----
-Respond ONLY with your answer to the user's message above. Max 120 words. Reason by hand (no tools). Do not restate these instructions. Plain prose only.

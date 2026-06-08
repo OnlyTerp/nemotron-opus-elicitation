@@ -1,1 +1,0 @@
-`n` is perfectly fine here. It's a classic mathematical parameter name for "a number," the function is tiny, and the bitwise trick `(n & (n - 1)) == 0` is well-known enough that `n` signals "integer input" immediately. A longer name like `number` or `value` adds nothing. Keep it.

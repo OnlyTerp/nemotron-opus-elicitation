@@ -1,6 +1,0 @@
-Add type hints. The function is small but the contract isn't obvious: `xs` expects a sequence of numbers, `k` an int > 0, and the return is `list[float]`. Without hints, callers can't tell if `xs` accepts iterators (it doesn't — `len(xs)` and slicing require `Sequence`), or whether `k` can exceed `len(xs)` (it silently returns empty). The hints cost one line and prevent real bugs:
-
-```python
-def moving_average(xs: Sequence[float], k: int) -> list[float]:
-    ...
-```

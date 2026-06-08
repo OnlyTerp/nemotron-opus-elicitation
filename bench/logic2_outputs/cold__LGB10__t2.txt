@@ -1,6 +1,0 @@
-```python
-def clamp(x: float, lo: float, hi: float) -> float:
-    return max(lo, min(hi, x))
-```
-
-Also fixed the logic: `max(lo, min(hi, x))` clamps `x` between `lo` and `hi` (your original had `hi`/`lo` swapped).

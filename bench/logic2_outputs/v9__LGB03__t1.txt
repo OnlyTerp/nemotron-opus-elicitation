@@ -1,5 +1,0 @@
-Two lines — the precedence is ambiguous as written (`and` binds tighter than `or`). Write:
-```python
-return (age > 0 and age < 150) or age == 0
-```
-or better: `return 0 <= age < 150`. The chained comparison is idiomatic, unambiguous, and fits on one line.

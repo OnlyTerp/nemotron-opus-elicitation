@@ -1,1 +1,0 @@
-Rename to `count`. `c` is ambiguous (character? char code? constant?) and saves 4 chars at the cost of readability. `s` → `total` for the same reason. The whole function is `sum(nums) // len(nums)` if you're not avoiding builtins.

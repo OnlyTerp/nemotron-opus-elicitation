@@ -1,4 +1,0 @@
-```css
-.parent { display: flex; justify-content: center; align-items: center; }
-```
-Done. Flexbox centers both axes. If you need IE11 support (why), use `margin: auto` on the child with defined width. Grid works too: `display: grid; place-items: center;`.

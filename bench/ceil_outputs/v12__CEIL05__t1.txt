@@ -1,3 +1,0 @@
-Bug first: `fib(1)` returns `0` (should be `1`), `fib(3)` returns `1` (should be `2`). The loop runs `n-1` times but needs `n` times — change `range(n - 1)` to `range(n)`.
-
-`fib` is fine — standard, unambiguous in this context.

@@ -1,1 +1,0 @@
-`from math import ceil` — then call `ceil(total / size)`. The call site reads cleanly. Also your logic is wrong: `total > size` returns 1 for exact multiples (e.g., 10/5=2 but you'd return 1) and total=0 returns 1. Should be `(total + size - 1) // size` or `ceil(total / size)` unconditionally.

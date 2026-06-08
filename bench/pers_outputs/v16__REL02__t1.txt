@@ -1,1 +1,0 @@
-Nope — Python lists are arrays of pointers. Indexing *any* position is O(1) pointer arithmetic + dereference. Middle vs end is same speed (modulo cache lines, but 10M pointers ≈ 80MB fits in L3). You're confusing with linked lists or insertion cost.

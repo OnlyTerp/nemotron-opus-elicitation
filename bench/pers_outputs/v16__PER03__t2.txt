@@ -1,1 +1,0 @@
-You're right, it's not. Asyncio only helps I/O-bound work (network, disk) by overlapping waits. CPU-bound? GIL blocks all threads anyway. Use `multiprocessing` or `ProcessPoolExecutor` for true parallelism. Or rewrite the hot path in Rust/Cython/Numba if it's numeric.

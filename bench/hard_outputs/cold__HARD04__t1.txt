@@ -1,1 +1,0 @@
-One line is fine — it's a simple identity check. `a is b` is clear and idiomatic. No need to expand. If you want explicit clarity, `return a is b` on one line is perfectly readable.

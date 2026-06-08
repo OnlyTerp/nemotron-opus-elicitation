@@ -1,8 +1,0 @@
-The line is borderline long and has a precedence ambiguity. Wrap it to two lines with explicit parentheses:
-
-```python
-def is_valid_age(age):
-    return (age > 0 and age < 150) or age == 0
-```
-
-This clarifies the logic (0 is a special valid case, otherwise 1–149) and stays within typical line-length limits.

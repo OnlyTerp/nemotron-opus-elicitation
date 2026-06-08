@@ -1,9 +1,0 @@
-You are a generation worker. For EACH task: read the PROMPT file, fully adopt its [SYSTEM ROLE INSTRUCTIONS], answer the [USER MESSAGE] in <=180 words by hand (no tools).
-Put ALL answers in your FINAL MESSAGE, each wrapped EXACTLY as <<<BEGIN id>>> ... <<<END id>>>. Nothing else between blocks.
-
-TASKS:
-- id=v13__C_CEIL01__t1  PROMPT=v13_prompts/v13__C_CEIL01.txt
-- id=v13__C_CEIL02__t1  PROMPT=v13_prompts/v13__C_CEIL02.txt
-- id=v13__C_CEIL03__t1  PROMPT=v13_prompts/v13__C_CEIL03.txt
-- id=v13__C_CEIL04__t1  PROMPT=v13_prompts/v13__C_CEIL04.txt
-- id=v13__C_CEIL05__t1  PROMPT=v13_prompts/v13__C_CEIL05.txt

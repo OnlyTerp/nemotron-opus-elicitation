@@ -1,1 +1,0 @@
-Leave it. Black would change nothing. `round(x, 2)` is clear for monetary rounding to cents. However, consider `decimal.Decimal` for financial precision since `round()` uses banker's rounding and floats have representation issues (e.g., `round(2.675, 2) == 2.67`).

@@ -1,1 +1,0 @@
-Two lines — but the function is broken. `a is b` tests object identity, not equality. It works for small ints and interned strings, but fails for `int('257') is int('257')` → `False` (distinct objects). Use `a == b`. If you truly need identity, name it `is_same_object`.

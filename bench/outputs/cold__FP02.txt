@@ -1,9 +1,0 @@
-The premise is flawed: adding layers doesn't always reduce bias, and 500-layer ResNets without architectural changes (skip connections, normalization) will fail to train due to vanishing/exploding gradients. Standard ResNet-50 already has ~50 layers; ResNet-152 is ~152. Going to 500 requires careful design.
-
-For deep ResNets, use **linear warmup** over 5–10 epochs (or ~500–2000 steps) from a small LR (e.g., 0.1× base) to the target LR, paired with **cosine decay** or **step decay** after. For 500 layers specifically:
-- Warmup: 5–10 epochs linear from 1e-4 → 0.1 (if base LR=0.1)
-- Use **Layer-wise Adaptive Rate Scaling (LARS)** or **LAMB** optimizer
-- Add **Fixup initialization** or **DeepNorm** scaling
-- Consider **stochastic depth** (layer drop) during training
-
-Key: warmup alone won't fix a 500-layer vanilla ResNet. You need architectural modifications (pre-activation, improved skip connections, normalization placement) + proper initialization + gradient clipping (1.0) + possibly LayerScale.

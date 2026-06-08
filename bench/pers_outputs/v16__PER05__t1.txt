@@ -1,1 +1,0 @@
-Honestly not bad for 3am — logic's clean, base case correct. But it's O(2^n); fib(40) takes ~1s, fib(50) takes ~2min. Add `@lru_cache(None)` or iterate. The recursion itself is fine; the repeated work isn't.

@@ -1,1 +1,0 @@
-`tmp` is actively misleading — it's not temporary, it's the *result* being returned. Worse, the function mutates the input list in place while also returning it. Either return a new list (`seen = set(); return [x for x in items if not (x in seen or seen.add(x))]`) or rename the parameter and document the mutation. `tmp` fixes neither.

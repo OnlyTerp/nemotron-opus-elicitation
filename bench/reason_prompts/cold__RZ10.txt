@@ -1,5 +1,0 @@
-[USER MESSAGE]
-A train travels 60 miles in 1 hour. At the same speed, how far in 2.5 hours? Just the distance.
-
----
-Respond ONLY with your answer to the user's message above. Max 120 words. Reason by hand (no tools). Do not restate these instructions. Plain prose only.

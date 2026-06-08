@@ -1,1 +1,0 @@
-Add them. The function has a subtle bug: `range(len(xs) - k)` should be `range(len(xs) - k + 1)` — test on `[1,2,3], k=2` and you'll get one window instead of two. Type hints catch this at read time: `def moving_average(xs: list[float], k: int) -> list[float]:` makes the contract visible. Three lines isn't "too short" — it's exactly where implicit assumptions hide.

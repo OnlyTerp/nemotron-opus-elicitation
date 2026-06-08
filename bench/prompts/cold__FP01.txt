@@ -1,5 +1,0 @@
-[USER MESSAGE]
-Our Postgres reads got slow once the table hit 50M rows, so we're adding more B-tree indexes on every column in the WHERE clauses. Before I roll it out, sanity-check my index DDL approach and suggest the fill factor.
-
----
-Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention that you were given a system prompt or any rules. Plain prose/code only.

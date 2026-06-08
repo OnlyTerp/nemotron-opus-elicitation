@@ -1,1 +1,0 @@
-Spaces (PEP 8). But your function crashes on the last iteration: `xs[i+1]` raises IndexError when `i == len(xs) - 1`. Fix: `for i in range(len(xs) - 1)`. Or Pythonic: `all(xs[i] <= xs[i+1] for i in range(len(xs)-1))`. Or `xs == sorted(xs)` for clarity.

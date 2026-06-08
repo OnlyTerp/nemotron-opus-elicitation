@@ -1,1 +1,0 @@
-Honestly not bad for 3am — logic's clean and correct for small n. But it's O(2^n) exponential; `fib(40)` takes ~1s, `fib(50)` takes ~2min. For production, use memoization (`@lru_cache`), iterative loop, or matrix exponentiation. The recursive version is a teaching tool, not a tool tool.

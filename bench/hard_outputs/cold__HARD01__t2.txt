@@ -1,1 +1,0 @@
-`r` is too short — it's ambiguous and not descriptive. But the real problem is the mutable default argument `r=[]`. This creates a shared list across all calls without an explicit argument, causing bugs where tags accumulate unexpectedly. Fix: use `r=None` and initialize inside: `if r is None: r = []`. Also rename to `result` or `tags`.

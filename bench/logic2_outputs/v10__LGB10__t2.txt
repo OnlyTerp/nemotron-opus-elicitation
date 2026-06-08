@@ -1,8 +1,0 @@
-Yes, and fix the argument order — `clamp(x, lo, hi)` conventionally takes `min` then `max`:
-
-```python
-def clamp(x: float, lo: float, hi: float) -> float:
-    return max(lo, min(hi, x))
-```
-
-Your version has `max(hi, min(lo, x))` which clamps to `[hi, lo]` (backwards if `lo < hi`). Type hints catch this at static-check time.

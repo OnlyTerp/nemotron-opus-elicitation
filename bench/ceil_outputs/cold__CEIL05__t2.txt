@@ -1,1 +1,0 @@
-`fib` is fine — it's the universal name for Fibonacci. Spelling it out adds noise without clarity. If the module has multiple sequence generators, consider a namespace, but as a standalone function the abbreviation is standard.
