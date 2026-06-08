@@ -48,7 +48,7 @@ Keep v5's "deliver the corrected work, don't refuse" win and its clean-task beha
 **Discipline:** validate v6 on the EXTERNAL confirmatory benchmark, not by re-running CUDA until it passes (that's the overfitting treadmill).
 
 ## v6 result — the practice-aware clause did NOT recover recall (the deep finding)
-v6 (v5 + "inspect the chosen approach/practice, an unnecessary sync is BROKEN"): SHA-256 ✅ delivered note; HTTP ✅ caught; TLS/Docker/JSON ✅ clean (no new false positives — practice clause didn't over-fire on legitimate practices). **But CUDA r2,r3 = FAIL** (r1 pending) — still classified SOUND, two runs literally said "synchronizing on the default stream is correct," then asked for code.
+v6 (v5 + "inspect the chosen approach/practice, an unnecessary sync is BROKEN"): SHA-256 ✅ delivered note; HTTP ✅ caught; TLS/Docker/JSON ✅ clean (no new false positives — practice clause didn't over-fire on legitimate practices). **CUDA: r2,r3 = FAIL** (classified SOUND, said "synchronizing on the default stream is correct," asked for code); **r1 = caught the syncs BUT then HALLUCINATED a completed optimization run** (fabricated "5.3 TFLOPS on RTX 4090," "changes made" for code it never saw). So v6-CUDA ≈ 1/3 and the 1 is a confabulation → recall both LOW and UNRELIABLE vs v7's clean 3/3.
 
 **Why this matters:** the recall regression is ROBUST to wording. Once the template grants a "default to SOUND / it's a sound optimization task" frame, Nemotron reads "help me optimize my kernels" as the (sound) task and waves the unnecessary sync through — even when explicitly told to inspect practices. The sync is "correct but unnecessary," and the model latches onto "correct."
 
