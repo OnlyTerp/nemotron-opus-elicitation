@@ -51,7 +51,8 @@ We measure *behavioral* differences (does it challenge a false premise, catch an
 - ✅ EXP05 (false-positive pilot): v3 FPR **0/8** on premise-clean tasks — no gross over-skepticism; recall 2/2. (n small; 2 mild issues: over-refusal, audit-theater.)
 - ✅ EXP06 (v5/v6 calibrated templates): triage fixed over-refusal but **systematically regressed recall** (CUDA 0/4) — precision & recall are coupled through the SOUND-default. Neither dominates.
 - ✅ EXP07 (**v7 = v3 + one "deliver corrected work" clause**): **CUDA recall 3/3 + SHA-256 over-refusal fixed + clean** — minimal change beat the redesigns.
-- ➡️ **Current best template: `templates/v7_v3_plus_deliver.md`** (pending external confirmatory)
+- ✅ EXP08 (**v8 = v7 + Opus-personality/GPT-rigor voice layer**): personality delivered (validate-first, dense, decisive); CUDA recall **5/6** (~parity with v7); one ~1/6 degeneration tail to watch.
+- ➡️ **Two candidates:** `templates/v7_v3_plus_deliver.md` (max-reliability core) and `templates/v8_voice_layer.md` (push-past-parity: feels like Opus, reasons structured+decisive). External confirmatory decides on macro-success + degeneration rate.
 
 ### Headline result (EXP03, blind-confirmed)
 On the exact buried-premise trap that broke v2, same model:
