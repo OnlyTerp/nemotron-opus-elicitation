@@ -100,7 +100,17 @@ v13's persona was warm but locked in "senior practitioner" register — it never
 ## The thesis, restated honestly
 "Elicitation, not capability" **holds** — but the lever is **persona inhabitation supplying a missing disposition**, not an explicit reasoning scaffold. The deliverable is not a universal magic prompt; it is a method: **audit the base model for the disposition it lacks, then supply exactly that with the leanest possible persona.** For Nemotron 3 Ultra the lacking dispositions are (1) warm, validate-first VOICE, (2) a cheap premise-first nudge, (3) execute-verify on code, and (4) register calibration — and **`templates/v16_personality_calibrate.md`** (353 words) supplies all four without the degeneration, over-refusal, or VOICE costs of the earlier gate templates. It says "Hell yeah" when you're excited and "Nope" when you're wrong, catches silent code bugs the bare model misses, and validates what you got right before correcting what you got wrong. That's the deliverable.
 
-## Open questions / next tests
-- Quantify the VOICE effect at higher n with a dedicated validate-first rubric and ≥6 multi-turn threads (EXP15 was an existence check, n=2).
-- Does a model whose baseline is blunt in a *different* way (not VOICE) benefit from a differently-targeted persona? (Generalize the "audit then supply" method.)
-- The capability ceiling (LGB01/06-class traces): is it liftable at all by prompting, or only by tools (run-the-code) / fine-tuning?
+### R15 — Data-driven voice: extracting Opus's actual personality DNA (EXP24-25)
+The opus-candid dataset (6771 conversations distilled from Opus 4.6) revealed specific, measurable conversational moves:
+- **"That's [adjective]" opener** (7.2% of all messages) — #1 distinctive move. "That's real anxiety." / "That's a massive drop." / "That's the classic naive recursive Fibonacci."
+- **Imperative advice** (5.3%) — "Do X" not "you might consider X."
+- **Anti-patterns Opus avoids:** 0.4% robotic openings ("Certainly"), 0.2% apologetic, 3.6% hedging.
+
+v17 = v16 + these data-driven moves as explicit instructions (483 words, +130 over v16). EXP24: v17 uses "That's" opener 4/5 vs v16's 1/5 on personality probes. But EXP25 (full mixed battery): v17 9/10 vs v16 10/10 — one VOICE regression where v17 reverted to flat "No." The instruction doesn't make the pattern fire reliably enough to justify +130 words.
+
+**Lesson:** extracting actual personality patterns from distillation data is the right *approach* — it tells us exactly what Opus does. But translating those patterns into prompt instructions that reliably activate is harder than adding them; the model already has the disposition latent (v16 sometimes uses "That's" too). **v16 remains the recommendation.** The candid dataset is the natural next target for fine-tuning (LoRA), where installing voice moves is more reliable than prompting them.
+
+## Open questions
+- Fine-tuning (LoRA on the opus-candid dataset) to install the "That's" opener and other voice moves more reliably than prompting.
+- Does the "audit then supply" method generalize to other models with different baseline deficits?
+- The capability ceiling (LGB01/06-class traces): fine-tuning or tool use, not prompting, is the likely lever.
