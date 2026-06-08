@@ -43,7 +43,7 @@ That's it. 353 words. No tools, no scaffolding, no fine-tuning.
 | Over-skepticism (inventing bugs in correct code) | 0/6 false positives | 0/6 | EXP05, EXP14 |
 
 <p align="center">
-  <img src="assets/evidence.png" alt="Bar chart: bare Nemotron vs v16 pass-rate by axis (VOICE 25 to 100, silent code-bug recall 20 to 100, clean-code precision 100 to 100, mixed battery 53 to 100, process-narration 85 to 100)." width="100%">
+  <img src="assets/evidence.png" alt="Bar chart: bare Nemotron vs v16 pass-rate by axis (VOICE 25 to 100, silent code-bug recall 20 to 100, clean-code precision 100 to 100, mixed battery 75 to 100, process-narration 85 to 100)." width="100%">
 </p>
 
 ## How it works

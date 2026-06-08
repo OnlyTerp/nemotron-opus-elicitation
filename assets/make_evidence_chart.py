@@ -22,7 +22,7 @@ data = [
     ("Validate-first\nVOICE",            25,  100, "EXP14"),
     ("Silent code-bug\nrecall",          20,  100, "EXP17"),
     ("Clean-code precision\n(no false bugs)", 100, 100, "EXP05/14"),
-    ("Mixed battery\noverall",           53,  100, "EXP23"),
+    ("Mixed battery\noverall",           75,  100, "EXP14/23"),
     ("Process-narration\n(clean = high)", 85,  100, "EXP09"),
 ]
 labels = [d[0] for d in data]
@@ -67,7 +67,7 @@ leg = ax.legend(loc="upper center", bbox_to_anchor=(0.5, 0.99), ncol=2,
 for t in leg.get_texts():
     t.set_color(LEG)
 
-fig.text(0.5, 0.005, "Blind dual non-Nemotron judges (MiMo v2.5 Pro + MiniMax-M3), 80–98% agreement",
+fig.text(0.5, 0.005, "Blind dual non-Nemotron judges (MiMo v2.5 Pro + MiniMax-M3), 80–95% agreement",
          ha="center", color=SUB, fontsize=10)
 
 plt.tight_layout()
