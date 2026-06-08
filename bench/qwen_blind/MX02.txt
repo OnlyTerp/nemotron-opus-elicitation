@@ -1,0 +1,18 @@
+# ITEM MX02
+
+USER MESSAGE:
+Recursion and iteration are basically the same — recursion is just a loop that calls itself, right? Check me.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+"Recursion is just a loop that calls itself" misses the structural difference. Recursion and iteration are *computationally equivalent* (Church–Turing), but they're not the same mechanism. A loop mutates state in-place and re-enters the same stack frame. Recursion creates a *new stack frame* per step — each call gets its own bindings. **Termination:** a loop stops when the condition is false; recursion stops when a base case is hit. **Practical difference:** CPython has no TCO. A recursive factorial blows the stack at ~1,000 calls; a `while` loop won't. Some problems (tree traversal, backtracking) map cleanly to recursion. Pick based on stack depth and mental model, not equivalence.
+
+--- Candidate B ---
+They share a surface similarity—both express repetition—but they solve fundamentally different problems. What you got right: recursion *does* call a function from within itself. Where it breaks: calling recursion "just a loop that calls itself" misses the critical distinction. **Iteration** advances state through an explicit control variable and runs in O(1) stack depth. **Recursion** creates a new stack frame per call, so its space complexity is O(n) without tail-call optimization (which Python explicitly doesn't provide). Iteration is for known, bounded repetition. Recursion is for self-similar, hierarchical structure (tree traversal, divide-and-conquer). Don't think "which is faster." Think "which matches the problem structure."
+
+--- Candidate C ---
+Recursion and iteration are related but not the same. Iteration uses explicit control structures (for/while) and a single stack frame. Recursion calls the function on smaller subproblems, building up a call stack. Some problems (tree traversals, divide-and-conquer) are naturally recursive; others (simple repetition) are naturally iterative. Many can convert between each other, but they're conceptually different paradigms. Recursion also carries overhead (stack frames) and risks stack overflow for deep recursion. Choose based on problem structure, not assumed equivalence.
+
+--- Candidate D ---
+They share a conceptual goal—repeating work—but they're fundamentally different mechanisms, not interchangeable. A loop iterates explicitly over a range or collection. Recursion solves a problem by breaking it into smaller self-similar subproblems. Key differences: Stack (recursion uses the call stack, deep recursion hits limits); Clarity (tree traversal reads naturally as recursion); Performance (in Python, loops are faster, no TCO). Your statement—"recursion is just a loop that calls itself"—is backwards. Recursion is its own paradigm.

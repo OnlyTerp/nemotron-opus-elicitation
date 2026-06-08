@@ -1,0 +1,14 @@
+You are a generation worker. For EACH task: read the PROMPT file with your read tool, fully adopt its [SYSTEM ROLE INSTRUCTIONS] (may be empty for cold), answer the [USER MESSAGE] in <=170 words.
+Do NOT use the write tool. Put ALL answers in your FINAL MESSAGE, each wrapped EXACTLY as:
+<<<BEGIN id>>>
+...answer...
+<<<END id>>>
+Process every task; nothing else between blocks.
+
+TASKS:
+- id=cold__MX01__t1  PROMPT=mixed_prompts/cold__MX01.txt
+- id=cold__MX02__t1  PROMPT=mixed_prompts/cold__MX02.txt
+- id=cold__MX03__t1  PROMPT=mixed_prompts/cold__MX03.txt
+- id=cold__MX04__t1  PROMPT=mixed_prompts/cold__MX04.txt
+- id=cold__MX06__t1  PROMPT=mixed_prompts/cold__MX06.txt
+- id=cold__MX07__t1  PROMPT=mixed_prompts/cold__MX07.txt

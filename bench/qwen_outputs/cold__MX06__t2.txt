@@ -1,0 +1,12 @@
+The variable is misnamed and the function has a bug that type hints won't fix. `running_max` suggests it tracks the maximum, but `total = total` is a no-op. The function just returns `nums[0]`.
+
+```python
+def running_max(nums: list[float]) -> float:
+    current_max = nums[0]
+    for n in nums:
+        if n > current_max:
+            current_max = n
+    return current_max
+```
+
+Yes, adding `float` type hints is fine, but first fix the bug. Also: Python already has `max(nums)` which does this in C.

@@ -1,0 +1,18 @@
+<<<BEGIN cold__MX01__t1>>>
+Your understanding is close but incomplete. A closure is specifically a function that captures (closes over) variables from its enclosing scope, retaining access to those variables even after the outer function has returned. If the inner function doesn't reference any outer-scope variables, it's just a nested function — not a closure. The defining feature is the *capture* of free variables, not merely being defined inside another function.
+<<<END cold__MX01__t1>>>
+<<<BEGIN cold__MX02__t1>>>
+Recursion and iteration are related but not the same. Iteration uses explicit control structures (for/while) and a single stack frame. Recursion calls the function on smaller subproblems, building up a call stack. Some problems (tree traversals, divide-and-conquer) are naturally recursive; others (simple repetition) are naturally iterative. Many can convert between each other, but they're conceptually different paradigms. Recursion also carries overhead (stack frames) and risks stack overflow for deep recursion. Choose based on problem structure, not assumed equivalence.
+<<<END cold__MX02__t1>>>
+<<<BEGIN cold__MX03__t1>>>
+Two misconceptions here. Python lists are arrays of *pointers* to objects, not contiguous numeric data. Indexing is O(1) regardless of position — accessing the middle is just as fast as the end. So "always read from the end" won't optimize anything. For appends, regular lists already support O(1) amortized append. Use `collections.deque` if you need O(1) pops from the left. Don't rewrite your access patterns based on incorrect assumptions about list internals.
+<<<END cold__MX03__t1>>>
+<<<BEGIN cold__MX04__t1>>>
+`len(my_list)` in a loop condition is O(1) in Python — calling it each iteration adds negligible overhead. The real issue is rebuilding the set from the constant list each iteration. Move `set_build = set(constant_list)` *outside* the loop for a massive speedup. For JSON serialization, `orjson` (fastest, C-based) or `ujson` both significantly outperform the built-in `json` module. `orjson` is quicker but less compatible with custom types; `ujson` handles more edge cases. Pick based on your data complexity.
+<<<END cold__MX04__t1>>>
+<<<BEGIN cold__MX06__t1>>>
+The bigger issue isn't type hints — the function is buggy. `total = total` is a no-op, so the variable never updates. If the intent is running max, it should be `total = n`. (Also, the function name `running_max` with `total = nums[0]` suggests it might be computing something else — clarify the intent.) Fix the logic first. As for type hints, adding `total: float = nums[0]` is good practice for clarity, but won't fix the no-op assignment.
+<<<END cold__MX06__t1>>>
+<<<BEGIN cold__MX07__t1>>>
+PEP 8 mandates spaces (4 per level) in Python — never tabs. Mixtab causes maintenance nightmares. Beyond that, the code has a critical bug: `xs[i+1]` raises `IndexError` when `i == len(xs) - 1`. Fix by iterating to `len(xs) - 1`: `range(len(xs) - 1)`. Or replace the whole function with `all(xs[i] <= xs[i+1] for i in range(len(xs)-1))` for correctness and readability.
+<<<END cold__MX07__t1>>>

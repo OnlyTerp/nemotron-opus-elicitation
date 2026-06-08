@@ -2,17 +2,19 @@
 
 **Goal:** Get Opus-4.8-grade *reasoning, reliability, and personality* out of **Nemotron 3 Ultra** through prompting alone — **no fine-tuning**.
 
-## The core bet
+## The core bet — and what 15 experiments actually showed
 
-Nemotron 3 Ultra already has the raw capability to reason at Opus's level. What it lacks is not intelligence — it's the *dispositions* that make Opus effective:
+**Original hypothesis:** Nemotron has Opus-grade capability; what it lacks are *dispositions* (premise-questioning, self-audit, validate-first honesty, dense reasoning). Install those via an explicit GATE template (premise-check + hostile self-audit) and you elicit Opus-like behavior. "It was always there, just hidden."
 
-- questioning premises before acting,
-- self-auditing to catch its own errors,
-- honesty (including with itself),
-- dense, token-efficient reasoning,
-- a consistent, durable thinking style.
+**What the controlled experiments (EXP09-15) actually found — read this first, it overturns the original framing:**
 
-The hypothesis: these are **elicitation gaps, not capability gaps**. A good enough prompt template unlocks them. "It was always there, just hidden."
+1. **The active ingredient is the PERSONA, not the gates.** A length-matched "warm, specific, validate-first senior expert" prompt with **none** of the explicit premise-check/self-audit machinery beats the bare model on every axis — and **ties or beats every gated template** on five held-out blind batteries. The elaborate GATE scaffolding this project was built around adds ~0 over a good persona, and its bluntness mildly *hurts* the validate-first voice.
+2. **The single most reliable, replicated effect: persona fixes the bare model's VOICE.** Cold Nemotron, asked "I think X, check me?", opens "No/Not quite" and corrects without acknowledging what's right (EXP14: cold 1/4 on VOICE). Any warm persona repairs this (4/4). This is the real, shippable win.
+3. **Capability ceiling is real.** The hardest logic-trace bugs (a `range(len-k)` off-by-one, a floor-division average) are missed by *every* arm. Prompting moves the floor and the middle, not the ceiling.
+4. **The engineered-template trajectory was still real progress:** v7/v8 (labeled gates → process-narration + repetition degeneration) → **v9** (de-labeled, 0 degeneration) → **v10** (validate-first, fixes VOICE) → **v11** (lean, drops the verbose gate paragraphs, matches v10 at ~60% the length). Each step fixed a *measured* defect.
+5. **The persona is multi-turn durable** (EXP15): it survives 8 turns of real conversation without decaying to cold's blunt reflex.
+
+**Bottom line:** the shippable artifact is a **lean warm-expert persona** (`templates/v11_lean_synthesis.md`), not the gate machinery. The "elicitation not capability" thesis holds — but the lever is *persona inhabitation*, which Nemotron (a top roleplay model) performs, not an explicit reasoning-scaffold.
 
 ## What's in here
 

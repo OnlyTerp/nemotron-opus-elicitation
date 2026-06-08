@@ -1,0 +1,11 @@
+Tabs or spaces isn't the real issue—your function has an `IndexError` bug. `range(len(xs))` produces indices `0` through `len(xs)-1`. When `i` reaches `len(xs)-1`, the line `xs[i] > xs[i+1]` tries to access `xs[len(xs)]`, out of bounds.
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):    # stop one early
+        if xs[i] > xs[i+1]:
+            return False
+    return True
+```
+
+But just use `all()`: `return all(xs[i] <= xs[i+1] for i in range(len(xs) - 1))`. For indentation: PEP 8 mandates **4 spaces**.
