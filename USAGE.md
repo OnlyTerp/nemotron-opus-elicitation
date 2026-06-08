@@ -19,7 +19,7 @@ Use **v16** (`templates/v16_personality_calibrate.md`) when the bare model's **d
 The single change that improved *correctness* (not just tone) was a clause telling the model: **when code is involved, don't trust a read-through — check the actual output on a concrete boundary input (even-length list, n=0/1, the empty case) before judging it.** On silent-wrong-output bugs (off-by-ones, floor-division averages, dropped-last-window) this took recall from cold 2/10 to 10/10, with no extra false positives.
 - **You do NOT need a sandbox for review-sized snippets.** Mentally checking a concrete input tied with actually running the code (EXP18) — Nemotron either knows the gotcha as a fact or can simulate small functions once told to.
 - **Use a real sandbox** only when the output genuinely can't be predicted by eye: large/stateful code, real I/O, heavy numeric work, unfamiliar libraries. There the disposition still helps but the tool is what guarantees the answer.
-- It's baked into `v13`. If you're on `v11`, the clause to add is one sentence (see `templates/v13_lean_verify.md` diff).
+- It's already baked into the recommended **v16** (and into `v13`). If you're running an earlier lean persona like `v11`, the clause to add is a single sentence (see the `templates/v13_lean_verify.md` diff).
 
 ## The method (the generalizable part)
 1. **Audit the bare model.** Run 4-6 "I think X, check me?" partial-truth probes and a few "review this code / sanity-check this plan" tasks with NO system prompt. Note which *dispositions* are missing (cold corrections? option-dumping? hedging? padding? premise-acceptance?).

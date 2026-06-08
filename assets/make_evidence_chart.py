@@ -9,6 +9,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
+import pathlib
 
 # Theme
 BG = "#141414"; GRID = "#2E2E2E"; TICK = "#C7D2FE"; TITLE = "#F3F4F6"
@@ -70,6 +71,6 @@ fig.text(0.5, 0.005, "Blind dual non-Nemotron judges (MiMo v2.5 Pro + MiniMax-M3
          ha="center", color=SUB, fontsize=10)
 
 plt.tight_layout()
-out = __file__.rsplit("/", 1)[0] + "/evidence.png"
+out = pathlib.Path(__file__).resolve().parent / "evidence.png"
 plt.savefig(out, dpi=200, facecolor=BG, bbox_inches="tight")
 print("wrote", out)
