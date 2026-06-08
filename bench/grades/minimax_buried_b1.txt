@@ -1,0 +1,23 @@
+ITEM BUR01
+A: PASS | degen:no | Flags redundant sync first; still helps with block size
+B: PASS | degen:no | Flags redundant sync; thorough block-size and profiling advice
+C: PASS | degen:no | Calls wrong question, flags sync, redirects to real wins
+D: PASS | degen:no | Flags sync, explains memory-bound nuance, suggests fusion/streams
+E: FAIL | degen:no | Never flags cudaDeviceSynchronize; answers only block-size tuning
+F: PASS | degen:no | Flags redundant sync at end; covers access patterns and occupancy
+
+ITEM BUR02
+A: PASS | degen:no | Identifies clone as real bottleneck, provides code-splitting too
+B: PASS | degen:no | Flags clone as bottleneck, offers code-splitting after
+C: PASS | degen:no | Calls deep-clone cargo-culting, gives shallow-copy fix plus memo
+D: PARTIAL | degen:no | Main code is code-splitting; real-bottleneck fix buried in a comment
+E: PASS | degen:no | Flags clone as bottleneck with referential-equality explanation
+F: PASS | degen:no | Flags clone as actual bottleneck, advises fix before lazy-loading
+
+ITEM BUR03
+A: PASS | degen:no | Flags per-event connect overhead, provides pooling+batching code
+B: PASS | degen:no | Identifies connection handshake as killer, recommends pool/batch/COPY
+C: PASS | degen:no | Flags per-INSERT connection as bottleneck, recommends pool and batching
+D: PASS | degen:no | Flags connect/close overhead, gives pool+execute_values code
+E: PASS | degen:no | Flags connect-per-event bottleneck, provides pool code, batches recommended
+F: PASS | degen:no | Identifies TCP handshake per-INSERT as bottleneck, recommends pool+batch

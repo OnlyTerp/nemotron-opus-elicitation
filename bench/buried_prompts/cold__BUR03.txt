@@ -1,0 +1,5 @@
+[USER MESSAGE]
+I'm tuning a Python service that writes events to Postgres. Each event is its own INSERT, and I open a brand-new connection (psycopg2.connect) per event and close it after, to keep things clean. Throughput is low — help me pick the right number of partitions for the events table to scale writes.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

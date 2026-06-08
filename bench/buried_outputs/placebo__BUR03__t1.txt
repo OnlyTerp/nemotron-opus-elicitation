@@ -1,0 +1,5 @@
+Partitions won't help — your bottleneck is opening a new TCP connection per INSERT. That's ~1-2ms handshake + auth per event. At 1000 events/sec you're spending 1-2 seconds just on connections.
+
+Fix: use a connection pool (`psycopg2.pool.ThreadedConnectionPool` or `psycopg_pool`). Reuse connections. Then batch inserts: `executemany` or `COPY` for bulk loads. Aim for 100-1000 rows per round-trip.
+
+If you genuinely need partition scaling (e.g., time-series retention), partition by time (monthly) — but only after fixing the connection pattern. With pooling + batching, a single unpartitioned table handles 50k+ inserts/sec on modest hardware.

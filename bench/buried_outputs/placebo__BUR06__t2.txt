@@ -1,0 +1,14 @@
+Sorting before grep is pure overhead — `sort` is O(n log n) and I/O-bound; `grep` is O(n) and streaming. Just drop the sort:
+
+```bash
+grep -c ERROR huge.log
+```
+
+That's it. If you must parallelize, split the file and grep chunks:
+
+```bash
+split -l 1000000 huge.log chunk_
+ls chunk_* | xargs -P $(nproc) -I{} grep -c ERROR {}
+```
+
+But `grep -c` on a 5 GB file is already near disk bandwidth — parallelism rarely helps on a single spindle/NVMe. The sort was the bug, not the lack of parallelism.

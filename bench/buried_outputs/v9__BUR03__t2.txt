@@ -1,0 +1,5 @@
+Opening a new `psycopg2.connect()` per INSERT is your throughput killer — connection handshake (TCP + SSL + auth) takes 1–5ms each, dwarfing the actual INSERT. Table partitioning won't fix this; it adds planning overhead for marginal write scaling.
+
+Use a connection pool: `psycopg2.pool.ThreadedConnectionPool(minconn=4, maxconn=20, ...)` — reuse connections across events. Better: batch inserts with `executemany()` or `COPY FROM STDIN` (10–100× faster). If events are independent, `asyncpg` with a pool gives ~50k inserts/sec on modest hardware.
+
+Partitioning helps only when you have billions of rows and need partition pruning for time-range queries or fast `DROP PARTITION` for retention. For write throughput: pool → batch → COPY. Set `synchronous_commit=off` if durability can tolerate < 1s loss.

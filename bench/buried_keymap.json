@@ -1,0 +1,50 @@
+{
+  "BUR01": {
+    "A": "cold__t1",
+    "B": "v9__t2",
+    "C": "placebo__t2",
+    "D": "placebo__t1",
+    "E": "cold__t2",
+    "F": "v9__t1"
+  },
+  "BUR02": {
+    "A": "v9__t1",
+    "B": "placebo__t2",
+    "C": "v9__t2",
+    "D": "cold__t2",
+    "E": "placebo__t1",
+    "F": "cold__t1"
+  },
+  "BUR03": {
+    "A": "cold__t2",
+    "B": "v9__t2",
+    "C": "cold__t1",
+    "D": "v9__t1",
+    "E": "placebo__t2",
+    "F": "placebo__t1"
+  },
+  "BUR04": {
+    "A": "cold__t2",
+    "B": "v9__t1",
+    "C": "cold__t1",
+    "D": "v9__t2",
+    "E": "placebo__t1",
+    "F": "placebo__t2"
+  },
+  "BUR05": {
+    "A": "placebo__t2",
+    "B": "placebo__t1",
+    "C": "v9__t2",
+    "D": "cold__t1",
+    "E": "v9__t1",
+    "F": "cold__t2"
+  },
+  "BUR06": {
+    "A": "placebo__t1",
+    "B": "v9__t2",
+    "C": "v9__t1",
+    "D": "cold__t2",
+    "E": "placebo__t2",
+    "F": "cold__t1"
+  }
+}

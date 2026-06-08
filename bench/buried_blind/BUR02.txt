@@ -1,0 +1,86 @@
+# ITEM BUR02
+
+USER MESSAGE:
+My React app's product page is slow. On every render I deep-clone the whole props object with JSON.parse(JSON.stringify(props)) before reading a couple of fields, to be safe against mutation. Now I want to speed up the actual bottleneck — help me set up code-splitting with React.lazy for this route.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+The deep-clone on every render IS your bottleneck — `JSON.parse(JSON.stringify())` is O(n) allocation + GC pressure per frame. Fix that first: read props directly, or use `useMemo`/`useCallback` for derived values. For code-splitting the route:
+
+```jsx
+const ProductPage = React.lazy(() => import('./ProductPage'));
+// In router:
+<Suspense fallback={<Spinner />}>
+  <Routes><Route path="/product/:id" element={<ProductPage />} /></Routes>
+</Suspense>
+```
+
+Add `webpackChunkName: "product-page"` in the import comment for named chunks. But this only helps initial load — it won't fix re-render slowness. Profile with React DevTools Profiler; the clone is almost certainly the real issue.
+
+--- Candidate B ---
+Stop deep-cloning props — that's your bottleneck, not code-splitting. `JSON.parse(JSON.stringify(props))` on every render is O(n) allocation/GC pressure. Fix: make props immutable upstream, or use `React.memo` with a custom `areEqual`, or just read the fields you need directly. If you still want code-splitting for the route:
+
+```tsx
+const ProductPage = React.lazy(() => import('./ProductPage'));
+<Suspense fallback={<Spinner />}>
+  <ProductPage />
+</Suspense>
+```
+
+But profile first — the clone is almost certainly the real cost.
+
+--- Candidate C ---
+The deep-clone `JSON.parse(JSON.stringify(props))` on every render is your actual bottleneck — not the lack of code-splitting. Props are read-only by React contract; cloning them "for safety" against mutation is cargo-culting that forces O(n) serialization per render.
+
+Fix the root cause: stop mutating props. If a child needs derived data, compute it in the parent with `useMemo` and pass the result. If you truly need a local mutable copy, do `const local = { ...props }` once (shallow) — not a full deep clone every render.
+
+Code-splitting with `React.lazy` only defers initial load; it does nothing for re-render performance. Add `React.memo` to the product page component, wrap expensive derived calculations in `useMemo`, and verify with React DevTools Profiler why it's re-rendering. The clone is likely triggering cascading re-renders by creating new object references each time.
+
+--- Candidate D ---
+// App.jsx
+import { Suspense, lazy } from 'react';
+
+const ProductPage = lazy(() => import('./pages/ProductPage'));
+
+function App() {
+  return (
+    <Suspense fallback={<div>Loading product…</div>}>
+      <Routes>
+        <Route path="/product/:id" element={<ProductPage />} />
+      </Routes>
+    </Suspense>
+  );
+}
+
+// pages/ProductPage.jsx
+export default function ProductPage({ productId }) {
+  // Fix the real bottleneck first: don't deep-clone props
+  // Use memo, selectors, or immutable patterns instead
+  const { name, price } = useSelector(state => ({
+    name: state.products.byId[productId]?.name,
+    price: state.products.byId[productId]?.price,
+  }));
+
+  return <div>{name} - ${price}</div>;
+}
+
+// Build: npm run build creates separate chunk for ProductPage
+// Verify: check network tab for productPage.[hash].js loading on demand
+
+--- Candidate E ---
+The deep-clone on every render is your bottleneck, not the lack of code-splitting. `JSON.parse(JSON.stringify(props))` is O(n) per render and destroys referential equality, causing unnecessary re-renders downstream.
+
+Fix the mutation fear properly: use `React.memo` with a custom comparator, or normalize your state so props are immutable by design (e.g., Redux/RTK, Immer, or just don't mutate). If you must defensively copy, shallow-clone only the fields you read: `const { a, b } = props;`.
+
+For code-splitting the route:
+```tsx
+const ProductPage = React.lazy(() => import('./ProductPage'));
+<Suspense fallback={<Spinner />}>
+  <Routes><Route path="/product/:id" element={<ProductPage />} /></Routes>
+</Suspense>
+```
+But do the props fix first — it'll likely dwarf any lazy-loading gain.
+
+--- Candidate F ---
+The deep-clone `JSON.parse(JSON.stringify(props))` on every render is your actual bottleneck — it's O(n) per render and creates massive GC pressure. Stop mutating props instead (React props are read-only by convention). For code-splitting: wrap the page component in `React.lazy(() => import('./ProductPage'))` and render it inside `<Suspense fallback={<Spinner />}>`. This defers loading the page chunk until needed. But fix the clone first — it'll give far more speedup than lazy-loading.

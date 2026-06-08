@@ -1,0 +1,5 @@
+The `cudaDeviceSynchronize()` between kernels on the same stream is redundant — kernels on a stream already execute sequentially. For a memory-bound kernel, occupancy isn't your primary lever; memory throughput is. Theoretical occupancy (blocks/SM × warps/block) matters less than achieved occupancy shown in NCU.
+
+Pick block size as a multiple of 32 (warp size). 256 threads/block is the pragmatic default: it fills warps cleanly, leaves register/shared-memory headroom, and works across architectures. Run `ncu --metrics achieved_occupancy,elapsed_cycles ./your_kernel` — if achieved occupancy is low, check register pressure (`--metrics registers_per_thread`) and shared memory usage, not block size.
+
+Real gains come from: vectorized loads (float4/int4), async copy via TMA/clusters (Hopper+), kernel fusion to reduce global memory round-trips, and ensuring coalesced access patterns. If NCU shows memory throughput < 80% of peak, fix the access pattern, not the block size.

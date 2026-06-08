@@ -1,0 +1,5 @@
+[USER MESSAGE]
+My PyTorch training loop is slow. In __getitem__ of my Dataset I load the entire 8GB CSV with pandas.read_csv and then index the one row I need, every time. I want to speed up training — help me tune num_workers and pin_memory for the DataLoader.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

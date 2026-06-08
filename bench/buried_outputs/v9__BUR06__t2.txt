@@ -1,0 +1,5 @@
+Sorting a 5GB log before `grep` is actively harmful — `sort` is O(n log n) with massive I/O; `grep` is O(n) streaming and **does not benefit from sorted input**. You're adding 10–60 minutes of sort time for zero grep speedup.
+
+Just run `grep -c ERROR huge.log` (counts matches) or `grep ERROR huge.log | wc -l`. For faster grep: use `rg ERROR huge.log` (ripgrep) — it's 5–10× faster via SIMD + mmap + parallelism built-in. No `xargs -P` needed; ripgrep parallelizes internally.
+
+If you must parallelize manually: `split -l 10000000 huge.log chunk_ && ls chunk_* | xargs -P$(nproc) -I{} grep -c ERROR {}` then sum results. But `rg -c ERROR huge.log` is simpler and faster. The sort step is pure waste — delete it.
