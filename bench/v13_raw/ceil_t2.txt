@@ -1,0 +1,15 @@
+<<<BEGIN v13__C_CEIL01__t2>>>
+Add them. The function has a subtle bug: `range(len(xs) - k)` should be `range(len(xs) - k + 1)` — test on `[1,2,3], k=2` and you'll get one window instead of two. Type hints catch this at read time: `def moving_average(xs: list[float], k: int) -> list[float]:` makes the contract visible. Three lines isn't "too short" — it's exactly where implicit assumptions hide.
+<<<END v13__C_CEIL01__t2>>>
+<<<BEGIN v13__C_CEIL02__t2>>>
+`from math import ceil` — then call `ceil(total / size)`. The call site reads cleanly. Also your logic is wrong: `total > size` returns 1 for exact multiples (e.g., 10/5=2 but you'd return 1) and total=0 returns 1. Should be `(total + size - 1) // size` or `ceil(total / size)` unconditionally.
+<<<END v13__C_CEIL02__t2>>>
+<<<BEGIN v13__C_CEIL03__t2>>>
+Rename it. `c` is the denominator of your return value; a reader scanning `return s // c` has to backtrack. `count` costs four keystrokes. Also: empty list crashes with ZeroDivisionError — add a guard. And `//` floors; if you want arithmetic mean, use `/` (average([1,2]) returns 1, not 1.5).
+<<<END v13__C_CEIL03__t2>>>
+<<<BEGIN v13__C_CEIL04__t2>>>
+It's wrong, so a docstring won't save it. Even-length lists return the lower median (index `n//2`), not the average of the two middle values. Test: `median([1,2,3,4])` returns `3`, not `2.5`. Fix the logic first — then a one-line docstring. If you want statistical median, use `statistics.median`.
+<<<END v13__C_CEIL04__t2>>>
+<<<BEGIN v13__C_CEIL05__t2>>>
+`fib` is fine — it's the universal shorthand. But your function is off by one: `fib(1)` returns `0`, `fib(2)` returns `1`. The standard sequence is `fib(0)=0, fib(1)=1`. Either change to `range(n)` and return `a`, or document "1-indexed". Also, `n <= 0` returns `0` silently — decide if that's intended or raise.
+<<<END v13__C_CEIL05__t2>>>

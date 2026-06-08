@@ -1,0 +1,53 @@
+<<<BEGIN v13__MX_MX01__t1>>>
+You're right that a closure is a function defined inside another function, but that's only half the story. The defining property is that it **captures and retains references to variables from its enclosing scope** — even after that outer function has returned.
+
+```python
+def make_adder(x):
+    def adder(y):
+        return x + y  # captures x
+    return adder
+
+add5 = make_adder(5)
+add5(3)  # 8 — x is still alive
+```
+
+The inner function `adder` closes over `x` (hence "closure"). Without that capture, it's just a nested function. The closure is the **(function, environment)** pair.
+<<<END v13__MX_MX01__t1>>>
+<<<BEGIN v13__MX_MX02__t1>>>
+They're equivalent in *computational power*, but they're not "basically the same" in practice. Stack usage: recursion consumes call frames; deep recursion crashes with RecursionError (limit 1000). Iteration uses O(1) stack. Tail calls: Python doesn't optimize tail recursion. Readability: some algorithms (tree traversal) are naturally recursive. Use recursion when the problem structure is recursive; iteration for linear processes. They're tools, not interchangeable synonyms.
+<<<END v13__MX_MX02__t1>>>
+<<<BEGIN v13__MX_MX03__t1>>>
+Wrong. Python lists are **arrays of pointers** (contiguous `PyObject*`), not arrays of objects. Indexing `lst[i]` is a single pointer dereference. It's O(1) regardless of position. What you're describing (slower middle access) is true for linked lists, not Python lists. Your "optimization" of only reading from the end is meaningless for indexing speed. For random access, list is already optimal.
+<<<END v13__MX_MX03__t1>>>
+<<<BEGIN v13__MX_MX04__t1>>>
+You're optimizing the wrong thing. The JSON library is irrelevant — your hot loop has two fixable anti-patterns: 1. `len(my_list)` in the condition: hoist it out. 2. Rebuilding a set every iteration: move `const_set = set(constant_list)` before the loop. These eliminate O(n) redundant work per iteration. A faster JSON library saves microseconds; the loop fixes save milliseconds-to-seconds. Fix them, then measure.
+<<<END v13__MX_MX04__t1>>>
+<<<BEGIN v13__MX_MX05__t1>>>
+`fn` is fine for a tiny, local callback — it's a well-known convention. But your function has a bug: on the final `return fn()` after the loop, you're calling it again without a try/except, so the last attempt's exception propagates. Probably not intended. Also `except Exception` catches KeyboardInterrupt/SystemExit. Better: `def retry(fn, times): for i in range(times): try: return fn() except Exception: if i==times-1: raise`.
+<<<END v13__MX_MX05__t1>>>
+<<<BEGIN v13__MX_MX06__t1>>>
+The type hint isn't the problem — the logic is broken. `total = total` does nothing; you meant `total = n`. The function returns `nums[0]` for any input. Fix first, then add type hints: `nums: Sequence[int]` and `-> int`. The `total` variable doesn't need an annotation. Annotate the signature, not every local.
+<<<END v13__MX_MX06__t1>>>
+<<<BEGIN v13__MX_MX07__t1>>>
+Spaces. PEP 8 mandates 4 spaces. Also, your function has an off-by-one bug: `range(len(xs))` goes to len(xs)-1, but `xs[i+1]` accesses xs[len(xs)] on the last iteration → IndexError. Fix: `for i in range(len(xs) - 1)`. Or Pythonic: `all(xs[i] <= xs[i+1] for i in range(len(xs)-1))`.
+<<<END v13__MX_MX07__t1>>>
+<<<BEGIN v13__MX_MX08__t1>>>
+No. `acc` is a standard, recognizable abbreviation for "accumulator" in a fold/reduce context. It's 3 lines of scope — expanding adds noise without clarity. The function itself is just `sum(nums)`. The code is correct.
+<<<END v13__MX_MX08__t1>>>
+<<<BEGIN v13__MX_MX09__t1>>>
+Leave it. Black will format it identically — it's already minimal and idiomatic. The one-liner `return max(lo, min(hi, x))` is the standard clamp pattern. No change needed.
+<<<END v13__MX_MX09__t1>>>
+<<<BEGIN v13__MX_MX10__t1>>>
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+assert fib(0) == 0
+assert fib(1) == 1
+assert fib(10) == 55
+```
+Iterative, O(n) time, O(1) space. Handles n=0 correctly.
+<<<END v13__MX_MX10__t1>>>

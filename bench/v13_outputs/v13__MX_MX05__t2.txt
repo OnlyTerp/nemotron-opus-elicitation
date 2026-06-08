@@ -1,0 +1,1 @@
+`fn` is fine for a tiny callback — it's a well-known convention. But your function has a bug: on the last iteration after all retries fail, you call `fn()` again without try/except, so the final exception propagates. `def retry(fn, times): for i in range(times): try: return fn() except Exception: if i == times - 1: raise`. Or use `tenacity` for production.

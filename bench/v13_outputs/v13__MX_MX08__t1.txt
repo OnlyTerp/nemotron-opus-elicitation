@@ -1,0 +1,1 @@
+No. `acc` is a standard, recognizable abbreviation for "accumulator" in a fold/reduce context. It's 3 lines of scope — expanding adds noise without clarity. The function itself is just `sum(nums)`. The code is correct.

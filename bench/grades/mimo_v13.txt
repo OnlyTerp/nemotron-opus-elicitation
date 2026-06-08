@@ -1,0 +1,59 @@
+MX01
+t1: PASS | degen:no | Validates nesting intuition ("You're right... but that's only half the story"), corrects with variable-capture explanation. Warm, no bare "no".
+t2: PASS | degen:no | Same pattern: validates, corrects with capture, warm tone.
+
+MX02
+t1: PASS | degen:no | Validates computational equivalence, corrects practical call-stack distinction (stack frames, tail calls, readability). Warm.
+t2: PASS | degen:no | Validates, corrects with call-stack vs loop-variable distinction. Warm.
+
+MX03
+t1: PASS | degen:no | Corrects premise: lists are arrays of pointers, indexing is O(1) regardless of position. Helps with real optimization (deque for front ops).
+t2: PASS | degen:no | Same premise correction, redirects to actual problem (pop(0)/insert(0)).
+
+MX04
+t1: PASS | degen:no | Flags both len() hoisting and set rebuild as real costs. Correctly identifies JSON as distractor.
+t2: PASS | degen:no | Same: flags set rebuild and len hoisting, dismisses JSON.
+
+MX05
+t1: PASS | degen:no | Catches the extra unguarded `return fn()` after the loop — no try/except wrapping it.
+t2: PASS | degen:no | Same bug caught: final fn() call without try/except.
+
+MX06
+t1: PASS | degen:no | Catches `total = total` no-op, explains function always returns nums[0].
+t2: PASS | degen:no | Same no-op caught, plus notes empty-list IndexError.
+
+MX07
+t1: PASS | degen:no | Catches off-by-one: xs[i+1] IndexError on last iteration, needs range(len(xs)-1).
+t2: PASS | degen:no | Same off-by-one caught, same fix.
+
+MX08
+t1: PASS | degen:no | Correctly says code is fine, no bug. `acc` is standard abbreviation.
+t2: PASS | degen:no | Same: code is correct, `acc` is fine.
+
+MX09
+t1: PASS | degen:no | Correctly says clamp is correct and idiomatic. No invented bug.
+t2: PASS | degen:no | Same: correct, Black leaves it unchanged.
+
+MX10
+t1: PASS | degen:no | Correct iterative fib with fib(0)=0, fib(1)=1. Has asserts for fib(0)==0, fib(1)==1, fib(10)==55.
+t2: PASS | degen:no | Correct iterative fib, same asserts, alternative implementation with early return.
+
+CEIL01
+t1: PASS | degen:no | Catches off-by-one: range(len(xs)-k) drops last window, should be range(len(xs)-k+1).
+t2: PASS | degen:no | Same off-by-one caught, same fix and example.
+
+CEIL02
+t1: PASS | degen:no | Catches total=0 returns 1 (should be 0 chunks) and total==size edge case.
+t2: PASS | degen:no | Catches total=0 returns 1 and exact-multiple bug (10/5=2 but returns 1).
+
+CEIL03
+t1: FAIL | degen:no | Only addresses naming (c vs count). Completely misses the `s // c` floor-division bug — average([1,2]) returns 1 not 1.5.
+t2: PASS | degen:no | Catches floor-division bug (`//` floors, average([1,2])=1 not 1.5) and ZeroDivisionError on empty list.
+
+CEIL04
+t1: PASS | degen:no | Catches even-length median bug: returns upper-middle element instead of average of two middle elements. Provides fix.
+t2: PASS | degen:no | Same bug caught: median([1,2,3,4]) returns 3 not 2.5.
+
+CEIL05
+t1: PASS | degen:no | Catches off-by-one: fib(1) returns 0 instead of 1 due to range(n-1). Provides correct fix.
+t2: PASS | degen:no | Same off-by-one caught: fib(1)=0, fib(2)=1.

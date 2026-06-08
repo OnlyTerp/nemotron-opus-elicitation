@@ -1,0 +1,1 @@
+You're asking about JSON libraries but your hot loop has two obvious bugs: 1. `len(my_list)` in the condition — hoist it. 2. Rebuilding a set from a constant list every iteration — move it out: `const_set = set(CONST_LIST)`. Those are fixes that'll dwarf any JSON library difference. `orjson` is fastest for serialization, but fix the loop first.

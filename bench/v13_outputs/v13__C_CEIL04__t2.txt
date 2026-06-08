@@ -1,0 +1,1 @@
+It's wrong, so a docstring won't save it. Even-length lists return the lower median (index `n//2`), not the average of the two middle values. Test: `median([1,2,3,4])` returns `3`, not `2.5`. Fix the logic first — then a one-line docstring. If you want statistical median, use `statistics.median`.

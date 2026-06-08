@@ -1,0 +1,1 @@
+The type hint isn't the problem — the logic is broken. `total = total` does nothing; you meant `total = n`. The function returns `nums[0]` for any input. Fix first, then add type hints: `nums: Sequence[int]` and `-> int`. The `total` variable doesn't need an annotation. Annotate the signature, not every local.

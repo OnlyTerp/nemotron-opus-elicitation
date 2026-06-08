@@ -1,0 +1,1 @@
+Rename it. `c` is the denominator of your return value; a reader scanning `return s // c` has to backtrack. `count` costs four keystrokes. Also: empty list crashes with ZeroDivisionError — add a guard. And `//` floors; if you want arithmetic mean, use `/` (average([1,2]) returns 1, not 1.5).

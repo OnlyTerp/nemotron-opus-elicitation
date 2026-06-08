@@ -1,0 +1,54 @@
+<<<BEGIN v13__MX_MX01__t2>>>
+You're right that a closure is a function defined inside another function, but that's only half the story. The defining feature is that the inner function *captures* variables from the outer scope — it "closes over" them. Without capture, it's just a nested function.
+
+```python
+def make_adder(x):
+    def adder(y):
+        return x + y  # captures x
+    return adder
+add5 = make_adder(5)
+add5(3)  # 8 — x is still alive
+```
+
+The captured variable `x` persists after `make_adder` returns. That's the closure.
+<<<END v13__MX_MX01__t2>>>
+<<<BEGIN v13__MX_MX02__t2>>>
+They compute the same things, but they're not "basically the same." Recursion uses the call stack; iteration uses a loop variable. Stack overflow: deep recursion crashes (limit ~1000). Tail calls: Python doesn't optimize them. State: recursion threads state through parameters; iteration mutates locals. Recursion isn't "a loop that calls itself" — it's a function that calls itself. Use iteration by default in Python; recurse when the problem structure demands it.
+<<<END v13__MX_MX02__t2>>>
+<<<BEGIN v13__MX_MX03__t2>>>
+Wrong. Python lists are arrays of pointers to objects, stored contiguously. Indexing is O(1) — `list[i]` is pointer arithmetic. Middle vs. end makes zero difference. Your real problem: if you're doing `pop(0)` or `insert(0, x)`, that's O(n) because everything shifts. If you need fast front operations, use `collections.deque`. Don't optimize indexing — it's already optimal.
+<<<END v13__MX_MX03__t2>>>
+<<<BEGIN v13__MX_MX04__t2>>>
+You're asking about JSON libraries but your hot loop has two obvious bugs: 1. `len(my_list)` in the condition — hoist it. 2. Rebuilding a set from a constant list every iteration — move it out: `const_set = set(CONST_LIST)`. Those are fixes that'll dwarf any JSON library difference. `orjson` is fastest for serialization, but fix the loop first.
+<<<END v13__MX_MX04__t2>>>
+<<<BEGIN v13__MX_MX05__t2>>>
+`fn` is fine for a tiny callback — it's a well-known convention. But your function has a bug: on the last iteration after all retries fail, you call `fn()` again without try/except, so the final exception propagates. `def retry(fn, times): for i in range(times): try: return fn() except Exception: if i == times - 1: raise`. Or use `tenacity` for production.
+<<<END v13__MX_MX05__t2>>>
+<<<BEGIN v13__MX_MX06__t2>>>
+Two problems before type hints: 1. Bug: `total = total` does nothing. You meant `total = n`. 2. Crash: `nums[0]` on empty list raises IndexError. Fixed: `def running_max(nums: list[int]) -> int | None: if not nums: return None; total = nums[0]; for n in nums: if n > total: total = n; return total`. `total` doesn't need an annotation — it's inferred.
+<<<END v13__MX_MX06__t2>>>
+<<<BEGIN v13__MX_MX07__t2>>>
+Spaces (PEP 8). But your function crashes on the last iteration: `xs[i+1]` raises IndexError when `i == len(xs) - 1`. Fix: `for i in range(len(xs) - 1)`. Or Pythonic: `all(xs[i] <= xs[i+1] for i in range(len(xs)-1))`. Or `xs == sorted(xs)` for clarity.
+<<<END v13__MX_MX07__t2>>>
+<<<BEGIN v13__MX_MX08__t2>>>
+`acc` is fine — it's a standard abbreviation for "accumulator" in fold/reduce contexts. Everyone recognizes it. Longer names add noise without clarity here. The code is correct.
+<<<END v13__MX_MX08__t2>>>
+<<<BEGIN v13__MX_MX09__t2>>>
+Black will leave it unchanged — it's already formatted. The one-liner fits (<88 chars), so Black keeps it. It's correct. Your call — it's fine as-is.
+<<<END v13__MX_MX09__t2>>>
+<<<BEGIN v13__MX_MX10__t2>>>
+```python
+def fib(n: int) -> int:
+    if n < 2:
+        return n
+    a, b = 0, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return b
+
+assert fib(0) == 0
+assert fib(1) == 1
+assert fib(10) == 55
+```
+Iterative, O(n) time, O(1) space.
+<<<END v13__MX_MX10__t2>>>

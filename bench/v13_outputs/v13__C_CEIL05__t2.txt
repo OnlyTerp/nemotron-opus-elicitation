@@ -1,0 +1,1 @@
+`fib` is fine — it's the universal shorthand. But your function is off by one: `fib(1)` returns `0`, `fib(2)` returns `1`. The standard sequence is `fib(0)=0, fib(1)=1`. Either change to `range(n)` and return `a`, or document "1-indexed". Also, `n <= 0` returns `0` silently — decide if that's intended or raise.

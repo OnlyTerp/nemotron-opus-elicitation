@@ -1,0 +1,13 @@
+You're right that a closure is a function defined inside another function, but that's only half the story. The defining property is that it **captures and retains references to variables from its enclosing scope** — even after that outer function has returned.
+
+```python
+def make_adder(x):
+    def adder(y):
+        return x + y  # captures x
+    return adder
+
+add5 = make_adder(5)
+add5(3)  # 8 — x is still alive
+```
+
+The inner function `adder` closes over `x` (hence "closure"). Without that capture, it's just a nested function. The closure is the **(function, environment)** pair.

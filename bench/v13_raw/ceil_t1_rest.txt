@@ -1,0 +1,45 @@
+<<<BEGIN v13__C_CEIL02__t1>>>
+`from math import ceil` is better here — single use, no namespace pollution, reads cleaner at the call site. The `math.` prefix adds nothing when you only need one function.
+
+Also, your condition is off: `total > size` returns 1 when `total == size` (correct) but also when `total == 0` (wrong — should be 0 chunks). Use `(total + size - 1) // size` or `max(1, (total + size - 1) // size)` if you want at least 1 chunk for non-zero input.
+<<<END v13__C_CEIL02__t1>>>
+<<<BEGIN v13__C_CEIL03__t1>>>
+`c` is fine here. Six lines, single loop, obvious counter. `count` adds noise without clarity. Rename when scope grows or purpose isn't obvious from context.
+<<<END v13__C_CEIL03__t1>>>
+<<<BEGIN v13__C_CEIL04__t1>>>
+This function is **buggy**, not just undocumented. For even-length lists it returns the upper middle element instead of the average of the two middle elements:
+
+```python
+median([1, 2, 3, 4])  # returns 3, should be 2.5
+```
+
+Fix it first:
+
+```python
+def median(xs):
+    """Return the median of a sequence of numbers."""
+    s = sorted(xs)
+    n = len(s)
+    mid = n // 2
+    if n % 2 == 0:
+        return (s[mid - 1] + s[mid]) / 2
+    return s[mid]
+```
+
+Now the docstring is worth it — the behavior for even-length inputs isn't obvious from the code alone.
+<<<END v13__C_CEIL04__t1>>>
+<<<BEGIN v13__C_CEIL05__t1>>>
+`fib` is clear enough — it's the universally recognized abbreviation for Fibonacci. Spelling it out adds noise without clarity.
+
+The function itself has an off-by-one bug: `fib(1)` returns `0` instead of `1`. The loop runs `n-1` iterations but should run `n` iterations starting from `a=0, b=1` to return `F(n)`. Fix:
+
+```python
+def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+```
+
+Now `fib(0)=0`, `fib(1)=1`, `fib(2)=1`, `fib(3)=2`.
+<<<END v13__C_CEIL05__t1>>>

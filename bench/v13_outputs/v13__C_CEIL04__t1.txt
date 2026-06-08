@@ -1,0 +1,20 @@
+This function is **buggy**, not just undocumented. For even-length lists it returns the upper middle element instead of the average of the two middle elements:
+
+```python
+median([1, 2, 3, 4])  # returns 3, should be 2.5
+```
+
+Fix it first:
+
+```python
+def median(xs):
+    """Return the median of a sequence of numbers."""
+    s = sorted(xs)
+    n = len(s)
+    mid = n // 2
+    if n % 2 == 0:
+        return (s[mid - 1] + s[mid]) / 2
+    return s[mid]
+```
+
+Now the docstring is worth it — the behavior for even-length inputs isn't obvious from the code alone.
