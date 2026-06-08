@@ -1,0 +1,1 @@
+No comment needed. The logic is wrong anyway: returns `True` if *any* element is positive, not if *all* are. Should be `if n <= 0: return False`. Once fixed, `return False` is obviously "none were positive."

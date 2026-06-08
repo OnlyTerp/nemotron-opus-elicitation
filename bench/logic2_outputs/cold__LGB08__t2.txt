@@ -1,0 +1,1 @@
+Leave it. Black would leave this essentially unchanged — the function is already well-formatted at 88 columns. The `setdefault` chains and return statement are already idiomatic and fit within line length.

@@ -1,0 +1,102 @@
+{
+  "LGB01": {
+    "A": "v9__t2",
+    "B": "placebo__t2",
+    "C": "v9__t1",
+    "D": "v10__t1",
+    "E": "placebo__t1",
+    "F": "cold__t2",
+    "G": "v10__t2",
+    "H": "cold__t1"
+  },
+  "LGB02": {
+    "A": "cold__t1",
+    "B": "v9__t1",
+    "C": "v9__t2",
+    "D": "v10__t2",
+    "E": "placebo__t1",
+    "F": "v10__t1",
+    "G": "cold__t2",
+    "H": "placebo__t2"
+  },
+  "LGB03": {
+    "A": "v10__t1",
+    "B": "v9__t2",
+    "C": "v10__t2",
+    "D": "cold__t2",
+    "E": "placebo__t2",
+    "F": "placebo__t1",
+    "G": "v9__t1",
+    "H": "cold__t1"
+  },
+  "LGB04": {
+    "A": "placebo__t2",
+    "B": "cold__t2",
+    "C": "v9__t1",
+    "D": "v10__t2",
+    "E": "v10__t1",
+    "F": "cold__t1",
+    "G": "placebo__t1",
+    "H": "v9__t2"
+  },
+  "LGB05": {
+    "A": "v9__t2",
+    "B": "cold__t2",
+    "C": "v10__t2",
+    "D": "v10__t1",
+    "E": "placebo__t2",
+    "F": "cold__t1",
+    "G": "placebo__t1",
+    "H": "v9__t1"
+  },
+  "LGB06": {
+    "A": "v9__t1",
+    "B": "cold__t1",
+    "C": "placebo__t1",
+    "D": "placebo__t2",
+    "E": "cold__t2",
+    "F": "v9__t2",
+    "G": "v10__t2",
+    "H": "v10__t1"
+  },
+  "LGB07": {
+    "A": "v9__t2",
+    "B": "placebo__t1",
+    "C": "v10__t1",
+    "D": "cold__t2",
+    "E": "cold__t1",
+    "F": "v10__t2",
+    "G": "v9__t1",
+    "H": "placebo__t2"
+  },
+  "LGB08": {
+    "A": "cold__t1",
+    "B": "placebo__t1",
+    "C": "v10__t2",
+    "D": "v9__t2",
+    "E": "v9__t1",
+    "F": "v10__t1",
+    "G": "placebo__t2",
+    "H": "cold__t2"
+  },
+  "LGB09": {
+    "A": "placebo__t1",
+    "B": "cold__t1",
+    "C": "v9__t2",
+    "D": "v10__t2",
+    "E": "placebo__t2",
+    "F": "v10__t1",
+    "G": "cold__t2",
+    "H": "v9__t1"
+  },
+  "LGB10": {
+    "A": "v10__t1",
+    "B": "placebo__t2",
+    "C": "v9__t1",
+    "D": "cold__t2",
+    "E": "cold__t1",
+    "F": "v9__t2",
+    "G": "v10__t2",
+    "H": "placebo__t1"
+  }
+}

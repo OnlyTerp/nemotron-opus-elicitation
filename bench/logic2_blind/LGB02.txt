@@ -1,0 +1,66 @@
+# ITEM LGB02
+
+USER MESSAGE:
+Does the inner loop need a comment, or is it clear?
+```python
+def group_sums(rows):
+    result = []
+    total = 0
+    for row in rows:
+        for x in row:
+            total += x
+        result.append(total)
+    return result
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+The inner loop is clear — it's a simple sum accumulation. No comment needed. The logic is obvious: `total += x` for each element. Comments that restate code add noise.
+
+--- Candidate B ---
+The bug is louder than the comment question: `total` accumulates across rows instead of resetting per row. Fix that first — `total = 0` inside the outer loop. After that, the logic is self-explanatory; no comment needed.
+
+--- Candidate C ---
+The inner loop itself is clear — `for x in row: total += x` is an idiomatic sum. **But the function is buggy:** `total` isn't reset per row, so it returns a cumulative sum across all rows, not per-row sums. Fix that first:
+
+```python
+def group_sums(rows):
+    result = []
+    for row in rows:
+        total = 0
+        for x in row:
+            total += x
+        result.append(total)
+    return result
+```
+
+Or more idiomatically: `return [sum(row) for row in rows]`.
+
+With the fix, the inner loop (or `sum()`) is self-explanatory — no comment needed. If you keep the explicit loop, a comment would only restate the obvious.
+
+--- Candidate D ---
+The code has a bug — `total` accumulates across rows instead of resetting per row. Fix that first. After fixing, the inner loop is clear enough; a comment would just restate the obvious. What needs a comment is *why* you're summing rows this way if there's a non-obvious reason.
+
+--- Candidate E ---
+It needs a comment — or better, a fix. As written, `total` accumulates across *all* rows, so each `result.append(total)` returns the running sum of everything seen so far, not the per-row sum. If you want per-row sums, reset `total = 0` inside the outer loop. If the running total is intentional, add a one-line comment: `# cumulative sum across rows`. Either way, the current behavior isn't obvious from the code alone.
+
+--- Candidate F ---
+It's clear without a comment. The logic is straightforward: accumulate a running total per row. A comment would be noise. If anything, rename `total` to `row_sum` inside the outer loop for clarity at zero cost.
+
+--- Candidate G ---
+The inner loop is clear enough — summing `x` across `row` is a standard pattern. A comment like `# sum row elements` would be redundant for anyone reading Python regularly. The outer loop's purpose (cumulative row sums) is the less obvious part; a comment there would help more.
+
+--- Candidate H ---
+It's clear enough as-is — the nested loop structure is a standard pattern. A comment would add noise. If anything, the bug is more concerning: `total` isn't reset per row, so you're accumulating across all rows instead of per-row sums. Fix that first:
+```python
+def group_sums(rows):
+    result = []
+    for row in rows:
+        total = 0
+        for x in row:
+            total += x
+        result.append(total)
+    return result
+```
+Or just `return [sum(row) for row in rows]`.

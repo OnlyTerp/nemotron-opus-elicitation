@@ -1,0 +1,5 @@
+Wrap it — and fix the precedence bug. `and` binds tighter than `or`, so `age == 0` currently passes for *any* age. Correct version, two lines:
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```

@@ -1,0 +1,1 @@
+Self-explanatory for this simple slice operation. A docstring adds noise. If behavior is non-obvious (e.g., negative `n`, empty seq), add a one-liner: `"""Return last n elements (or all if n > len)."""`. Otherwise skip.

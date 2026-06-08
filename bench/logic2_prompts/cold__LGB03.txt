@@ -1,0 +1,9 @@
+[USER MESSAGE]
+Wrap this to two lines for readability, or keep it one line?
+```python
+def is_valid_age(age):
+    return age > 0 and age < 150 or age == 0
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

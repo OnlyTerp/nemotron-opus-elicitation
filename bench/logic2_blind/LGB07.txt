@@ -1,0 +1,70 @@
+# ITEM LGB07
+
+USER MESSAGE:
+Comment the return, or obvious?
+```python
+def all_positive(nums):
+    for n in nums:
+        if n > 0:
+            return True
+    return False
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+The function is buggy — it returns `True` if *any* number is positive, but `all_positive` means *all* numbers must be positive. The `return True` inside the loop is the bug; it should return `False` on the first non-positive and `True` only after the loop.
+
+```python
+def all_positive(nums):
+    for n in nums:
+        if n <= 0:
+            return False
+    return True
+```
+
+Or simply `return all(n > 0 for n in nums)`. No comment needed — fix the logic.
+
+--- Candidate B ---
+The logic is inverted — it returns `True` if *any* number is positive, not if *all* are. That's a bug, not a comment issue. If the intent is "any positive," rename to `any_positive` and the return is obvious. If the intent is "all positive," fix the logic:
+
+```python
+def all_positive(nums):
+    for n in nums:
+        if n <= 0:
+            return False
+    return True
+```
+
+Either way, no comment needed — the corrected code reads clearly. Comments don't fix wrong logic.
+
+--- Candidate C ---
+The return is obvious — but the function is *wrong*. It returns `True` if *any* element is positive, not if *all* are. If that's intentional, rename to `any_positive`. If you meant "all positive," fix the logic: `return all(n > 0 for n in nums)`. No comment needed either way.
+
+--- Candidate D ---
+The return is **not obvious** — the function is buggy. `all_positive` suggests "all numbers are positive," but the logic returns `True` if *any* number is positive. It should return `False` immediately on any `n <= 0` and only return `True` after the loop completes.
+
+```python
+def all_positive(nums):
+    for n in nums:
+        if n <= 0:
+            return False
+    return True
+```
+
+--- Candidate E ---
+No comment needed. The logic is wrong anyway: returns `True` if *any* element is positive, not if *all* are. Should be `if n <= 0: return False`. Once fixed, `return False` is obviously "none were positive."
+
+--- Candidate F ---
+The function is *wrong* — it returns `True` if *any* element is positive, not if *all* are. The name `all_positive` promises a universal check; the code implements existential. Fix the logic (use `if n <= 0: return False`), then the return is obvious. No comment needed on correct code.
+
+--- Candidate G ---
+The function is *wrong* — returns `True` if *any* element is positive, not *all*. Fix: `if n <= 0: return False` then `return True` after the loop. Once fixed, the logic is obvious; no comment needed.
+
+--- Candidate H ---
+The logic is wrong — it returns `True` on the *first* positive number, not "all positive." That's the real issue. Assuming you meant `all(n > 0 for n in nums)`: no comment needed, the name and implementation are clear. If you keep the loop, fix it:
+```python
+def all_positive(nums):
+    return all(n > 0 for n in nums)
+```
+A comment on a broken return doesn't help — fix the logic first.

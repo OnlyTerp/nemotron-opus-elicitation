@@ -1,0 +1,11 @@
+The function is buggy — it returns `True` if *any* number is positive, but `all_positive` means *all* numbers must be positive. The `return True` inside the loop is the bug; it should return `False` on the first non-positive and `True` only after the loop.
+
+```python
+def all_positive(nums):
+    for n in nums:
+        if n <= 0:
+            return False
+    return True
+```
+
+Or simply `return all(n > 0 for n in nums)`. No comment needed — fix the logic.

@@ -1,0 +1,1 @@
+Leave it. Black will format it identically (the line lengths are fine). The pattern is idiomatic for undirected graph edge addition. Only change if your project's style guide forbids mutation + return — but that's a design debate, not a formatting one.

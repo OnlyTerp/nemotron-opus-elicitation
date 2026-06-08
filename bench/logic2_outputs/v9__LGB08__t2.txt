@@ -1,0 +1,14 @@
+**Black it.** The mutation-and-return pattern violates Python conventions — either mutate in place and return `None`, or return a new graph and leave the input alone. Doing both causes subtle bugs when callers ignore the return value assuming mutation, or chain calls expecting immutability.
+
+Also, `a == b` adds the node to its own adjacency list twice (two `setdefault` calls), creating a duplicate self-loop entry.
+
+Fix:
+```python
+def add_edge(graph, a, b):
+    if a == b:
+        graph.setdefault(a, []).append(a)
+        return
+    graph.setdefault(a, []).append(b)
+    graph.setdefault(b, []).append(a)
+```
+Return `None` to signal in-place mutation. If you need immutability, copy first.

@@ -1,0 +1,1 @@
+Leave it. Black won't change anything — it's already formatted. The function mutates and returns the graph (redundant but harmless). If you want immutability, return a new dict; otherwise drop the return.

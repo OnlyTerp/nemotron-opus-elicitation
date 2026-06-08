@@ -1,0 +1,1 @@
+`tmp` is actively misleading — it's not temporary, it's the *same list* (`tmp = items` aliases, doesn't copy). The function mutates the input and returns it. Either rename to `items` (drop the alias) or make it actually copy: `result = []` and build a new list. The current code also has O(n²) `remove` inside the loop.

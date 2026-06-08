@@ -1,0 +1,12 @@
+It's largely self-explanatory for the happy path — the name `last_n` and the loop make the intent clear. However, a one-line docstring adds value for edge cases that aren't obvious from the code alone:
+
+```python
+def last_n(seq, n):
+    """Return the last n elements of seq as a list."""
+    out = []
+    for i in range(len(seq) - n, len(seq)):
+        out.append(seq[i])
+    return out
+```
+
+This clarifies: return type (list), behavior when `n > len(seq)` (returns whole sequence via negative indexing), and that `n < 0` raises `ValueError` from `range()`. Also consider `seq[-n:]` for a simpler implementation.

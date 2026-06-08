@@ -1,0 +1,1 @@
+`n` is fine — it's a standard math parameter name for "a number." The function is a one-liner with a well-known bitwise trick. Adding `number` or `value` adds zero clarity here.

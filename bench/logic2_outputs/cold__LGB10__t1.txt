@@ -1,0 +1,6 @@
+Yes, add type hints — trivial win for clarity:
+```python
+def clamp(x: float, lo: float, hi: float) -> float:
+    return max(hi, min(lo, x))
+```
+Note: logic is swapped (`max(hi, ...)` should be `min(hi, max(lo, x))`). Fix that too.

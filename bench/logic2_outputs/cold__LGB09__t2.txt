@@ -1,0 +1,1 @@
+Yes, `n` is fine here. It's a widely recognized convention for "number" in mathematical/bitwise functions, and the function is small and self-contained enough that the meaning is immediately clear from context (`n > 0 and (n & (n - 1)) == 0` is a well-known bitwise idiom for powers of two). No need for a more verbose name like `number` or `value`.

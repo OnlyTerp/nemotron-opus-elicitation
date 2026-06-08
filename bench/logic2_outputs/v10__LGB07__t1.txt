@@ -1,0 +1,1 @@
+The return is obvious — but the function is *wrong*. It returns `True` if *any* element is positive, not if *all* are. If that's intentional, rename to `any_positive`. If you meant "all positive," fix the logic: `return all(n > 0 for n in nums)`. No comment needed either way.

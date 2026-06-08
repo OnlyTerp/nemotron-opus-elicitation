@@ -1,0 +1,1 @@
+`n` is fine — standard for numeric predicates like `is_power_of_two`. Clear in context. If the function took multiple numbers, use descriptive names (e.g., `value`, `base`). Single-letter params are acceptable for math helpers.

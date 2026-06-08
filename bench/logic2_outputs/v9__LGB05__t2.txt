@@ -1,0 +1,19 @@
+**Needs a docstring — and a rewrite.**
+
+```python
+def last_n(seq: Sequence[T], n: int) -> list[T]:
+    """Return the last n elements of seq as a list.
+
+    Returns [] if n <= 0. Returns a copy of the entire sequence if n > len(seq).
+    """
+    if n <= 0:
+        return []
+    return list(seq[-n:])
+```
+
+The original is **not self-explanatory** because:
+1. **No docstring** — behavior on edge cases (n ≤ 0, n > len) is undefined
+2. **Verbose manual loop** — `seq[-n:]` is the Pythonic way
+3. **No edge-case handling** — `n > len(seq)` produces a negative range start (wrong tail); `n <= 0` returns wrong results
+
+The rewrite handles all edge cases, uses slicing, and documents behavior.

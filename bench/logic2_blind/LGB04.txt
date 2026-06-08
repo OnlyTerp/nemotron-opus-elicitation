@@ -1,0 +1,71 @@
+# ITEM LGB04
+
+USER MESSAGE:
+Is `tmp` an okay name or should I be more descriptive?
+```python
+def remove_duplicates_inplace(items):
+    tmp = items
+    seen = set()
+    for x in items:
+        if x in seen:
+            tmp.remove(x)
+        seen.add(x)
+    return tmp
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`tmp` is misleading here — it's not temporary, it's the actual list being mutated (and returned). Worse, `tmp = items` just aliases the same list, so you're modifying the caller's list in-place. Name it `result` or `unique_items` if you're returning a new list, or drop the variable entirely and work on `items` directly if mutation is intentional. Also, modifying a list while iterating it is fragile — build a new list instead:
+```python
+def remove_duplicates_inplace(items):
+    seen = set()
+    result = []
+    for x in items:
+        if x not in seen:
+            seen.add(x)
+            result.append(x)
+    items[:] = result
+    return items
+```
+
+--- Candidate B ---
+`tmp` is **misleading** here — it's not a temporary copy, it's the **same list object** (`tmp = items` creates another reference, not a copy). So `tmp.remove(x)` mutates the original `items` in place, and `return tmp` returns that same mutated list.
+
+Better names: `result` or `result_list` (if you want to emphasize it's the return value), or actually make a copy: `result = items.copy()` / `result = list(items)` if you want to preserve the original.
+
+Also, the function has a bug: modifying a list while iterating over it (`for x in items: ... tmp.remove(x)`) skips elements. Use a list comprehension or build a new list instead:
+
+```python
+def remove_duplicates(items):
+    seen = set()
+    return [x for x in items if not (x in seen or seen.add(x))]
+```
+
+--- Candidate C ---
+`tmp` is actively misleading — it's not temporary, it's the *same list* (`tmp = items` aliases, doesn't copy). The function mutates the input and returns it. Either rename to `items` (drop the alias) or make it actually copy: `result = []` and build a new list. The current code also has O(n²) `remove` inside the loop.
+
+--- Candidate D ---
+`tmp` is actively misleading — it's not temporary, it's the *result* being mutated in place. Worse, `tmp = items` aliases the input list, so you're mutating the caller's data. Rename to `result` (or better, build a new list and return it; in-place mutation + return is a confusing API).
+
+--- Candidate E ---
+`tmp` is actively misleading — it's not temporary, it's the *result* being returned. Worse, the function mutates the input list in place while also returning it. Either return a new list (`seen = set(); return [x for x in items if not (x in seen or seen.add(x))]`) or rename the parameter and document the mutation. `tmp` fixes neither.
+
+--- Candidate F ---
+`tmp` is a poor name here — it's not temporary, it's the result list being mutated in place. Use `result` or `deduped`. Also, the function has a bug: mutating while iterating `items` skips elements. Build a new list instead.
+
+--- Candidate G ---
+`tmp` is a red flag here — it's not temporary at all. It's an alias for `items`, and you're mutating the original list via that alias. That's surprising behavior (the caller's list gets modified). If in-place mutation is intentional, name it `items` and add a docstring noting the side effect. If you want a new list, build one: `result = []` and append uniques to it. Either way, `tmp` misleads.
+
+--- Candidate H ---
+`tmp` is **misleading** here — it's not a temporary copy, it's the **same list object** (`tmp = items` creates another reference, not a copy). So `tmp.remove(x)` mutates the original `items` in place, and `return tmp` returns that same mutated list.
+
+Better names: `result` or `result_list`, or actually make a copy: `result = list(items)` if you want to preserve the original.
+
+Also, the function has a bug: modifying a list while iterating over it (`for x in items: ... tmp.remove(x)`) skips elements. Build a new list instead:
+
+```python
+def remove_duplicates(items):
+    seen = set()
+    return [x for x in items if not (x in seen or seen.add(x))]
+```

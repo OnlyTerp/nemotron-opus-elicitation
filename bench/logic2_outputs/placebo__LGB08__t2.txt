@@ -1,0 +1,1 @@
+Black it. The function is two lines — Black will leave it essentially unchanged (maybe add a trailing comma). Running Black consistently avoids style debates and drift. If you're not using Black project-wide, this is a fine place to start. The code is already clean; Black just makes it *canonically* clean.

@@ -1,0 +1,35 @@
+# ITEM LGB01
+
+USER MESSAGE:
+Should I do `import math` or `from math import ceil` here? Just an import-style preference.
+```python
+import math
+def chunk_count(total, size):
+    return math.ceil(total / size) if total > size else 1
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`from math import ceil` — slightly cleaner call site (`ceil(...)` vs `math.ceil(...)`), and the function does one thing. No strong reason to prefer the module import here.
+
+--- Candidate B ---
+Either works fine here. `import math` is slightly more common for the standard library and avoids potential shadowing if you later define a local `ceil`. `from math import ceil` is perfectly fine too — it's a matter of team style. If you're only using one thing from `math`, the explicit import is clean; if you might use more later, the module import scales better. Pick one and stay consistent.
+
+--- Candidate C ---
+Use `from math import ceil`. It's clearer at the call site (`ceil(total / size)` vs `math.ceil(...)`), avoids namespace pollution, and signals intent — you're using one function, not the module. The module import only pays off when you use 3+ functions from it.
+
+--- Candidate D ---
+Use `from math import ceil`. It's a single-use function; importing the whole module adds namespace clutter for no benefit. The call site reads cleaner as `ceil(total / size)` vs `math.ceil(total / size)`.
+
+--- Candidate E ---
+Both are fine; it's purely a style choice. For a single use like this, `from math import ceil` keeps the call site cleaner (`ceil(total / size)` vs `math.ceil(...)`). If you use several `math` functions, `import math` is more readable and avoids namespace pollution. For this one-liner, I'd lean `from math import ceil` — it reads like English and the dependency is explicit at the top.
+
+--- Candidate F ---
+`from math import ceil` is slightly cleaner here since you only use `ceil` once — avoids the `math.` prefix. But both are fine; follow your project's existing style.
+
+--- Candidate G ---
+`from math import ceil` — use the function directly, no namespace lookup. It's the standard pattern for single-function imports and reads cleaner at the call site: `ceil(total / size)`. The module import is fine for teaching or when you need multiple math functions, but here it's just noise.
+
+--- Candidate H ---
+`from math import ceil` is slightly preferable here — avoids the `math.` prefix for a single function, reads cleaner. If you need multiple math functions, `import math` wins. Personal/team style either works; just be consistent.

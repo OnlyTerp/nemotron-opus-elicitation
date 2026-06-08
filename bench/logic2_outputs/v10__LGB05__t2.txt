@@ -1,0 +1,1 @@
+Self-explanatory for the happy path, but the behavior on `n > len(seq)` or `n <= 0` is undefined (index errors or empty returns). A one-line docstring stating the contract — "Returns last n elements; n must be 0 <= n <= len(seq)" — is worth the three seconds to write.

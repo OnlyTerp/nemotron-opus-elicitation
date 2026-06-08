@@ -1,0 +1,11 @@
+The logic is inverted — it returns `True` if *any* number is positive, not if *all* are. That's a bug, not a comment issue. If the intent is "any positive," rename to `any_positive` and the return is obvious. If the intent is "all positive," fix the logic:
+
+```python
+def all_positive(nums):
+    for n in nums:
+        if n <= 0:
+            return False
+    return True
+```
+
+Either way, no comment needed — the corrected code reads clearly. Comments don't fix wrong logic.

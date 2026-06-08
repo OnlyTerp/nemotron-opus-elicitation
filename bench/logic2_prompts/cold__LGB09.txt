@@ -1,0 +1,9 @@
+[USER MESSAGE]
+Is `n` a fine parameter name here?
+```python
+def is_power_of_two(n):
+    return n > 0 and (n & (n - 1)) == 0
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

@@ -1,0 +1,1 @@
+Leave it. Black will format this identically — it's already clean, idiomatic, and under the line limit. `setdefault` is the right tool here. Running Black on it changes nothing, so there's no point. Save the formatter run for files that actually need it.

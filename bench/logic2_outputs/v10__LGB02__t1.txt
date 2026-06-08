@@ -1,0 +1,1 @@
+It's clear without a comment. The logic is straightforward: accumulate a running total per row. A comment would be noise. If anything, rename `total` to `row_sum` inside the outer loop for clarity at zero cost.

@@ -1,0 +1,48 @@
+<<<BEGIN v10__LGB01__t1>>>
+Use `from math import ceil`. It's a single-use function; importing the whole module adds namespace clutter for no benefit. The call site reads cleaner as `ceil(total / size)` vs `math.ceil(total / size)`.
+<<<END v10__LGB01__t1>>>
+
+<<<BEGIN v10__LGB02__t1>>>
+It's clear without a comment. The logic is straightforward: accumulate a running total per row. A comment would be noise. If anything, rename `total` to `row_sum` inside the outer loop for clarity at zero cost.
+<<<END v10__LGB02__t1>>>
+
+<<<BEGIN v10__LGB03__t1>>>
+Wrap it — and fix the precedence bug. `and` binds tighter than `or`, so `age == 0` currently passes for *any* age. Correct version, two lines:
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```
+<<<END v10__LGB03__t1>>>
+
+<<<BEGIN v10__LGB04__t1>>>
+`tmp` is actively misleading — it's not temporary, it's the *result* being returned. Worse, the function mutates the input list in place while also returning it. Either return a new list (`seen = set(); return [x for x in items if not (x in seen or seen.add(x))]`) or rename the parameter and document the mutation. `tmp` fixes neither.
+<<<END v10__LGB04__t1>>>
+
+<<<BEGIN v10__LGB05__t1>>>
+It's self-explanatory for anyone who knows slicing. Replace the loop with `return seq[-n:]` — handles `n > len(seq)` correctly (returns full seq), is O(1) for sequences supporting slice, and is idiomatic Python. If you keep the loop, add a one-line docstring: `"Return last n elements."`
+<<<END v10__LGB05__t1>>>
+
+<<<BEGIN v10__LGB06__t1>>>
+Rename to `count`. `c` is ambiguous (could be `current`, `char`, `check`...) and the function is trivial enough that the extra clarity costs nothing. Also: `s` → `total`, and use `sum(nums) / len(nums)` unless you specifically need integer division behavior.
+<<<END v10__LGB06__t1>>>
+
+<<<BEGIN v10__LGB07__t1>>>
+The return is obvious — but the function is *wrong*. It returns `True` if *any* element is positive, not if *all* are. If that's intentional, rename to `any_positive`. If you meant "all positive," fix the logic: `return all(n > 0 for n in nums)`. No comment needed either way.
+<<<END v10__LGB07__t1>>>
+
+<<<BEGIN v10__LGB08__t1>>>
+Leave it. Black will format it identically (single statement per line, trailing comma optional). The code is clean: `setdefault` is the right tool, mutation + return is a common pattern for chaining. No style issue to fix.
+<<<END v10__LGB08__t1>>>
+
+<<<BEGIN v10__LGB09__t1>>>
+`n` is fine — it's a standard math parameter name for "a number." The function is a one-liner with a well-known bitwise trick. Adding `number` or `value` adds zero clarity here.
+<<<END v10__LGB09__t1>>>
+
+<<<BEGIN v10__LGB10__t1>>>
+Yes, add them — it's a generic helper where types prevent misuse:
+```python
+def clamp(x: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, x))
+```
+(Also fixed your `max(hi, min(lo, x))` → `max(lo, min(hi, x))`; your version swapped the bounds.)
+<<<END v10__LGB10__t1>>>

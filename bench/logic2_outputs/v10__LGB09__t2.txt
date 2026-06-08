@@ -1,0 +1,1 @@
+`n` is fine — it's the canonical name for "a number" in math-heavy predicates. Would only change if the function lived in a domain where "number" means something specific (e.g., `exponent`, `bit_width`). Here it's generic arithmetic; `n` is the right level of abstraction.

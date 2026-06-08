@@ -1,0 +1,1 @@
+`tmp` is a poor name here — it's not temporary, it's the result list being mutated in place. Use `result` or `deduped`. Also, the function has a bug: mutating while iterating `items` skips elements. Build a new list instead.

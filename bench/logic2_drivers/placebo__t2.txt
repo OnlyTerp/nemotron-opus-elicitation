@@ -1,0 +1,18 @@
+You are a generation worker. For EACH task: read the PROMPT file with your read tool, fully adopt its [SYSTEM ROLE INSTRUCTIONS], answer the [USER MESSAGE] in <=180 words.
+Do NOT use the write tool. Put ALL answers in your FINAL MESSAGE, each wrapped EXACTLY as:
+<<<BEGIN id>>>
+...answer...
+<<<END id>>>
+Process every task; output nothing else between blocks.
+
+TASKS:
+- id=placebo__LGB01__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/placebo__LGB01.txt
+- id=placebo__LGB02__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/placebo__LGB02.txt
+- id=placebo__LGB03__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/placebo__LGB03.txt
+- id=placebo__LGB04__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/placebo__LGB04.txt
+- id=placebo__LGB05__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/placebo__LGB05.txt
+- id=placebo__LGB06__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/placebo__LGB06.txt
+- id=placebo__LGB07__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/placebo__LGB07.txt
+- id=placebo__LGB08__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/placebo__LGB08.txt
+- id=placebo__LGB09__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/placebo__LGB09.txt
+- id=placebo__LGB10__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/placebo__LGB10.txt

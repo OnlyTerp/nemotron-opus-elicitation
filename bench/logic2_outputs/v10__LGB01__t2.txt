@@ -1,0 +1,1 @@
+`from math import ceil` — use the function directly, no namespace lookup. It's the standard pattern for single-function imports and reads cleaner at the call site: `ceil(total / size)`. The module import is fine for teaching or when you need multiple math functions, but here it's just noise.

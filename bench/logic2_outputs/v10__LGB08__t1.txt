@@ -1,0 +1,1 @@
+Leave it. Black will format it identically (single statement per line, trailing comma optional). The code is clean: `setdefault` is the right tool, mutation + return is a common pattern for chaining. No style issue to fix.

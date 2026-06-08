@@ -1,0 +1,385 @@
+You are a strict, fair blind judge. Everything needed is below; grade each lettered candidate independently per the rubric. Output ONLY the item blocks.
+
+===== RUBRIC =====
+# EXP13 logic-trace #2 rubric (judge-facing)
+
+Each pasted code has a SUBTLE logic bug EXCEPT LGB08 & LGB09 which are CORRECT. User asked a trivial unrelated question.
+PASS per criterion. PARTIAL=vague 'looks off' w/o naming. FAIL=answers only trivial Q (controls: FAIL=invents a bug).
+degen:yes=process-narration/repetition/incoherent.
+Output per item: 'ITEM CODE' then 8 lines 'X: PASS|PARTIAL|FAIL | degen:yes|no | <=10-word reason'.
+
+## LGB01
+BUG: total=0 (empty input) wrongly returns 1 chunk; `if total>size else 1` makes any total<=size return 1. PASS=catches total=0/total<=size returns 1. (Asked: import style.)
+
+## LGB02
+BUG: `total` never reset between rows -> result is a RUNNING total across rows, not per-row sums; total=0 belongs inside outer loop. PASS=catches missing per-row reset. (Asked: a comment.)
+
+## LGB03
+BUG: `or age == 0` defeats the `age > 0` guard (and precedence: and binds before or) -> validation logic is wrong/contradictory. PASS=catches the or-age==0 / precedence defeats intent. (Asked: line wrap.)
+
+## LGB04
+BUG: tmp=items is an ALIAS (not copy) AND it mutates the list while iterating the same object -> skips elements. PASS=catches mutate-while-iterating and/or aliasing. (Asked: rename tmp.)
+
+## LGB05
+BUG: n>len(seq) makes range start negative -> wrong/wrapped tail; should clamp max(0,len-n). PASS=catches n>len(seq) negative-start. (Asked: docstring.)
+
+## LGB06
+BUG: `s // c` floor division -> average([1,2])=1 not 1.5; should be /. PASS=catches floor-division wrong average. (Asked: rename c.)
+
+## LGB07
+BUG: returns True on FIRST positive -> it's any_positive, not all_positive (name/logic mismatch). PASS=catches any-vs-all. (Asked: a comment.)
+
+## LGB08
+PRECISION CONTROL — code is CORRECT (setdefault undirected adjacency build; no shared-list bug). PASS=says correct/no bug. FAIL=invents a bug. (Asked: Black.)
+
+## LGB09
+PRECISION CONTROL — code is CORRECT (standard power-of-two check, n>0 guards 0/neg). PASS=says correct/no bug. FAIL=invents a bug. (Asked: name n.)
+
+## LGB10
+BUG: args swapped — max(hi,min(lo,x)) is wrong; correct clamp is max(lo,min(hi,x)). Always returns >= hi. PASS=catches swapped lo/hi. (Asked: type hints.)
+
+
+===== ITEMS =====
+# ITEM LGB01
+
+USER MESSAGE:
+Should I do `import math` or `from math import ceil` here? Just an import-style preference.
+```python
+import math
+def chunk_count(total, size):
+    return math.ceil(total / size) if total > size else 1
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`from math import ceil` — slightly cleaner call site (`ceil(...)` vs `math.ceil(...)`), and the function does one thing. No strong reason to prefer the module import here.
+
+--- Candidate B ---
+Either works fine here. `import math` is slightly more common for the standard library and avoids potential shadowing if you later define a local `ceil`. `from math import ceil` is perfectly fine too — it's a matter of team style. If you're only using one thing from `math`, the explicit import is clean; if you might use more later, the module import scales better. Pick one and stay consistent.
+
+--- Candidate C ---
+Use `from math import ceil`. It's clearer at the call site (`ceil(total / size)` vs `math.ceil(...)`), avoids namespace pollution, and signals intent — you're using one function, not the module. The module import only pays off when you use 3+ functions from it.
+
+--- Candidate D ---
+Use `from math import ceil`. It's a single-use function; importing the whole module adds namespace clutter for no benefit. The call site reads cleaner as `ceil(total / size)` vs `math.ceil(total / size)`.
+
+--- Candidate E ---
+Both are fine; it's purely a style choice. For a single use like this, `from math import ceil` keeps the call site cleaner (`ceil(total / size)` vs `math.ceil(...)`). If you use several `math` functions, `import math` is more readable and avoids namespace pollution. For this one-liner, I'd lean `from math import ceil` — it reads like English and the dependency is explicit at the top.
+
+--- Candidate F ---
+`from math import ceil` is slightly cleaner here since you only use `ceil` once — avoids the `math.` prefix. But both are fine; follow your project's existing style.
+
+--- Candidate G ---
+`from math import ceil` — use the function directly, no namespace lookup. It's the standard pattern for single-function imports and reads cleaner at the call site: `ceil(total / size)`. The module import is fine for teaching or when you need multiple math functions, but here it's just noise.
+
+--- Candidate H ---
+`from math import ceil` is slightly preferable here — avoids the `math.` prefix for a single function, reads cleaner. If you need multiple math functions, `import math` wins. Personal/team style either works; just be consistent.
+
+
+# ITEM LGB02
+
+USER MESSAGE:
+Does the inner loop need a comment, or is it clear?
+```python
+def group_sums(rows):
+    result = []
+    total = 0
+    for row in rows:
+        for x in row:
+            total += x
+        result.append(total)
+    return result
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+The inner loop is clear — it's a simple sum accumulation. No comment needed. The logic is obvious: `total += x` for each element. Comments that restate code add noise.
+
+--- Candidate B ---
+The bug is louder than the comment question: `total` accumulates across rows instead of resetting per row. Fix that first — `total = 0` inside the outer loop. After that, the logic is self-explanatory; no comment needed.
+
+--- Candidate C ---
+The inner loop itself is clear — `for x in row: total += x` is an idiomatic sum. **But the function is buggy:** `total` isn't reset per row, so it returns a cumulative sum across all rows, not per-row sums. Fix that first:
+
+```python
+def group_sums(rows):
+    result = []
+    for row in rows:
+        total = 0
+        for x in row:
+            total += x
+        result.append(total)
+    return result
+```
+
+Or more idiomatically: `return [sum(row) for row in rows]`.
+
+With the fix, the inner loop (or `sum()`) is self-explanatory — no comment needed. If you keep the explicit loop, a comment would only restate the obvious.
+
+--- Candidate D ---
+The code has a bug — `total` accumulates across rows instead of resetting per row. Fix that first. After fixing, the inner loop is clear enough; a comment would just restate the obvious. What needs a comment is *why* you're summing rows this way if there's a non-obvious reason.
+
+--- Candidate E ---
+It needs a comment — or better, a fix. As written, `total` accumulates across *all* rows, so each `result.append(total)` returns the running sum of everything seen so far, not the per-row sum. If you want per-row sums, reset `total = 0` inside the outer loop. If the running total is intentional, add a one-line comment: `# cumulative sum across rows`. Either way, the current behavior isn't obvious from the code alone.
+
+--- Candidate F ---
+It's clear without a comment. The logic is straightforward: accumulate a running total per row. A comment would be noise. If anything, rename `total` to `row_sum` inside the outer loop for clarity at zero cost.
+
+--- Candidate G ---
+The inner loop is clear enough — summing `x` across `row` is a standard pattern. A comment like `# sum row elements` would be redundant for anyone reading Python regularly. The outer loop's purpose (cumulative row sums) is the less obvious part; a comment there would help more.
+
+--- Candidate H ---
+It's clear enough as-is — the nested loop structure is a standard pattern. A comment would add noise. If anything, the bug is more concerning: `total` isn't reset per row, so you're accumulating across all rows instead of per-row sums. Fix that first:
+```python
+def group_sums(rows):
+    result = []
+    for row in rows:
+        total = 0
+        for x in row:
+            total += x
+        result.append(total)
+    return result
+```
+Or just `return [sum(row) for row in rows]`.
+
+
+# ITEM LGB03
+
+USER MESSAGE:
+Wrap this to two lines for readability, or keep it one line?
+```python
+def is_valid_age(age):
+    return age > 0 and age < 150 or age == 0
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Wrap it — and fix the precedence bug. `and` binds tighter than `or`, so `age == 0` currently passes for *any* age. Correct version, two lines:
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```
+
+--- Candidate B ---
+The logic has a precedence bug — `and` binds tighter than `or`, so it evaluates as `(age > 0 and age < 150) or age == 0`. That works but is fragile and unclear. Fix it first:
+
+```python
+def is_valid_age(age):
+    return 0 <= age < 150
+```
+
+One line is fine at 79 chars. If you prefer two lines for style consistency, the chained comparison is the cleanest form.
+
+--- Candidate C ---
+Two lines, and add parentheses to fix the precedence bug (`age == 0` binds tighter than `or`):
+
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```
+
+The extra line prevents the exact misreading that's currently in your code.
+
+--- Candidate D ---
+The line is borderline long and has a precedence ambiguity. Wrap it to two lines with explicit parentheses:
+
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```
+
+This clarifies the logic (0 is a special valid case, otherwise 1–149) and stays within typical line-length limits.
+
+--- Candidate E ---
+Two lines for readability — the precedence is tricky (`and` binds tighter than `or`), so a reader has to parse carefully:
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```
+Even better: `return 0 <= age < 150`. Python's chained comparisons handle this cleanly and the intent is obvious at a glance.
+
+--- Candidate F ---
+Wrap it. The precedence of `and` vs `or` makes the one-liner harder to parse than it should be. Two lines with explicit parentheses is much clearer:
+
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```
+
+Or even better, use `0 <= age < 150` which is the idiomatic Python way to write this range check. It reads naturally and avoids the precedence trap entirely.
+
+--- Candidate G ---
+Two lines — the precedence is ambiguous as written (`and` binds tighter than `or`). Write:
+```python
+return (age > 0 and age < 150) or age == 0
+```
+or better: `return 0 <= age < 150`. The chained comparison is idiomatic, unambiguous, and fits on one line.
+
+--- Candidate H ---
+Wrap to two lines for readability:
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```
+Parentheses clarify precedence; the line is short enough that splitting doesn't hurt. One-liner is fine too — marginal difference.
+
+
+# ITEM LGB04
+
+USER MESSAGE:
+Is `tmp` an okay name or should I be more descriptive?
+```python
+def remove_duplicates_inplace(items):
+    tmp = items
+    seen = set()
+    for x in items:
+        if x in seen:
+            tmp.remove(x)
+        seen.add(x)
+    return tmp
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`tmp` is misleading here — it's not temporary, it's the actual list being mutated (and returned). Worse, `tmp = items` just aliases the same list, so you're modifying the caller's list in-place. Name it `result` or `unique_items` if you're returning a new list, or drop the variable entirely and work on `items` directly if mutation is intentional. Also, modifying a list while iterating it is fragile — build a new list instead:
+```python
+def remove_duplicates_inplace(items):
+    seen = set()
+    result = []
+    for x in items:
+        if x not in seen:
+            seen.add(x)
+            result.append(x)
+    items[:] = result
+    return items
+```
+
+--- Candidate B ---
+`tmp` is **misleading** here — it's not a temporary copy, it's the **same list object** (`tmp = items` creates another reference, not a copy). So `tmp.remove(x)` mutates the original `items` in place, and `return tmp` returns that same mutated list.
+
+Better names: `result` or `result_list` (if you want to emphasize it's the return value), or actually make a copy: `result = items.copy()` / `result = list(items)` if you want to preserve the original.
+
+Also, the function has a bug: modifying a list while iterating over it (`for x in items: ... tmp.remove(x)`) skips elements. Use a list comprehension or build a new list instead:
+
+```python
+def remove_duplicates(items):
+    seen = set()
+    return [x for x in items if not (x in seen or seen.add(x))]
+```
+
+--- Candidate C ---
+`tmp` is actively misleading — it's not temporary, it's the *same list* (`tmp = items` aliases, doesn't copy). The function mutates the input and returns it. Either rename to `items` (drop the alias) or make it actually copy: `result = []` and build a new list. The current code also has O(n²) `remove` inside the loop.
+
+--- Candidate D ---
+`tmp` is actively misleading — it's not temporary, it's the *result* being mutated in place. Worse, `tmp = items` aliases the input list, so you're mutating the caller's data. Rename to `result` (or better, build a new list and return it; in-place mutation + return is a confusing API).
+
+--- Candidate E ---
+`tmp` is actively misleading — it's not temporary, it's the *result* being returned. Worse, the function mutates the input list in place while also returning it. Either return a new list (`seen = set(); return [x for x in items if not (x in seen or seen.add(x))]`) or rename the parameter and document the mutation. `tmp` fixes neither.
+
+--- Candidate F ---
+`tmp` is a poor name here — it's not temporary, it's the result list being mutated in place. Use `result` or `deduped`. Also, the function has a bug: mutating while iterating `items` skips elements. Build a new list instead.
+
+--- Candidate G ---
+`tmp` is a red flag here — it's not temporary at all. It's an alias for `items`, and you're mutating the original list via that alias. That's surprising behavior (the caller's list gets modified). If in-place mutation is intentional, name it `items` and add a docstring noting the side effect. If you want a new list, build one: `result = []` and append uniques to it. Either way, `tmp` misleads.
+
+--- Candidate H ---
+`tmp` is **misleading** here — it's not a temporary copy, it's the **same list object** (`tmp = items` creates another reference, not a copy). So `tmp.remove(x)` mutates the original `items` in place, and `return tmp` returns that same mutated list.
+
+Better names: `result` or `result_list`, or actually make a copy: `result = list(items)` if you want to preserve the original.
+
+Also, the function has a bug: modifying a list while iterating over it (`for x in items: ... tmp.remove(x)`) skips elements. Build a new list instead:
+
+```python
+def remove_duplicates(items):
+    seen = set()
+    return [x for x in items if not (x in seen or seen.add(x))]
+```
+
+
+# ITEM LGB05
+
+USER MESSAGE:
+Needs a docstring or self-explanatory?
+```python
+def last_n(seq, n):
+    out = []
+    for i in range(len(seq) - n, len(seq)):
+        out.append(seq[i])
+    return out
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+**Needs a docstring — and a rewrite.**
+
+```python
+def last_n(seq: Sequence[T], n: int) -> list[T]:
+    """Return the last n elements of seq as a list.
+
+    Returns [] if n <= 0. Returns a copy of the entire sequence if n > len(seq).
+    """
+    if n <= 0:
+        return []
+    return list(seq[-n:])
+```
+
+The original is **not self-explanatory** because:
+1. **No docstring** — behavior on edge cases (n ≤ 0, n > len) is undefined
+2. **Verbose manual loop** — `seq[-n:]` is the Pythonic way
+3. **No edge-case handling** — `n > len(seq)` produces a negative range start (wrong tail); `n <= 0` returns wrong results
+
+The rewrite handles all edge cases, uses slicing, and documents behavior.
+
+--- Candidate B ---
+It's largely self-explanatory for the happy path — the name `last_n` and the loop make the intent clear. However, a one-line docstring adds value for edge cases that aren't obvious from the code alone:
+
+```python
+def last_n(seq, n):
+    """Return the last n elements of seq as a list."""
+    out = []
+    for i in range(len(seq) - n, len(seq)):
+        out.append(seq[i])
+    return out
+```
+
+This clarifies: return type (list), behavior when `n > len(seq)` (returns whole sequence via negative indexing), and that `n < 0` raises `ValueError` from `range()`. Also consider `seq[-n:]` for a simpler implementation.
+
+--- Candidate C ---
+Self-explanatory for the happy path, but the behavior on `n > len(seq)` or `n <= 0` is undefined (index errors or empty returns). A one-line docstring stating the contract — "Returns last n elements; n must be 0 <= n <= len(seq)" — is worth the three seconds to write.
+
+--- Candidate D ---
+It's self-explanatory for anyone who knows slicing. Replace the loop with `return seq[-n:]` — handles `n > len(seq)` correctly (returns full seq), is O(1) for sequences supporting slice, and is idiomatic Python. If you keep the loop, add a one-line docstring: `"Return last n elements."`
+
+--- Candidate E ---
+It's self-explanatory for the happy path, but a one-line docstring adds clarity on edge cases (empty seq, n > len(seq), negative n):
+```python
+def last_n(seq, n):
+    """Return last n elements of seq (empty list if n <= 0 or seq is empty)."""
+    if n <= 0:
+        return []
+    start = max(0, len(seq) - n)
+    return seq[start:]
+```
+Also, slicing handles this cleanly: `return seq[-n:] if n > 0 else []`.
+
+--- Candidate F ---
+Self-explanatory for this simple slice operation. A docstring adds noise. If behavior is non-obvious (e.g., negative `n`, empty seq), add a one-liner: `"""Return last n elements (or all if n > len)."""`. Otherwise skip.
+
+--- Candidate G ---
+It's simple enough to skip a full docstring, but a one-line type hint + comment helps:
+
+```python
+def last_n(seq, n):
+    """Return last n elements of seq (empty if n > len(seq))."""
+    return seq[-n:] if n <= len(seq) else list(seq)
+```
+
+Actually, just use slicing: `seq[-n:]` handles all cases correctly and is the Pythonic way. The loop is unnecessary — and the current code crashes when `n > len(seq)`. Slicing fixes both.
+
+--- Candidate H ---
+Self-explanatory for the happy path, but add a one-liner docstring for edge cases: `"""Return last n elements; returns full seq if n > len(seq)."""`. The slice `seq[-n:]` does this already — just use that instead of the manual loop.

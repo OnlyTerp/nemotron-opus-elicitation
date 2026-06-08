@@ -1,0 +1,10 @@
+[USER MESSAGE]
+Should I do `import math` or `from math import ceil` here? Just an import-style preference.
+```python
+import math
+def chunk_count(total, size):
+    return math.ceil(total / size) if total > size else 1
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

@@ -1,0 +1,1 @@
+`n` is fine — it's a classic math-function parameter (power of two, integer). Would only rename if the function were part of a public API where `value` or `number` adds clarity.

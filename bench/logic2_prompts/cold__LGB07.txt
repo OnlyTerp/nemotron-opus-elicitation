@@ -1,0 +1,12 @@
+[USER MESSAGE]
+Comment the return, or obvious?
+```python
+def all_positive(nums):
+    for n in nums:
+        if n > 0:
+            return True
+    return False
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

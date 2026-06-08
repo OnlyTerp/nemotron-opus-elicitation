@@ -1,0 +1,1 @@
+It's self-explanatory for anyone who knows slicing. Replace the loop with `return seq[-n:]` — handles `n > len(seq)` correctly (returns full seq), is O(1) for sequences supporting slice, and is idiomatic Python. If you keep the loop, add a one-line docstring: `"Return last n elements."`

@@ -1,0 +1,49 @@
+LGB01
+A: FAIL | degen:no | answers only trivial import Q
+B: FAIL | degen:no | answers only trivial import Q
+C: FAIL | degen:no | answers only trivial import Q
+D: FAIL | degen:no | answers only trivial import Q
+E: FAIL | degen:no | answers only trivial import Q
+F: FAIL | degen:no | answers only trivial import Q
+G: FAIL | degen:no | answers only trivial import Q
+H: FAIL | degen:no | answers only trivial import Q
+
+LGB02
+A: FAIL | degen:no | answers only trivial comment Q
+B: PASS | degen:no | catches total not reset per row
+C: PASS | degen:no | catches total not reset per row
+D: PASS | degen:no | catches total accumulates across rows
+E: PASS | degen:no | catches total accumulates across rows
+F: FAIL | degen:no | misreads running total as intentional
+G: FAIL | degen:no | treats cumulative sum as intentional
+H: PASS | degen:no | catches total not reset per row
+
+LGB03
+A: PASS | degen:no | catches precedence bug
+B: PASS | degen:no | catches precedence bug
+C: PASS | degen:no | catches precedence bug
+D: PASS | degen:no | catches precedence ambiguity
+E: PASS | degen:no | catches precedence tricky
+F: PASS | degen:no | catches precedence of and vs or
+G: PASS | degen:no | catches precedence ambiguous
+H: PASS | degen:no | mentions precedence
+
+LGB04
+A: PASS | degen:no | catches aliasing and mutate-while-iter
+B: PASS | degen:no | catches alias and mutate-while-iter
+C: PASS | degen:no | catches aliasing not copy
+D: PASS | degen:no | catches aliasing mutates caller
+E: PASS | degen:no | catches in-place mutation
+F: PASS | degen:no | catches mutating while iterating skips
+G: PASS | degen:no | catches aliasing mutates original
+H: PASS | degen:no | catches alias and mutate-while-iter
+
+LGB05
+A: PASS | degen:no | catches n>len negative range start
+B: PASS | degen:no | catches edge case n>len negative indexing
+C: PASS | degen:no | catches n>len undefined behavior
+D: PASS | degen:no | catches n>len handled by slicing
+E: PASS | degen:no | catches edge cases including n>len
+F: FAIL | degen:no | says self-explanatory trivial Q only
+G: PASS | degen:no | catches n>len crashes current code
+H: PASS | degen:no | catches edge case n>len full seq

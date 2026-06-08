@@ -1,0 +1,8 @@
+Wrap it. The precedence of `and` vs `or` makes the one-liner harder to parse than it should be. Two lines with explicit parentheses is much clearer:
+
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```
+
+Or even better, use `0 <= age < 150` which is the idiomatic Python way to write this range check. It reads naturally and avoids the precedence trap entirely.

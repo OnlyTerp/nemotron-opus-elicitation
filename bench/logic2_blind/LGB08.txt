@@ -1,0 +1,49 @@
+# ITEM LGB08
+
+USER MESSAGE:
+Black this or leave it?
+```python
+def add_edge(graph, a, b):
+    graph.setdefault(a, []).append(b)
+    graph.setdefault(b, []).append(a)
+    return graph
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Leave it. Black would format identically — it's already clean. The `setdefault` chaining is idiomatic. Black only changes things that violate its style; this doesn't.
+
+--- Candidate B ---
+Leave it. Black will format this identically — it's already clean, idiomatic, and under the line limit. `setdefault` is the right tool here. Running Black on it changes nothing, so there's no point. Save the formatter run for files that actually need it.
+
+--- Candidate C ---
+Leave it. Black will format it identically (the line lengths are fine). The pattern is idiomatic for undirected graph edge addition. Only change if your project's style guide forbids mutation + return — but that's a design debate, not a formatting one.
+
+--- Candidate D ---
+**Black it.** The mutation-and-return pattern violates Python conventions — either mutate in place and return `None`, or return a new graph and leave the input alone. Doing both causes subtle bugs when callers ignore the return value assuming mutation, or chain calls expecting immutability.
+
+Also, `a == b` adds the node to its own adjacency list twice (two `setdefault` calls), creating a duplicate self-loop entry.
+
+Fix:
+```python
+def add_edge(graph, a, b):
+    if a == b:
+        graph.setdefault(a, []).append(a)
+        return
+    graph.setdefault(a, []).append(b)
+    graph.setdefault(b, []).append(a)
+```
+Return `None` to signal in-place mutation. If you need immutability, copy first.
+
+--- Candidate E ---
+Leave it. Black won't change anything — it's already formatted. The function mutates and returns the graph (redundant but harmless). If you want immutability, return a new dict; otherwise drop the return.
+
+--- Candidate F ---
+Leave it. Black will format it identically (single statement per line, trailing comma optional). The code is clean: `setdefault` is the right tool, mutation + return is a common pattern for chaining. No style issue to fix.
+
+--- Candidate G ---
+Black it. The function is two lines — Black will leave it essentially unchanged (maybe add a trailing comma). Running Black consistently avoids style debates and drift. If you're not using Black project-wide, this is a fine place to start. The code is already clean; Black just makes it *canonically* clean.
+
+--- Candidate H ---
+Leave it. Black would leave this essentially unchanged — the function is already well-formatted at 88 columns. The `setdefault` chains and return statement are already idiomatic and fit within line length.

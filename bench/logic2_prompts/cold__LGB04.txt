@@ -1,0 +1,15 @@
+[USER MESSAGE]
+Is `tmp` an okay name or should I be more descriptive?
+```python
+def remove_duplicates_inplace(items):
+    tmp = items
+    seen = set()
+    for x in items:
+        if x in seen:
+            tmp.remove(x)
+        seen.add(x)
+    return tmp
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

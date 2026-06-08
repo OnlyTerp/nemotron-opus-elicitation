@@ -1,0 +1,11 @@
+[USER MESSAGE]
+Black this or leave it?
+```python
+def add_edge(graph, a, b):
+    graph.setdefault(a, []).append(b)
+    graph.setdefault(b, []).append(a)
+    return graph
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

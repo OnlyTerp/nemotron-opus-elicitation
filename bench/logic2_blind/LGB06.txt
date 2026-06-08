@@ -1,0 +1,49 @@
+# ITEM LGB06
+
+USER MESSAGE:
+Rename `c` to `count`, or is `c` fine?
+```python
+def average(nums):
+    s = 0
+    c = 0
+    for n in nums:
+        s += n
+        c += 1
+    return s // c
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Rename to `count`. `c` is ambiguous (character? char code? constant?) and saves 4 chars at the cost of readability. `s` → `total` for the same reason. The whole function is `sum(nums) // len(nums)` if you're not avoiding builtins.
+
+--- Candidate B ---
+Rename to `count`. `c` is too cryptic for a loop counter — adds cognitive load for zero savings. `count` is clear, conventional, and same length. Also consider `sum(nums) // len(nums)` instead of manual loop.
+
+--- Candidate C ---
+Rename to `count`. Single-letter names are fine for tight loop indices (`i`, `j`) or very short scopes, but `c` accumulates across the whole function — it's a meaningful variable, not a throwaway. `count` (or `n` if you want mathematical brevity) costs nothing and removes ambiguity. Same for `s` → `total`. The function becomes self-documenting:
+
+```python
+def average(nums):
+    total = 0
+    count = 0
+    for n in nums:
+        total += n
+        count += 1
+    return total // count
+```
+
+--- Candidate D ---
+Rename to `count`. Single-letter names are fine for tight loops or math contexts (`i`, `x`, `n`), but `c` for a counter in a readable function adds cognitive load for zero benefit. `count` (or `length`) is instantly clear. Same for `s` → `total` or `sum_`. The function is also better written as `return sum(nums) // len(nums)` with a guard for empty input.
+
+--- Candidate E ---
+Rename it to `count`. The single-letter `c` is ambiguous — it could mean "count", "counter", "constant", or "current". `count` is self-documenting and costs nothing. The function is already verbose enough (`average`, `nums`, `s`, `n`) that the extra clarity pays off.
+
+--- Candidate F ---
+Rename it to `count`. Single-letter names are only defensible for loop indices or throwaway variables in tight scopes. Here `c` lives across 4 lines and represents a semantic concept — the element count — so `count` pays for itself in readability with zero cost.
+
+--- Candidate G ---
+Rename to `count`. `c` saves three keystrokes but costs every reader a mental lookup. In a 5-line function the scope is tiny, but the pattern scales poorly — when someone adds logic between the loop and return, `c` becomes a liability. `count` is unambiguous and standard.
+
+--- Candidate H ---
+Rename to `count`. `c` is ambiguous (could be `current`, `char`, `check`...) and the function is trivial enough that the extra clarity costs nothing. Also: `s` → `total`, and use `sum(nums) / len(nums)` unless you specifically need integer division behavior.

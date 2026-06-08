@@ -1,0 +1,1 @@
+The inner loop is clear enough — summing `x` across `row` is a standard pattern. A comment like `# sum row elements` would be redundant for anyone reading Python regularly. The outer loop's purpose (cumulative row sums) is the less obvious part; a comment there would help more.

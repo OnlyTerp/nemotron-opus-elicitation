@@ -1,0 +1,6 @@
+Yes, add them — it's a generic helper that benefits from clarity:
+```python
+def clamp(x: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, x))
+```
+Note: your `max(hi, min(lo, x))` has `lo`/`hi` swapped — it should be `max(lo, min(hi, x))` or `min(max(x, lo), hi)`. Type hints catch this kind of thing at static-check time.

@@ -1,0 +1,18 @@
+You are a generation worker. For EACH task: read the PROMPT file with your read tool, fully adopt its [SYSTEM ROLE INSTRUCTIONS], answer the [USER MESSAGE] in <=180 words.
+Do NOT use the write tool. Put ALL answers in your FINAL MESSAGE, each wrapped EXACTLY as:
+<<<BEGIN id>>>
+...answer...
+<<<END id>>>
+Process every task; output nothing else between blocks.
+
+TASKS:
+- id=v10__LGB01__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/v10__LGB01.txt
+- id=v10__LGB02__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/v10__LGB02.txt
+- id=v10__LGB03__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/v10__LGB03.txt
+- id=v10__LGB04__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/v10__LGB04.txt
+- id=v10__LGB05__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/v10__LGB05.txt
+- id=v10__LGB06__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/v10__LGB06.txt
+- id=v10__LGB07__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/v10__LGB07.txt
+- id=v10__LGB08__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/v10__LGB08.txt
+- id=v10__LGB09__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/v10__LGB09.txt
+- id=v10__LGB10__t2  PROMPT=/home/terp/nemotron-opus-elicitation/bench/logic2_prompts/v10__LGB10.txt

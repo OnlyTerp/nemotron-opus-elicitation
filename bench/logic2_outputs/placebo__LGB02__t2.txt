@@ -1,0 +1,12 @@
+It's clear enough as-is — the nested loop structure is a standard pattern. A comment would add noise. If anything, the bug is more concerning: `total` isn't reset per row, so you're accumulating across all rows instead of per-row sums. Fix that first:
+```python
+def group_sums(rows):
+    result = []
+    for row in rows:
+        total = 0
+        for x in row:
+            total += x
+        result.append(total)
+    return result
+```
+Or just `return [sum(row) for row in rows]`.

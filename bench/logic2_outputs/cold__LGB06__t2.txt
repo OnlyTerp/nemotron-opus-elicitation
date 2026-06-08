@@ -1,0 +1,1 @@
+Rename it to `count`. The single-letter `c` is ambiguous — it could mean "count", "counter", "constant", or "current". `count` is self-documenting and costs nothing. The function is already verbose enough (`average`, `nums`, `s`, `n`) that the extra clarity pays off.

@@ -1,0 +1,12 @@
+[USER MESSAGE]
+Needs a docstring or self-explanatory?
+```python
+def last_n(seq, n):
+    out = []
+    for i in range(len(seq) - n, len(seq)):
+        out.append(seq[i])
+    return out
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

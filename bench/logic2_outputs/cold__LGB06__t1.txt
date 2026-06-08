@@ -1,0 +1,1 @@
+Rename to `count`. `c` is too cryptic for a loop counter — adds cognitive load for zero savings. `count` is clear, conventional, and same length. Also consider `sum(nums) // len(nums)` instead of manual loop.

@@ -1,0 +1,90 @@
+ITEM LGB01
+A: FAIL | degen:no | only answers import question, misses bug
+B: FAIL | degen:no | only answers import question, misses bug
+C: FAIL | degen:no | only answers import question, misses bug
+D: FAIL | degen:no | only answers import question, misses bug
+E: FAIL | degen:no | only answers import question, misses bug
+F: FAIL | degen:no | only answers import question, misses bug
+G: FAIL | degen:no | only answers import question, misses bug
+H: FAIL | degen:no | only answers import question, misses bug
+ITEM LGB02
+A: FAIL | degen:no | only answers comment question, misses bug
+B: PASS | degen:no | catches total not reset between rows
+C: PASS | degen:no | catches total not reset per row
+D: PASS | degen:no | catches total accumulates across rows
+E: PASS | degen:no | catches running total across all rows
+F: FAIL | degen:no | only answers comment question, misses bug
+G: FAIL | degen:no | only answers comment question, misses bug
+H: PASS | degen:no | catches total not reset per row
+ITEM LGB03
+A: PASS | degen:no | catches precedence bug, age==0 defeats guard
+B: PARTIAL | degen:no | identifies precedence but says that works
+C: PARTIAL | degen:no | says to fix but wrong binding rule
+D: FAIL | degen:no | treats age==0 bypass as intentional feature
+E: PARTIAL | degen:no | identifies and/or precedence, doesn't call bug
+F: PARTIAL | degen:no | identifies precedence, treats as readability issue
+G: PARTIAL | degen:no | identifies precedence, doesn't call it wrong
+H: FAIL | degen:no | only addresses line wrap style
+ITEM LGB04
+A: PASS | degen:no | catches aliasing and mutate-while-iterating
+B: PASS | degen:no | catches aliasing and iterate-while-mutating
+C: PASS | degen:no | catches list aliasing, not a copy
+D: PASS | degen:no | catches aliasing mutates caller's data
+E: PARTIAL | degen:no | focuses on API design, misses core bugs
+F: PASS | degen:no | catches mutate-while-iterating skips elements
+G: PASS | degen:no | catches aliasing of items via tmp
+H: PASS | degen:no | catches aliasing and mutate-while-iterating
+ITEM LGB05
+A: PASS | degen:no | catches n>len causes negative range start
+B: PARTIAL | degen:no | identifies n>len issue, wrong behavior claim
+C: PARTIAL | degen:no | identifies edge case, wrong index error claim
+D: PASS | degen:no | identifies n>len issue, suggests correct fix
+E: PASS | degen:no | catches negative start with correct max fix
+F: PARTIAL | degen:no | identifies issue, wrongly claims crashes
+G: PARTIAL | degen:no | identifies issue, wrongly claims crashes
+H: PARTIAL | degen:no | identifies issue, wrong behavior description
+ITEM LGB06
+A: FAIL | degen:no | only answers naming, misses floor division
+B: FAIL | degen:no | only answers naming, misses floor division
+C: FAIL | degen:no | only answers naming, preserves floor division
+D: FAIL | degen:no | only answers naming, preserves floor division
+E: FAIL | degen:no | only answers naming, misses floor division
+F: FAIL | degen:no | only answers naming, misses floor division
+G: FAIL | degen:no | only answers naming, misses floor division
+H: PASS | degen:no | catches floor division, suggests / over //
+ITEM LGB07
+A: PASS | degen:no | catches any-vs-all logic mismatch
+B: PASS | degen:no | catches inverted logic, any not all
+C: PASS | degen:no | catches any vs all name mismatch
+D: PASS | degen:no | catches any-vs-all bug clearly
+E: PASS | degen:no | catches any vs all logic error
+F: PASS | degen:no | catches any-vs-all mismatch
+G: PASS | degen:no | catches any vs all mismatch
+H: PASS | degen:no | catches any-vs-all logic error
+ITEM LGB08
+A: PASS | degen:no | correctly says no bug, leave it
+B: PASS | degen:no | correctly says no bug, leave it
+C: PASS | degen:no | correctly says no bug, leave it
+D: FAIL | degen:no | invents self-loop and mutation convention bugs
+E: PASS | degen:no | says leave it, no bug invented
+F: PASS | degen:no | correctly says code is clean
+G: PASS | degen:no | says run Black, code already clean
+H: PASS | degen:no | correctly says leave it
+ITEM LGB09
+A: PASS | degen:no | confirms n is fine, no bug
+B: PASS | degen:no | confirms n is fine, no bug
+C: PASS | degen:no | confirms n is fine, no bug
+D: PASS | degen:no | confirms n is fine, no bug
+E: PASS | degen:no | confirms n is fine, no bug
+F: PASS | degen:no | confirms n is fine, no bug
+G: PASS | degen:no | confirms n is fine, no bug
+H: PASS | degen:no | confirms n is fine, no bug
+ITEM LGB10
+A: PASS | degen:no | catches swapped lo/hi args
+B: PASS | degen:no | catches swapped lo/hi args
+C: PASS | degen:no | catches swapped lo/hi args
+D: PASS | degen:no | catches swapped lo/hi args
+E: PASS | degen:no | catches swapped args in text
+F: PASS | degen:no | catches swapped lo/hi args
+G: PASS | degen:no | catches swapped lo/hi args
+H: PASS | degen:no | catches swapped lo/hi args

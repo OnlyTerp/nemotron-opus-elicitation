@@ -1,0 +1,81 @@
+<<<BEGIN placebo__LGB01__t1>>>
+Both are fine; it's purely a style choice. For a single use like this, `from math import ceil` keeps the call site cleaner (`ceil(total / size)` vs `math.ceil(...)`). If you use several `math` functions, `import math` is more readable and avoids namespace pollution. For this one-liner, I'd lean `from math import ceil` — it reads like English and the dependency is explicit at the top.
+<<<END placebo__LGB01__t1>>>
+
+<<<BEGIN placebo__LGB02__t1>>>
+It needs a comment — or better, a fix. As written, `total` accumulates across *all* rows, so each `result.append(total)` returns the running sum of everything seen so far, not the per-row sum. If you want per-row sums, reset `total = 0` inside the outer loop. If the running total is intentional, add a one-line comment: `# cumulative sum across rows`. Either way, the current behavior isn't obvious from the code alone.
+<<<END placebo__LGB02__t1>>>
+
+<<<BEGIN placebo__LGB03__t1>>>
+Wrap it. The precedence of `and` vs `or` makes the one-liner harder to parse than it should be. Two lines with explicit parentheses is much clearer:
+
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```
+
+Or even better, use `0 <= age < 150` which is the idiomatic Python way to write this range check. It reads naturally and avoids the precedence trap entirely.
+<<<END placebo__LGB03__t1>>>
+
+<<<BEGIN placebo__LGB04__t1>>>
+`tmp` is a red flag here — it's not temporary at all. It's an alias for `items`, and you're mutating the original list via that alias. That's surprising behavior (the caller's list gets modified). If in-place mutation is intentional, name it `items` and add a docstring noting the side effect. If you want a new list, build one: `result = []` and append uniques to it. Either way, `tmp` misleads.
+<<<END placebo__LGB04__t1>>>
+
+<<<BEGIN placebo__LGB05__t1>>>
+It's simple enough to skip a full docstring, but a one-line type hint + comment helps:
+
+```python
+def last_n(seq, n):
+    """Return last n elements of seq (empty if n > len(seq))."""
+    return seq[-n:] if n <= len(seq) else list(seq)
+```
+
+Actually, just use slicing: `seq[-n:]` handles all cases correctly and is the Pythonic way. The loop is unnecessary — and the current code crashes when `n > len(seq)`. Slicing fixes both.
+<<<END placebo__LGB05__t1>>>
+
+<<<BEGIN placebo__LGB06__t1>>>
+Rename to `count`. Single-letter names are fine for tight loop indices (`i`, `j`) or very short scopes, but `c` accumulates across the whole function — it's a meaningful variable, not a throwaway. `count` (or `n` if you want mathematical brevity) costs nothing and removes ambiguity. Same for `s` → `total`. The function becomes self-documenting:
+
+```python
+def average(nums):
+    total = 0
+    count = 0
+    for n in nums:
+        total += n
+        count += 1
+    return total // count
+```
+<<<END placebo__LGB06__t1>>>
+
+<<<BEGIN placebo__LGB07__t1>>>
+The logic is inverted — it returns `True` if *any* number is positive, not if *all* are. That's a bug, not a comment issue. If the intent is "any positive," rename to `any_positive` and the return is obvious. If the intent is "all positive," fix the logic:
+
+```python
+def all_positive(nums):
+    for n in nums:
+        if n <= 0:
+            return False
+    return True
+```
+
+Either way, no comment needed — the corrected code reads clearly. Comments don't fix wrong logic.
+<<<END placebo__LGB07__t1>>>
+
+<<<BEGIN placebo__LGB08__t1>>>
+Leave it. Black will format this identically — it's already clean, idiomatic, and under the line limit. `setdefault` is the right tool here. Running Black on it changes nothing, so there's no point. Save the formatter run for files that actually need it.
+<<<END placebo__LGB08__t1>>>
+
+<<<BEGIN placebo__LGB09__t1>>>
+`n` is perfectly fine here. It's a classic mathematical parameter name for "a number," the function is tiny, and the bitwise trick `(n & (n - 1)) == 0` is well-known enough that `n` signals "integer input" immediately. A longer name like `number` or `value` adds nothing. Keep it.
+<<<END placebo__LGB09__t1>>>
+
+<<<BEGIN placebo__LGB10__t1>>>
+Yes, add them — it's a generic helper that benefits from explicit contracts:
+
+```python
+def clamp(x: int, lo: int, hi: int) -> int:
+    return max(lo, min(hi, x))
+```
+
+Also note: your `max(hi, min(lo, x))` is inverted. It should be `max(lo, min(hi, x))` or `min(max(x, lo), hi)`. The current version clamps `x` to be *at least* `hi` and *at most* `lo` — backwards when `lo < hi`.
+<<<END placebo__LGB10__t1>>>
