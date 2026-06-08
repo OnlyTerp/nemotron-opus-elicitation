@@ -1,0 +1,1 @@
+`acc` is fine — standard accumulator abbreviation, clear in a 3-line scope. The function itself is just `sum(nums)`. If you're writing it for production, delete it and use the built-in. The code is correct.

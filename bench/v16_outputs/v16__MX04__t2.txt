@@ -1,0 +1,1 @@
+You're asking about JSON libraries but your hot loop has two obvious bugs: 1. `len(my_list)` in the condition — hoist it: `n = len(my_list); for i in range(n):`. 2. Rebuilding a set from a constant list every iteration — move it out: `const_set = set(CONST_LIST); for ...:`. Those fixes will dwarf any JSON library difference. Fix the loop first, then measure.

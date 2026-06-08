@@ -1,0 +1,14 @@
+Two problems before type hints: 1. Bug: `total = total` does nothing. You meant `total = n`. 2. Crash: `nums[0]` on empty list raises IndexError. Fixed:
+
+```python
+def running_max(nums: list[int]) -> int | None:
+    if not nums:
+        return None
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = n
+    return total
+```
+
+`total` doesn't need an annotation — it's inferred.

@@ -1,0 +1,13 @@
+You're half right. A closure *is* a function defined inside another function — but the defining feature is that it **captures and retains references to variables from its enclosing scope**, even after that outer function has finished executing.
+
+```python
+def outer(x):
+    def inner():
+        return x  # captures x
+    return inner
+
+f = outer(5)
+f()  # returns 5 — x is "closed over"
+```
+
+The nested function alone isn't the closure; the *combination* of the function + its captured environment is. Common pitfall — late binding in loops: `funcs = [lambda: i for i in range(3)]` gives `[2, 2, 2]`. Fix: `lambda i=i: i`.

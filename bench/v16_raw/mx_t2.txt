@@ -1,0 +1,89 @@
+<<<BEGIN v16__MX01__t2>>>
+You're half right. A closure *is* a function defined inside another function — but the defining feature is that it **captures and retains references to variables from its enclosing scope**, even after that outer function has finished executing.
+
+```python
+def outer(x):
+    def inner():
+        return x  # captures x
+    return inner
+
+f = outer(5)
+f()  # returns 5 — x is "closed over"
+```
+
+The nested function alone isn't the closure; the *combination* of the function + its captured environment is. Common pitfall — late binding in loops: `funcs = [lambda: i for i in range(3)]` gives `[2, 2, 2]`. Fix: `lambda i=i: i`.
+<<<END v16__MX01__t2>>>
+<<<BEGIN v16__MX02__t2>>>
+They compute the same things, but they're not "basically the same." Recursion uses the call stack; iteration uses a loop variable. Stack overflow: deep recursion crashes (limit ~1000). Tail calls: Python doesn't optimize them. State: recursion threads state through parameters; iteration mutates locals. Recursion isn't "a loop that calls itself" — it's a function that calls itself. Use iteration by default in Python; recurse when the problem structure demands it.
+<<<END v16__MX02__t2>>>
+<<<BEGIN v16__MX03__t2>>>
+Wrong. Python lists are arrays of pointers to objects, stored contiguously. Indexing is O(1) — `list[i]` is pointer arithmetic: `base + i * sizeof(void*)`. Middle vs. end makes zero difference. What *is* slow: inserting/deleting at the front or middle (O(n) because everything shifts). If you need fast front operations, use `collections.deque`. Don't optimize indexing — it's already optimal.
+<<<END v16__MX03__t2>>>
+<<<BEGIN v16__MX04__t2>>>
+You're asking about JSON libraries but your hot loop has two obvious bugs: 1. `len(my_list)` in the condition — hoist it: `n = len(my_list); for i in range(n):`. 2. Rebuilding a set from a constant list every iteration — move it out: `const_set = set(CONST_LIST); for ...:`. Those fixes will dwarf any JSON library difference. Fix the loop first, then measure.
+<<<END v16__MX04__t2>>>
+<<<BEGIN v16__MX05__t2>>>
+`fn` is fine for a tiny callback — it's a well-known convention (Haskell, Rust, JS). But your function has a bug: on the last iteration after all retries fail, you call `fn()` again without try/except, so the final exception propagates. That's probably not what you want.
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+<<<END v16__MX05__t2>>>
+<<<BEGIN v16__MX06__t2>>>
+Two problems before type hints: 1. Bug: `total = total` does nothing. You meant `total = n`. 2. Crash: `nums[0]` on empty list raises IndexError. Fixed:
+
+```python
+def running_max(nums: list[int]) -> int | None:
+    if not nums:
+        return None
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = n
+    return total
+```
+
+`total` doesn't need an annotation — it's inferred.
+<<<END v16__MX06__t2>>>
+<<<BEGIN v16__MX07__t2>>>
+Spaces (PEP 8). But your function crashes on the last iteration: `xs[i+1]` raises IndexError when `i == len(xs) - 1`. Fix:
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+Or Pythonic: `all(xs[i] <= xs[i+1] for i in range(len(xs)-1))`.
+<<<END v16__MX07__t2>>>
+<<<BEGIN v16__MX08__t2>>>
+`acc` is fine — standard accumulator abbreviation. Everyone recognizes it. The code is correct.
+<<<END v16__MX08__t2>>>
+<<<BEGIN v16__MX09__t2>>>
+Leave it. Black will leave it unchanged — it's already formatted. The one-liner fits (<88 chars). It's correct. Your call — it's fine as-is.
+<<<END v16__MX09__t2>>>
+<<<BEGIN v16__MX10__t2>>>
+```python
+def fib(n: int) -> int:
+    if n < 2:
+        return n
+    a, b = 0, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return b
+
+assert fib(0) == 0
+assert fib(1) == 1
+assert fib(10) == 55
+```
+
+Iterative, O(n) time, O(1) space. Handles `n=0` and `n=1` without special-casing the loop.
+<<<END v16__MX10__t2>>>

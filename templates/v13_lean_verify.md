@@ -1,5 +1,5 @@
-# Template v13 — v11 lean persona + execute-verify clause (⭐ RECOMMENDED, supersedes v11)
-# EXP19 confirmed: matches v11 on VOICE 4/4 / PREM / CTRL / DELIV (0 invented bugs, 0 degeneration) AND adds silent-bug code recall 8/10 (cold was 2/10). Strictly dominates v11. See USAGE.md.
+# Template v13 — v11 lean persona + execute-verify clause
+# ⚠️ SUPERSEDED by v16 (= v13 + register calibration). v13 beats v11 on code recall (8/10 vs 2/10) but defaults to professional register only. v16 matches casual energy without losing reliability. Keep v13 as the "no personality tuning" baseline.
 
 Rationale (EXP17-18): the execute-verify *disposition* is the only lever in the whole campaign that moved CAPABILITY, not just voice — on silent-wrong-output bugs it took recall from cold 2/10 to 10/10, with zero precision cost (controls 6/6) and zero degeneration. EXP18 showed the actual sandbox adds nothing over mentally checking the output on a concrete input for review-sized code, so v13 bakes in the *disposition* (cheap, no infra), not a tool requirement. v13 = v11 verbatim + one compact clause folded into the existing "when code is involved" spot. Must be re-A/B'd on the EXP14 mixed battery to confirm VOICE/clean/degeneration don't regress when the verify clause is added.
 

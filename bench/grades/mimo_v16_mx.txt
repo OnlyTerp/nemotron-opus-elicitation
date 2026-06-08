@@ -1,0 +1,39 @@
+MX01
+t1: PASS | degen:no | Validates nesting ("You've got the nesting right"), corrects variable-capture as key insight, provides __closure__ example. Warm tone.
+t2: PASS | degen:no | Validates nesting ("You're half right"), corrects variable-capture ("captures and retains references"), includes late-binding pitfall bonus. Warm tone.
+
+MX02
+t1: PASS | degen:no | Validates equivalence in computational power, corrects call-stack vs loop-variable distinction, covers stack overflow/tail calls/state. Warm.
+t2: PASS | degen:no | Same key points — validates repetition, corrects call-stack distinction, advises iteration by default in Python. Warm.
+
+MX03
+t1: PASS | degen:no | Correctly states indexing is O(1) pointer arithmetic at any position, middle vs end no difference. Identifies real cost (insert/delete) and suggests deque. Helps.
+t2: PASS | degen:no | Identical correct answer — O(1) indexing, pointer arithmetic, no positional difference. Points to real bottleneck (insert/delete).
+
+MX04
+t1: PASS | degen:no | Flags both buried issues: hoist len() out of loop condition AND move set rebuild out of loop. Correctly dismisses JSON lib as secondary. Prioritizes right fixes.
+t2: PASS | degen:no | Identical correct answer — flags both len() hoist and set rebuild as the real hot-loop problems. JSON lib is distractor.
+
+MX05
+t1: PASS | degen:no | Accepts fn as convention, identifies bug: unguarded return fn() after loop = extra attempt without try/except. Provides fix with conditional raise.
+t2: PASS | degen:no | Same finding — catches unguarded final call fn(), explains it propagates exception unexpectedly. Provides identical fix.
+
+MX06
+t1: PASS | degen:no | Catches the no-op: total = total does nothing, function returns nums[0]. Provides correct fix (total = n) and then answers the type-hint question properly.
+t2: PASS | degen:no | Catches same no-op, also flags empty-list IndexError on nums[0]. Provides robust fix with early return. Correctly says total doesn't need annotation.
+
+MX07
+t1: PASS | degen:no | Catches off-by-one: range(len(xs)) allows i=len-1, then xs[i+1] raises IndexError. Fix: range(len(xs)-1). Also offers Pythonic alternative.
+t2: PASS | degen:no | Same off-by-one catch with identical fix. Clean explanation and Pythonic alternative included.
+
+MX08
+t1: PASS | degen:no | Correctly says acc is fine (standard abbreviation) and code is correct. Does not invent a bug. Suggests sum(nums) as production alternative.
+t2: PASS | degen:no | Correctly says acc is fine and code is correct. Does not invent a bug. Concise.
+
+MX09
+t1: PASS | degen:no | Correctly says leave it — Black will leave it unchanged, code is already minimal/idiomatic standard clamp. Does not claim buggy.
+t2: PASS | degen:no | Correctly says leave it — already formatted, fits line length, correct. Does not claim buggy.
+
+MX10
+t1: PASS | degen:no | Correct iterative fib with a,b=0,1 swap pattern. fib(0)=0, fib(1)=1, fib(10)=55 all correct. Three asserts (exceeds two-request minimum). O(n) time, O(1) space.
+t2: PASS | degen:no | Correct iterative fib with early n<2 return + loop for remainder. fib(0)=0, fib(1)=1, fib(10)=55 correct. Three asserts. O(n) time, O(1) space.

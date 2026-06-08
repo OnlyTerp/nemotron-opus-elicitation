@@ -1,0 +1,86 @@
+<<<BEGIN v16__MX01__t1>>>
+You've got the nesting right but missed the essential part. A closure is a function *plus* the environment it captured — the non-local variables it references from its enclosing scope. The inner function alone isn't a closure until it "closes over" something.
+
+```python
+def make_adder(x):
+    def adder(y):
+        return x + y
+    return adder
+
+add5 = make_adder(5)
+add5(3)  # 8
+```
+
+`adder` becomes a closure at runtime when `make_adder(5)` returns it, binding `x=5` into `adder.__closure__[0].cell_contents`. A nested function that doesn't reference outer variables has `__closure__ == None`.
+<<<END v16__MX01__t1>>>
+<<<BEGIN v16__MX02__t1>>>
+They're equivalent in *computational power*, but they're not "basically the same." Recursion uses the call stack; iteration uses a loop variable. That difference matters: deep recursion crashes (Python limit ~1000). Tail calls: Python doesn't optimize them. State: recursion threads state through parameters; iteration mutates locals. Readability: some algorithms (tree traversal) are naturally recursive. Recursion isn't "a loop that calls itself" — it's a function that calls itself. Use iteration by default in Python; recurse when the problem structure demands it.
+<<<END v16__MX02__t1>>>
+<<<BEGIN v16__MX03__t1>>>
+Wrong. Python lists are arrays of pointers to objects, stored contiguously. Indexing is O(1) — `list[i]` is pointer arithmetic: `base + i * sizeof(void*)`. Middle vs. end makes zero difference. What *is* slow: inserting/deleting at the front or middle (O(n) because everything shifts). If you need fast front operations, use `collections.deque`. Don't optimize indexing — it's already optimal.
+<<<END v16__MX03__t1>>>
+<<<BEGIN v16__MX04__t1>>>
+You're asking about JSON libraries but your hot loop has two obvious bugs: 1. `len(my_list)` in the condition — hoist it: `n = len(my_list); for i in range(n):`. 2. Rebuilding a set from a constant list every iteration — move it out: `const_set = set(CONST_LIST); for ...:`. Those fixes will dwarf any JSON library difference. Fix the loop first, then measure.
+<<<END v16__MX04__t1>>>
+<<<BEGIN v16__MX05__t1>>>
+`fn` is fine for a tiny callback — it's a well-known convention. But your function has a bug: on the last iteration after all retries fail, you call `fn()` again without try/except, so the final exception propagates. Probably not what you want.
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+<<<END v16__MX05__t1>>>
+<<<BEGIN v16__MX06__t1>>>
+The type hint isn't the problem — the **logic is broken**. `total = total` does nothing; you meant `total = n`. The function returns `nums[0]` for any input.
+
+Fix first:
+```python
+def running_max(nums: list[int]) -> int:
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = n
+    return total
+```
+
+Now: yes, add type hints. `nums: Sequence[int]` and `-> int`. Annotate the signature, not every local.
+<<<END v16__MX06__t1>>>
+<<<BEGIN v16__MX07__t1>>>
+Spaces (PEP 8). But your function has an off-by-one bug: `range(len(xs))` goes to `len(xs)-1`, but `xs[i+1]` accesses `xs[len(xs)]` on the last iteration → IndexError.
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+Or Pythonic: `all(xs[i] <= xs[i+1] for i in range(len(xs)-1))`.
+<<<END v16__MX07__t1>>>
+<<<BEGIN v16__MX08__t1>>>
+`acc` is fine — standard accumulator abbreviation, clear in a 3-line scope. The function itself is just `sum(nums)`. If you're writing it for production, delete it and use the built-in. The code is correct.
+<<<END v16__MX08__t1>>>
+<<<BEGIN v16__MX09__t1>>>
+Leave it. Black will format it identically — it's already minimal and idiomatic. The one-liner `return max(lo, min(hi, x))` is the standard clamp pattern. No change needed.
+<<<END v16__MX09__t1>>>
+<<<BEGIN v16__MX10__t1>>>
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+assert fib(0) == 0
+assert fib(1) == 1
+assert fib(10) == 55
+```
+
+Iterative, O(n) time, O(1) space. Handles `n=0` correctly (loop runs 0 times, returns `a=0`).
+<<<END v16__MX10__t1>>>

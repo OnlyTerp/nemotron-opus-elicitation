@@ -1,0 +1,1 @@
+`acc` is fine — standard accumulator abbreviation. Everyone recognizes it. The code is correct.
