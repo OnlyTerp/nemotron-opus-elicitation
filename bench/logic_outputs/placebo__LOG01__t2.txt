@@ -1,0 +1,7 @@
+Add them. Even for tiny functions, type hints cost almost nothing and pay off immediately: they document the contract, catch mistakes early, and make IDE navigation work. For this specific function:
+
+```python
+def moving_average(xs: list[float], k: int) -> list[float]:
+```
+
+If you're on Python 3.9+ use built-in generics; otherwise `from typing import List`. The hints also force you to think about edge cases — what if `k > len(xs)`? (Your current loop would produce an empty list, which may or may not be what you want.) That pause to consider the signature is exactly where bugs get caught before they ship.

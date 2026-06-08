@@ -1,0 +1,12 @@
+Add them. Even for short functions, type hints document intent and catch misuse early. They're free documentation that IDEs and linters can use.
+
+```python
+def moving_average(xs: list[float], k: int) -> list[float]:
+    out = []
+    for i in range(len(xs) - k):
+        window = xs[i:i+k]
+        out.append(sum(window) / k)
+    return out
+```
+
+The hints make it obvious `xs` is a sequence of numbers, `k` is the window size, and you get a list of floats back. No one has to read the body to understand the contract.

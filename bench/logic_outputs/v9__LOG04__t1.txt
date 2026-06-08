@@ -1,0 +1,1 @@
+Leave it. Black would change nothing — it's already one line under the 88-char limit. Running a formatter on a 3-line function is noise in diffs and CI. Only format when the file/project already uses Black and you're editing nearby code.

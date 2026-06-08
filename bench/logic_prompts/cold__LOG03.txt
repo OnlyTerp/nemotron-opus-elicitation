@@ -1,0 +1,15 @@
+[USER MESSAGE]
+Does this need a comment explaining the loop, or is it self-evident?
+```python
+def fetch_with_retries(do_call, max_retries=3):
+    attempt = 0
+    while attempt < max_retries:
+        try:
+            return do_call()
+        except TransientError:
+            attempt += 1
+    raise RuntimeError("all retries failed")
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

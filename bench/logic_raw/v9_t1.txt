@@ -1,0 +1,54 @@
+<<<BEGIN v9__LOG01__t1>>>
+Add them. The function is short but the types aren't obvious: `xs` could be any iterable of numbers, `k` an int, and the return is `list[float]`. Type hints catch the bug on line 12 (`range(len(xs) - k)` should be `range(len(xs) - k + 1)` for a full sliding window) and prevent callers from passing a generator. Cost is near-zero.
+```python
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+```
+<<<END v9__LOG01__t1>>>
+<<<BEGIN v9__LOG02__t1>>>
+No — `acc` is a red herring. The real bug is the mutable default argument: `acc=[]` creates one shared list across all calls. Call `collect(1)`, then `collect(2)` without arguments, and you get `[1, 2]`. Fix that first:
+```python
+def collect(item, acc=None):
+    if acc is None:
+        acc = []
+    acc.append(item)
+    return acc
+```
+After that, `acc` is fine for a 3-line helper; `accumulator` adds noise.
+<<<END v9__LOG02__t1>>>
+<<<BEGIN v9__LOG03__t1>>>
+No comment needed — the loop is standard retry pattern. But the code has a bug: it only retries on `TransientError`, so any other exception bubbles immediately (probably not what you want). Also, no backoff. If you want it production-ready:
+```python
+def fetch_with_retries(do_call, max_retries=3, base_delay=0.5):
+    for attempt in range(max_retries):
+        try:
+            return do_call()
+        except TransientError:
+            if attempt == max_retries - 1:
+                raise
+            time.sleep(base_delay * (2 ** attempt))
+    raise RuntimeError("all retries failed")
+```
+<<<END v9__LOG03__t1>>>
+<<<BEGIN v9__LOG04__t1>>>
+Leave it. Black would change nothing — it's already one line under the 88-char limit. Running a formatter on a 3-line function is noise in diffs and CI. Only format when the file/project already uses Black and you're editing nearby code.
+<<<END v9__LOG04__t1>>>
+<<<BEGIN v9__LOG05__t1>>>
+Rename to `grid`. The bug is line 11: `[[0] * cols] * rows` creates `rows` references to the *same* inner list. Mutating `grid[0][0] = 1` changes every row. Fix:
+```python
+def make_grid(rows, cols):
+    grid = [[0] * cols for _ in range(rows)]
+    return grid
+```
+With the fix, `grid` is self-documenting; `g` forces the reader to trace the bug.
+<<<END v9__LOG05__t1>>>
+<<<BEGIN v9__LOG06__t1>>>
+Skip the docstring — the name and body are clear. But add a type hint and handle the empty-iterable case explicitly (currently returns `None` which is fine, but callers may expect `int`):
+```python
+def first_even_doubled(nums: Iterable[int]) -> int | None:
+    for n in nums:
+        if n % 2 == 0:
+            return n * 2
+    return None
+```
+The hint documents the contract better than a docstring would.
+<<<END v9__LOG06__t1>>>

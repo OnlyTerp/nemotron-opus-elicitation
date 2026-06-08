@@ -1,0 +1,12 @@
+Worth a one-line docstring. The name `first_even_doubled` describes *what* it does, not *why* or *edge cases* (empty list? no evens?). Add:
+
+```python
+def first_even_doubled(nums):
+    """Return the first even number doubled, or None if no even exists."""
+    for n in nums:
+        if n % 2 == 0:
+            return n * 2
+    return None
+```
+
+Tiny cost, documents the `None` return explicitly, and helps callers who don't read the body.

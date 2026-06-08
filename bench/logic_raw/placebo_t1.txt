@@ -1,0 +1,74 @@
+<<<BEGIN placebo__LOG01__t1>>>
+Add them. Even for short functions, type hints document intent and catch misuse early. They're free documentation that IDEs and linters can use.
+
+```python
+def moving_average(xs: list[float], k: int) -> list[float]:
+    out = []
+    for i in range(len(xs) - k):
+        window = xs[i:i+k]
+        out.append(sum(window) / k)
+    return out
+```
+
+The hints make it obvious `xs` is a sequence of numbers, `k` is the window size, and you get a list of floats back. No one has to read the body to understand the contract.
+<<<END placebo__LOG01__t1>>>
+<<<BEGIN placebo__LOG02__t1>>>
+Two issues here: the name and the mutable default.
+
+`acc` is too cryptic — call it `accumulator` or `collected`. But the real problem is `acc=[]` as a default. In Python, that list is created once at function definition time and shared across all calls without an explicit argument. This is almost certainly a bug.
+
+Fix both:
+```python
+def collect(item, accumulator=None):
+    if accumulator is None:
+        accumulator = []
+    accumulator.append(item)
+    return accumulator
+```
+
+Now the name is clear and each call gets its own fresh list unless you explicitly pass one.
+<<<END placebo__LOG02__t1>>>
+<<<BEGIN placebo__LOG03__t1>>>
+It's self-evident. The retry pattern is idiomatic: `attempt` counts up, `max_retries` bounds it, `TransientError` is caught, and the final `raise` handles exhaustion. A comment would just restate what the code already says clearly.
+
+If you want to be extra kind to future readers, a one-line docstring on the function is enough:
+```python
+def fetch_with_retries(do_call, max_retries=3):
+    """Call do_call() with retries on TransientError."""
+    ...
+```
+
+But the loop itself needs no explanation.
+<<<END placebo__LOG03__t1>>>
+<<<BEGIN placebo__LOG04__t1>>>
+Leave it as-is. Black would change nothing meaningful here — it's a three-line function with no formatting ambiguity. Running a formatter on tiny helpers like this is just noise in your diff and CI time.
+
+If you're already running Black on the file/project, fine. But don't add it or run it *for* this function. The current formatting is perfectly readable.
+<<<END placebo__LOG04__t1>>>
+<<<BEGIN placebo__LOG05__t1>>>
+Rename to `grid` — it costs nothing and reads better. But there's a subtle bug: `[[0] * cols] * rows` creates `rows` references to the *same* inner list. Mutating one row mutates them all.
+
+Fix it and rename:
+```python
+def make_grid(rows, cols):
+    grid = [[0] * cols for _ in range(rows)]
+    return grid
+```
+
+Now each row is independent. The list comprehension is the standard fix, and `grid` makes the return value obvious at a glance.
+<<<END placebo__LOG05__t1>>>
+<<<BEGIN placebo__LOG06__t1>>>
+The name `first_even_doubled` is descriptive enough that a docstring isn't necessary. The logic is straightforward: iterate, find first even, return doubled, else `None`.
+
+If you want to be thorough, a one-liner helps:
+```python
+def first_even_doubled(nums):
+    """Return the first even number doubled, or None if no even exists."""
+    for n in nums:
+        if n % 2 == 0:
+            return n * 2
+    return None
+```
+
+But for a 5-line function with a clear name, it's optional. Your call.
+<<<END placebo__LOG06__t1>>>

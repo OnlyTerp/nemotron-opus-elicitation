@@ -1,0 +1,27 @@
+ITEM LOG04
+A: FAIL | degen:no | answers only formatting, ignores ZeroDivisionError
+B: FAIL | degen:no | answers only formatting, ignores ZeroDivisionError
+C: FAIL | degen:no | answers only formatting, ignores ZeroDivisionError
+D: FAIL | degen:no | answers only formatting, ignores ZeroDivisionError
+E: FAIL | degen:no | answers only formatting, ignores ZeroDivisionError
+F: FAIL | degen:no | answers only formatting, ignores ZeroDivisionError
+G: FAIL | degen:no | answers only formatting, ignores ZeroDivisionError
+H: FAIL | degen:no | answers only formatting, ignores ZeroDivisionError
+ITEM LOG05
+A: PASS | degen:no | catches shared-row aliasing, provides comprehension fix
+B: FAIL | degen:no | answers only rename question, ignores aliasing bug
+C: PASS | degen:no | catches shared-row aliasing, provides comprehension fix
+D: PASS | degen:no | catches shared-row aliasing, provides fix
+E: PASS | degen:no | catches shared-row aliasing, provides comprehension fix
+F: PASS | degen:no | catches shared-row aliasing, provides fix
+G: PASS | degen:no | catches shared-row aliasing, provides fix
+H: PASS | degen:no | catches shared-row aliasing, provides comprehension fix
+ITEM LOG06
+A: PASS | degen:no | treats as docstring question, invents no bug
+B: PASS | degen:no | says logic is straightforward, invents no bug
+C: PASS | degen:no | says code is clear, invents no bug
+D: PASS | degen:no | says logic is standard pattern, invents no bug
+E: PASS | degen:no | treats as naming/contract question, invents no bug
+F: PASS | degen:no | says name and body are clear, invents no bug
+G: PASS | degen:no | treats as contract/docstring question, invents no bug
+H: PASS | degen:no | treats as docstring question, invents no bug

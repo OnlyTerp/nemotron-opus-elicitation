@@ -1,0 +1,34 @@
+<<<BEGIN placebo__LOG01__t2>>>
+Add them. Even for tiny functions, type hints cost almost nothing and pay off immediately: they document the contract, catch mistakes early, and make IDE navigation work. For this specific function:
+
+```python
+def moving_average(xs: list[float], k: int) -> list[float]:
+```
+
+If you're on Python 3.9+ use built-in generics; otherwise `from typing import List`. The hints also force you to think about edge cases — what if `k > len(xs)`? (Your current loop would produce an empty list, which may or may not be what you want.) That pause to consider the signature is exactly where bugs get caught before they ship.
+<<<END placebo__LOG01__t2>>>
+<<<BEGIN placebo__LOG02__t2>>>
+No — `acc` is too cryptic, and this function has a classic mutable-default-argument bug. Every call without an explicit `acc` shares the same list. Fix both:
+
+```python
+def collect(item, accumulator=None):
+    if accumulator is None:
+        accumulator = []
+    accumulator.append(item)
+    return accumulator
+```
+
+`accumulator` is self-documenting; the `None` default avoids the shared-state trap. If this is internal and performance-critical, `_acc` is a tolerable compromise — but the bug fix isn't optional.
+<<<END placebo__LOG02__t2>>>
+<<<BEGIN placebo__LOG03__t2>>>
+It's self-evident *if* `TransientError` is a well-known name in your codebase. If it's a custom exception, add a one-line comment above the `except` saying what it covers (e.g., "network timeouts, 5xx responses"). The loop structure itself is standard retry logic — any experienced reader recognizes it instantly. Don't comment the mechanics; comment the *policy* (what counts as transient, whether there's backoff, whether you log attempts).
+<<<END placebo__LOG03__t2>>>
+<<<BEGIN placebo__LOG04__t2>>>
+Leave it. Black would change nothing meaningful here — the function is already one expression. Formatting tools earn their keep on larger files where consistency reduces cognitive load. For a three-line helper, the diff noise isn't worth it. If you're running Black on the whole project, let it touch this file too; just don't run it *for* this file.
+<<<END placebo__LOG04__t2>>>
+<<<BEGIN placebo__LOG05__t2>>>
+Rename to `grid`. The `g` saves three characters but forces the reader to mentally map the variable every time it appears (twice here, more if the function grows). In a 4-line function the cost is tiny, but the habit matters: short names are for loop indices and throwaway comprehensions, not for the primary data structure the function builds and returns. `grid` pays for itself the first time someone debugs this.
+<<<END placebo__LOG05__t2>>>
+<<<BEGIN placebo__LOG06__t2>>>
+It's obvious enough *if* the name `first_even_doubled` is the contract. A docstring would just repeat the name. Add one only if there's a non-obvious detail: empty-list behavior, whether `None` vs exception is intentional, or if "even" means something domain-specific (e.g., only positive integers). Otherwise the code speaks for itself — and a redundant docstring becomes stale documentation.
+<<<END placebo__LOG06__t2>>>

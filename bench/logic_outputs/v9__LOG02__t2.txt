@@ -1,0 +1,11 @@
+`acc` is unclear — spell it out as `accumulator` or `result`. But the real problem is the mutable default: `acc=[]` creates one shared list across all calls, so `collect(1); collect(2)` returns `[1, 2]` unexpectedly. Fix both:
+
+```python
+def collect(item, accumulator=None):
+    if accumulator is None:
+        accumulator = []
+    accumulator.append(item)
+    return accumulator
+```
+
+If you want the old "accumulate across calls" behavior, make it explicit with a class or closure, not a default argument.

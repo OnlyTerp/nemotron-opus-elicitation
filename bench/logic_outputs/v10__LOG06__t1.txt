@@ -1,0 +1,9 @@
+Yes, a one-line docstring. The name `first_even_doubled` describes *what* it does, not *why* or *what it returns on empty/no-even*. A docstring answers the caller's immediate questions without reading the body:
+
+```python
+def first_even_doubled(nums):
+    """Return the first even number doubled, or None if no even exists."""
+    ...
+```
+
+That's 12 words — cheaper than the time the next reader spends verifying the `None` return.

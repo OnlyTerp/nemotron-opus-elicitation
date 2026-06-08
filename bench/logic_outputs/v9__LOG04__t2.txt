@@ -1,0 +1,8 @@
+Run Black. It's a one-liner; formatting drift is noise. Black will make it:
+
+```python
+def percent(part, whole):
+    return part / whole * 100
+```
+
+(unchanged here, but it enforces consistency project-wide). Don't make style decisions per-function — automate it.

@@ -1,0 +1,27 @@
+ITEM LOG01
+A: FAIL | degen:no | Only discusses type hints; misses the off-by-one bug
+B: FAIL | degen:no | Only discusses type hints and edge cases; misses off-by-one
+C: PASS | degen:no | Correctly identifies range(len(xs)-k) needs +1 for last window
+D: FAIL | degen:no | Adds type hints but preserves buggy range; misses bug
+E: FAIL | degen:no | Only discusses type hints generally; never mentions bug
+F: PASS | degen:no | Identifies off-by-one: range should be len(xs)-k+1
+G: PASS | degen:no | Correctly identifies drops last window; fixes with +1
+H: FAIL | degen:no | Adds type hints but preserves buggy range; misses bug
+ITEM LOG02
+A: PASS | degen:no | Catches mutable default acc=[] shared across calls
+B: PASS | degen:no | Identifies shared mutable default with clear example
+C: PASS | degen:no | Identifies mutable default creating one shared list
+D: PASS | degen:no | Identifies list created once at definition and shared
+E: PASS | degen:no | Identifies mutable default argument shared across calls
+F: PASS | degen:no | Identifies classic mutable-default-argument bug
+G: PASS | degen:no | Identifies mutable default with concrete example
+H: FAIL | degen:no | Only discusses naming conventions; misses mutable default bug
+ITEM LOG03
+A: FAIL | degen:no | Says self-evident; misses attempts-vs-retries mismatch
+B: FAIL | degen:no | Misidentifies issue; misses attempts-vs-retries off-by-one
+C: FAIL | degen:no | Flags wrong bug (catch-only-TransientError); misses count mismatch
+D: FAIL | degen:no | Only discusses commenting policy; misses retries bug
+E: FAIL | degen:no | Says self-evident; misses attempts-vs-retries mismatch
+F: FAIL | degen:no | Flags missing backoff; misses attempts-vs-retries mismatch
+G: FAIL | degen:no | Suggests docstring/backoff; misses attempts-vs-retries mismatch
+H: FAIL | degen:no | Says self-evident; misses attempts-vs-retries mismatch

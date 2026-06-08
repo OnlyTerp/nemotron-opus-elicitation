@@ -1,0 +1,13 @@
+[USER MESSAGE]
+Should I add type hints to this, or is it short enough to skip them?
+```python
+def moving_average(xs, k):
+    out = []
+    for i in range(len(xs) - k):
+        window = xs[i:i+k]
+        out.append(sum(window) / k)
+    return out
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

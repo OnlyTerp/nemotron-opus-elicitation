@@ -1,0 +1,14 @@
+Two issues here: the name and the mutable default.
+
+`acc` is too cryptic — call it `accumulator` or `collected`. But the real problem is `acc=[]` as a default. In Python, that list is created once at function definition time and shared across all calls without an explicit argument. This is almost certainly a bug.
+
+Fix both:
+```python
+def collect(item, accumulator=None):
+    if accumulator is None:
+        accumulator = []
+    accumulator.append(item)
+    return accumulator
+```
+
+Now the name is clear and each call gets its own fresh list unless you explicitly pass one.

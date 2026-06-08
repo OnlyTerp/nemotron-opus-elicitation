@@ -1,0 +1,1 @@
+Leave it as is. The function is already clean and PEP 8 compliant. Black would only add a space after the comma (`part, whole`), which is purely aesthetic. No functional difference—leave it.

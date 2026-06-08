@@ -1,0 +1,9 @@
+Skip the docstring — the name and body are clear. But add a type hint and handle the empty-iterable case explicitly (currently returns `None` which is fine, but callers may expect `int`):
+```python
+def first_even_doubled(nums: Iterable[int]) -> int | None:
+    for n in nums:
+        if n % 2 == 0:
+            return n * 2
+    return None
+```
+The hint documents the contract better than a docstring would.

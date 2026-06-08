@@ -1,0 +1,1 @@
+Obvious enough. The name `first_even_doubled` describes the behavior precisely. The logic is a single linear scan with an early return — standard pattern. A docstring would just repeat the name.

@@ -1,0 +1,9 @@
+Rename to `grid` — but first fix the bug: `[[0] * cols] * rows` creates `rows` references to the *same* inner list. Mutating one row mutates all. Use a comprehension:
+
+```python
+def make_grid(rows, cols):
+    grid = [[0] * cols for _ in range(rows)]
+    return grid
+```
+
+`grid` is clearer than `g`, and the comprehension is the correct pattern. Two fixes in one.

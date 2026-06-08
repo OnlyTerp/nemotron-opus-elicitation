@@ -1,0 +1,18 @@
+<<<BEGIN cold__LOG01__t1>>>
+Add type hints. Even short functions benefit from them: they clarify expected types (list[float], int), enable static analysis, and serve as living documentation. The cost is minimal — two annotations — and the payoff compounds as the codebase grows. For a utility like this that might be reused, type hints prevent subtle bugs (e.g., passing strings or None) and make IDE autocomplete work. Skip them only for truly throwaway one-liners in REPL sessions.
+<<<END cold__LOG01__t1>>>
+<<<BEGIN cold__LOG02__t1>>>
+Spell it out: `accumulator` or `result`. `acc` is a common abbreviation but still imposes a tiny cognitive tax on readers unfamiliar with the convention. More critically, this function has a **bug**: the mutable default `acc=[]` is created once at definition time, so repeated calls without an argument share the same list. Fix that first — use `acc=None` and initialize inside — then name the parameter clearly.
+<<<END cold__LOG02__t1>>>
+<<<BEGIN cold__LOG03__t1>>>
+No comment needed for the loop itself — the retry pattern is idiomatic and readable. However, add a docstring explaining *what* `TransientError` covers (network blips? 5xx? timeouts?) and that `do_call` must be a zero-arg callable. The current code also lacks exponential backoff or jitter, which matters for production retries. If this is a utility used broadly, document those assumptions; if it's a one-off, the loop is self-evident enough.
+<<<END cold__LOG03__t1>>>
+<<<BEGIN cold__LOG04__t1>>>
+Run Black. It's a one-liner, but consistency matters: formatting drift accumulates, and "leave as is" decisions become subjective debt. Black eliminates bikeshedding, handles edge cases (trailing commas, line length), and integrates with CI. For a two-line function, the diff is noise — but the habit of "always format" scales. If you're resisting Black for this, you're optimizing the wrong thing.
+<<<END cold__LOG04__t1>>>
+<<<BEGIN cold__LOG05__t1>>>
+Rename to `grid`. The abbreviation `g` saves 4 characters but forces every reader to mentally map it — especially since the function *returns* it, making the name part of the caller's context. In a 4-line function, clarity > brevity. Also, this code has a **bug**: `[[0] * cols] * rows` creates `rows` references to the *same* inner list. Fix: `[[0] * cols for _ in range(rows)]`. Then name the result `grid`.
+<<<END cold__LOG05__t1>>>
+<<<BEGIN cold__LOG06__t1>>>
+Add a one-line docstring. The logic is simple, but the *contract* isn't: returns `None` if no even number exists, otherwise the first even doubled. That edge case (`None` return) is the exact thing callers will get wrong without a hint. A docstring like `"""Return first even number doubled, or None if none exist."""` costs one line and prevents misuse. Skip docstrings only for truly obvious pure functions (e.g., `add(a, b)`).
+<<<END cold__LOG06__t1>>>

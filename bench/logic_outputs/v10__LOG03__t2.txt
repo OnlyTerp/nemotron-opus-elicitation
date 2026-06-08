@@ -1,0 +1,1 @@
+It's self-evident. The retry loop is idiomatic Python: `while attempt < max_retries` with `try/except TransientError` and an incrementing counter is a standard pattern any Python developer recognizes instantly. The variable names (`attempt`, `max_retries`, `TransientError`) and control flow make the intent obvious. A comment would be noise.

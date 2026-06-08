@@ -1,0 +1,9 @@
+No — `acc` is a red herring. The real bug is the mutable default argument: `acc=[]` creates one shared list across all calls. Call `collect(1)`, then `collect(2)` without arguments, and you get `[1, 2]`. Fix that first:
+```python
+def collect(item, acc=None):
+    if acc is None:
+        acc = []
+    acc.append(item)
+    return acc
+```
+After that, `acc` is fine for a 3-line helper; `accumulator` adds noise.

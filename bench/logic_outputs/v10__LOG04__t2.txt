@@ -1,0 +1,6 @@
+```python
+def percent(part, whole):
+    return part / whole * 100
+```
+
+Black will format this identically — just removes the redundant parentheses. Run it; no reason not to.

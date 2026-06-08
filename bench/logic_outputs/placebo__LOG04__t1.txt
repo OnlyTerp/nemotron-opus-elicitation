@@ -1,0 +1,3 @@
+Leave it as-is. Black would change nothing meaningful here — it's a three-line function with no formatting ambiguity. Running a formatter on tiny helpers like this is just noise in your diff and CI time.
+
+If you're already running Black on the file/project, fine. But don't add it or run it *for* this function. The current formatting is perfectly readable.

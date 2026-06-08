@@ -1,0 +1,4 @@
+Add them. The function is short but the types aren't obvious: `xs` could be any iterable of numbers, `k` an int, and the return is `list[float]`. Type hints catch the bug on line 12 (`range(len(xs) - k)` should be `range(len(xs) - k + 1)` for a full sliding window) and prevent callers from passing a generator. Cost is near-zero.
+```python
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+```

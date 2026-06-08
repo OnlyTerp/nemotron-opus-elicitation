@@ -1,0 +1,73 @@
+<<<BEGIN v10__LOG01__t1>>>
+Add type hints. The function is small but the contract isn't obvious: `xs` expects a sequence of numbers, `k` an int > 0, and the return is `list[float]`. Without hints, callers can't tell if `xs` accepts iterators (it doesn't — `len(xs)` and slicing require `Sequence`), or whether `k` can exceed `len(xs)` (it silently returns empty). The hints cost one line and prevent real bugs:
+
+```python
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+    ...
+```
+<<<END v10__LOG01__t1>>>
+<<<BEGIN v10__LOG02__t1>>>
+No — `acc` is a footgun. The default `acc=[]` creates a single shared list across all calls (mutable default argument). Every call without an explicit `acc` mutates the same list. Fix the bug first, then name the parameter:
+
+```python
+def collect(item, acc=None):
+    if acc is None:
+        acc = []
+    acc.append(item)
+    return acc
+```
+
+With the bug fixed, `acc` is fine for a one-liner accumulator. If the function grows, spell it out (`accumulator` or `results`).
+<<<END v10__LOG02__t1>>>
+<<<BEGIN v10__LOG03__t1>>>
+No comment needed. The loop structure is standard retry pattern: `while attempt < max_retries` + `try/except` + increment on failure is idiomatic. A comment would just restate the code.
+
+But the code has a bug: it catches `TransientError` but never sleeps between retries, so it hammer-retries instantly. Add exponential backoff:
+
+```python
+import time
+
+def fetch_with_retries(do_call, max_retries=3):
+    attempt = 0
+    while attempt < max_retries:
+        try:
+            return do_call()
+        except TransientError:
+            attempt += 1
+            if attempt < max_retries:
+                time.sleep(2 ** attempt)  # 2s, 4s, 8s...
+    raise RuntimeError("all retries failed")
+```
+<<<END v10__LOG03__t1>>>
+<<<BEGIN v10__LOG04__t1>>>
+Run Black. The function is one expression — formatting is trivial, but consistency across the codebase isn't. Black eliminates style debates, enforces a uniform line length, and makes diffs smaller (no whitespace churn). For a 2-liner the diff is zero; for the project it's nonzero. Run it.
+<<<END v10__LOG04__t1>>>
+<<<BEGIN v10__LOG05__t1>>>
+Rename to `grid` — but first, fix the bug. `[[0] * cols] * rows` creates `rows` references to the *same* inner list; mutating one row mutates all:
+
+```python
+g = make_grid(2, 3)
+g[0][0] = 1  # g is now [[1, 0, 0], [1, 0, 0]]
+```
+
+Correct version:
+
+```python
+def make_grid(rows, cols):
+    grid = [[0] * cols for _ in range(rows)]
+    return grid
+```
+
+`grid` reads better than `g` and the comprehension makes the bug impossible.
+<<<END v10__LOG05__t1>>>
+<<<BEGIN v10__LOG06__t1>>>
+Yes, a one-line docstring. The name `first_even_doubled` describes *what* it does, not *why* or *what it returns on empty/no-even*. A docstring answers the caller's immediate questions without reading the body:
+
+```python
+def first_even_doubled(nums):
+    """Return the first even number doubled, or None if no even exists."""
+    ...
+```
+
+That's 12 words — cheaper than the time the next reader spends verifying the `None` return.
+<<<END v10__LOG06__t1>>>

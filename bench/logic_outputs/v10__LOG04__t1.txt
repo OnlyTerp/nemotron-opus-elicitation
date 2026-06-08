@@ -1,0 +1,1 @@
+Run Black. The function is one expression — formatting is trivial, but consistency across the codebase isn't. Black eliminates style debates, enforces a uniform line length, and makes diffs smaller (no whitespace churn). For a 2-liner the diff is zero; for the project it's nonzero. Run it.

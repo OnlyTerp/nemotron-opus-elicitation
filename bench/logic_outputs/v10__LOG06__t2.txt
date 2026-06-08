@@ -1,0 +1,1 @@
+Obvious enough. The name `first_even_doubled` and the three-line body say everything a docstring would. A docstring here would be noise.

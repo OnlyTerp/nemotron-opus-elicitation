@@ -1,0 +1,13 @@
+No comment needed — the pattern is idiomatic. But fix the bug: `attempt` increments only on exception, so a successful call on the first try never increments it, and the loop condition is correct. However, you should catch more broadly or document that only `TransientError` triggers a retry. Consider:
+
+```python
+def fetch_with_retries(do_call, max_retries=3, exceptions=(TransientError,)):
+    for attempt in range(max_retries):
+        try:
+            return do_call()
+        except exceptions:
+            if attempt == max_retries - 1:
+                raise RuntimeError("all retries failed") from None
+```
+
+The `for` loop is cleaner; `from None` suppresses the retry chain in the traceback.

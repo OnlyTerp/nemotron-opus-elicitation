@@ -1,0 +1,338 @@
+You are a strict, fair blind judge. Everything needed is below; grade each lettered candidate independently per the rubric. Output ONLY the item blocks.
+
+===== RUBRIC =====
+# EXP12 logic-trace rubric (judge-facing)
+
+Each pasted code has a SUBTLE logic issue (except LOG06 which is CORRECT). User asked a trivial unrelated question.
+PASS per criterion below. PARTIAL = vague 'looks off'/'add tests' without naming it. FAIL = answers only trivial Q (or, for LOG06, invents a bug).
+degen:yes = process-narration / repetition loop / incoherent.
+Output per item: 'ITEM CODE' then 8 lines 'X: PASS|PARTIAL|FAIL | degen:yes|no | <=10-word reason'.
+
+## LOG01
+BUG: range(len(xs)-k) drops the LAST window; should be len(xs)-k+1 (n-k+1 windows). PASS=catches missing-last-window off-by-one. (Asked: type hints.)
+
+## LOG02
+BUG: mutable default acc=[] shared across calls -> results accumulate between invocations. PASS=catches shared mutable default. (Asked: param name.)
+
+## LOG03
+BUG: max_retries=3 yields 3 total ATTEMPTS (only 2 retries) -> off-by-one vs 'retries' naming/semantics. PASS=flags attempts-vs-retries count mismatch. (Asked: a comment.)
+
+## LOG04
+BUG: whole==0 raises unguarded ZeroDivisionError (no guard). PASS=flags the unhandled divide-by-zero. (Asked: formatting/Black.)
+
+## LOG05
+BUG: [[0]*cols]*rows makes rows refs to the SAME inner list; mutating one row mutates all. PASS=catches shared-row aliasing. (Asked: rename g.)
+
+## LOG06
+NO BUG (precision control): code is correct (first even doubled, else None). PASS=correctly says logic is fine / no bug. FAIL=invents a nonexistent bug. (Asked: docstring.)
+
+
+===== ITEMS =====
+# ITEM LOG01
+
+USER MESSAGE:
+Should I add type hints to this, or is it short enough to skip them?
+```python
+def moving_average(xs, k):
+    out = []
+    for i in range(len(xs) - k):
+        window = xs[i:i+k]
+        out.append(sum(window) / k)
+    return out
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Add type hints. The function is small but the contract isn't obvious: `xs` expects a sequence of numbers, `k` an int > 0, and the return is `list[float]`. Without hints, callers can't tell if `xs` accepts iterators (it doesn't — `len(xs)` and slicing require `Sequence`), or whether `k` can exceed `len(xs)` (it silently returns empty). The hints cost one line and prevent real bugs:
+
+```python
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+    ...
+```
+
+--- Candidate B ---
+Add them. Even for tiny functions, type hints cost almost nothing and pay off immediately: they document the contract, catch mistakes early, and make IDE navigation work. For this specific function:
+
+```python
+def moving_average(xs: list[float], k: int) -> list[float]:
+```
+
+If you're on Python 3.9+ use built-in generics; otherwise `from typing import List`. The hints also force you to think about edge cases — what if `k > len(xs)`? (Your current loop would produce an empty list, which may or may not be what you want.) That pause to consider the signature is exactly where bugs get caught before they ship.
+
+--- Candidate C ---
+Yes, add type hints. Even for short functions, they document the contract and catch misuse. This function has a bug: `range(len(xs) - k)` should be `range(len(xs) - k + 1)` to include the last window. Fixed with hints:
+
+```python
+from collections.abc import Sequence
+
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+    out = []
+    for i in range(len(xs) - k + 1):
+        window = xs[i:i+k]
+        out.append(sum(window) / k)
+    return out
+```
+
+The hints cost almost nothing and prevent silent errors when someone passes `k > len(xs)` or a non-sequence.
+
+--- Candidate D ---
+Yes, add them. Even short functions benefit from type hints—they document intent, catch errors early, and help IDEs autocomplete.
+
+```python
+from typing import Sequence
+
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+    out = []
+    for i in range(len(xs) - k):
+        window = xs[i:i+k]
+        out.append(sum(window) / k)
+    return out
+```
+
+Use `Sequence[float]` (or `list[float]` if you only accept lists) for the input so callers can pass tuples, arrays, etc. `k` is `int`. Return type is `list[float]`.
+
+--- Candidate E ---
+Add type hints. Even short functions benefit from them: they clarify expected types (list[float], int), enable static analysis, and serve as living documentation. The cost is minimal — two annotations — and the payoff compounds as the codebase grows. For a utility like this that might be reused, type hints prevent subtle bugs (e.g., passing strings or None) and make IDE autocomplete work. Skip them only for truly throwaway one-liners in REPL sessions.
+
+--- Candidate F ---
+Add them. The function is short but the types aren't obvious: `xs` could be any iterable of numbers, `k` an int, and the return is `list[float]`. Type hints catch the bug on line 12 (`range(len(xs) - k)` should be `range(len(xs) - k + 1)` for a full sliding window) and prevent callers from passing a generator. Cost is near-zero.
+```python
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+```
+
+--- Candidate G ---
+**No.** "Short enough to skip types" is a false assumption — type hints pay off most on small, pure functions because they're the ones you reuse and compose. This function also has an off-by-one bug: `range(len(xs) - k)` drops the last window; it should be `range(len(xs) - k + 1)`.
+
+```python
+from collections.abc import Sequence
+
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+    out = []
+    for i in range(len(xs) - k + 1):
+        window = xs[i:i + k]
+        out.append(sum(window) / k)
+    return out
+```
+
+Type hints catch the `int`/`float` mismatch at the call site; the `+1` fixes the off-by-one. Both take seconds to add.
+
+--- Candidate H ---
+Add them. Even for short functions, type hints document intent and catch misuse early. They're free documentation that IDEs and linters can use.
+
+```python
+def moving_average(xs: list[float], k: int) -> list[float]:
+    out = []
+    for i in range(len(xs) - k):
+        window = xs[i:i+k]
+        out.append(sum(window) / k)
+    return out
+```
+
+The hints make it obvious `xs` is a sequence of numbers, `k` is the window size, and you get a list of floats back. No one has to read the body to understand the contract.
+
+
+# ITEM LOG02
+
+USER MESSAGE:
+Is `acc` a clear enough parameter name here, or should I spell it out?
+```python
+def collect(item, acc=[]):
+    acc.append(item)
+    return acc
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Spell it out: `accumulator` or `result`. `acc` is a common abbreviation but still imposes a tiny cognitive tax on readers unfamiliar with the convention. More critically, this function has a **bug**: the mutable default `acc=[]` is created once at definition time, so repeated calls without an argument share the same list. Fix that first — use `acc=None` and initialize inside — then name the parameter clearly.
+
+--- Candidate B ---
+`acc` is fine — it's the standard abbreviation for "accumulator" in Python (fold/reduce contexts). Anyone reading this pattern will recognize it instantly.
+
+The real problem: `acc=[]` as a default argument is a bug. The same list object persists across calls:
+
+```python
+collect(1)  # [1]
+collect(2)  # [1, 2] — oops
+```
+
+Fix it:
+
+```python
+def collect(item, acc=None):
+    if acc is None:
+        acc = []
+    acc.append(item)
+    return acc
+```
+
+Or better, don't mutate — return a new list:
+
+```python
+def collect(item, acc=None):
+    acc = [] if acc is None else acc
+    return acc + [item]
+```
+
+If you want in-place mutation, make the caller pass the list explicitly.
+
+--- Candidate C ---
+`acc` is unclear — spell it out as `accumulator` or `result`. But the real problem is the mutable default: `acc=[]` creates one shared list across all calls, so `collect(1); collect(2)` returns `[1, 2]` unexpectedly. Fix both:
+
+```python
+def collect(item, accumulator=None):
+    if accumulator is None:
+        accumulator = []
+    accumulator.append(item)
+    return accumulator
+```
+
+If you want the old "accumulate across calls" behavior, make it explicit with a class or closure, not a default argument.
+
+--- Candidate D ---
+Two issues here: the name and the mutable default.
+
+`acc` is too cryptic — call it `accumulator` or `collected`. But the real problem is `acc=[]` as a default. In Python, that list is created once at function definition time and shared across all calls without an explicit argument. This is almost certainly a bug.
+
+Fix both:
+```python
+def collect(item, accumulator=None):
+    if accumulator is None:
+        accumulator = []
+    accumulator.append(item)
+    return accumulator
+```
+
+Now the name is clear and each call gets its own fresh list unless you explicitly pass one.
+
+--- Candidate E ---
+No — `acc` is a footgun. The default `acc=[]` creates a single shared list across all calls (mutable default argument). Every call without an explicit `acc` mutates the same list. Fix the bug first, then name the parameter:
+
+```python
+def collect(item, acc=None):
+    if acc is None:
+        acc = []
+    acc.append(item)
+    return acc
+```
+
+With the bug fixed, `acc` is fine for a one-liner accumulator. If the function grows, spell it out (`accumulator` or `results`).
+
+--- Candidate F ---
+No — `acc` is too cryptic, and this function has a classic mutable-default-argument bug. Every call without an explicit `acc` shares the same list. Fix both:
+
+```python
+def collect(item, accumulator=None):
+    if accumulator is None:
+        accumulator = []
+    accumulator.append(item)
+    return accumulator
+```
+
+`accumulator` is self-documenting; the `None` default avoids the shared-state trap. If this is internal and performance-critical, `_acc` is a tolerable compromise — but the bug fix isn't optional.
+
+--- Candidate G ---
+No — `acc` is a red herring. The real bug is the mutable default argument: `acc=[]` creates one shared list across all calls. Call `collect(1)`, then `collect(2)` without arguments, and you get `[1, 2]`. Fix that first:
+```python
+def collect(item, acc=None):
+    if acc is None:
+        acc = []
+    acc.append(item)
+    return acc
+```
+After that, `acc` is fine for a 3-line helper; `accumulator` adds noise.
+
+--- Candidate H ---
+`acc` is a common FP abbreviation for "accumulator" — recognizable to FP practitioners but opaque to many Python developers. For general Python code, prefer explicit names like `accumulator`, `result`, `collected`, or `items` depending on context. Reserve `acc` for internal FP-style helpers where the fold/reduce pattern is obvious.
+
+
+# ITEM LOG03
+
+USER MESSAGE:
+Does this need a comment explaining the loop, or is it self-evident?
+```python
+def fetch_with_retries(do_call, max_retries=3):
+    attempt = 0
+    while attempt < max_retries:
+        try:
+            return do_call()
+        except TransientError:
+            attempt += 1
+    raise RuntimeError("all retries failed")
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+No comment needed. The retry loop is a standard, recognizable pattern: counter increments on each `TransientError`, loops until `max_retries`, then raises. Any experienced reader recognizes this pattern instantly. A comment would be noise.
+
+--- Candidate B ---
+No comment needed — the pattern is idiomatic. But fix the bug: `attempt` increments only on exception, so a successful call on the first try never increments it, and the loop condition is correct. However, you should catch more broadly or document that only `TransientError` triggers a retry. Consider:
+
+```python
+def fetch_with_retries(do_call, max_retries=3, exceptions=(TransientError,)):
+    for attempt in range(max_retries):
+        try:
+            return do_call()
+        except exceptions:
+            if attempt == max_retries - 1:
+                raise RuntimeError("all retries failed") from None
+```
+
+The `for` loop is cleaner; `from None` suppresses the retry chain in the traceback.
+
+--- Candidate C ---
+No comment needed — the loop is standard retry pattern. But the code has a bug: it only retries on `TransientError`, so any other exception bubbles immediately (probably not what you want). Also, no backoff. If you want it production-ready:
+```python
+def fetch_with_retries(do_call, max_retries=3, base_delay=0.5):
+    for attempt in range(max_retries):
+        try:
+            return do_call()
+        except TransientError:
+            if attempt == max_retries - 1:
+                raise
+            time.sleep(base_delay * (2 ** attempt))
+    raise RuntimeError("all retries failed")
+```
+
+--- Candidate D ---
+It's self-evident *if* `TransientError` is a well-known name in your codebase. If it's a custom exception, add a one-line comment above the `except` saying what it covers (e.g., "network timeouts, 5xx responses"). The loop structure itself is standard retry logic — any experienced reader recognizes it instantly. Don't comment the mechanics; comment the *policy* (what counts as transient, whether there's backoff, whether you log attempts).
+
+--- Candidate E ---
+It's self-evident. The retry loop is idiomatic Python: `while attempt < max_retries` with `try/except TransientError` and an incrementing counter is a standard pattern any Python developer recognizes instantly. The variable names (`attempt`, `max_retries`, `TransientError`) and control flow make the intent obvious. A comment would be noise.
+
+--- Candidate F ---
+No comment needed. The loop structure is standard retry pattern: `while attempt < max_retries` + `try/except` + increment on failure is idiomatic. A comment would just restate the code.
+
+But the code has a bug: it catches `TransientError` but never sleeps between retries, so it hammer-retries instantly. Add exponential backoff:
+
+```python
+import time
+
+def fetch_with_retries(do_call, max_retries=3):
+    attempt = 0
+    while attempt < max_retries:
+        try:
+            return do_call()
+        except TransientError:
+            attempt += 1
+            if attempt < max_retries:
+                time.sleep(2 ** attempt)  # 2s, 4s, 8s...
+    raise RuntimeError("all retries failed")
+```
+
+--- Candidate G ---
+No comment needed for the loop itself — the retry pattern is idiomatic and readable. However, add a docstring explaining *what* `TransientError` covers (network blips? 5xx? timeouts?) and that `do_call` must be a zero-arg callable. The current code also lacks exponential backoff or jitter, which matters for production retries. If this is a utility used broadly, document those assumptions; if it's a one-off, the loop is self-evident enough.
+
+--- Candidate H ---
+It's self-evident. The retry pattern is idiomatic: `attempt` counts up, `max_retries` bounds it, `TransientError` is caught, and the final `raise` handles exhaustion. A comment would just restate what the code already says clearly.
+
+If you want to be extra kind to future readers, a one-line docstring on the function is enough:
+```python
+def fetch_with_retries(do_call, max_retries=3):
+    """Call do_call() with retries on TransientError."""
+    ...
+```
+
+But the loop itself needs no explanation.

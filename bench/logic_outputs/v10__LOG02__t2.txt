@@ -1,0 +1,28 @@
+`acc` is fine — it's the standard abbreviation for "accumulator" in Python (fold/reduce contexts). Anyone reading this pattern will recognize it instantly.
+
+The real problem: `acc=[]` as a default argument is a bug. The same list object persists across calls:
+
+```python
+collect(1)  # [1]
+collect(2)  # [1, 2] — oops
+```
+
+Fix it:
+
+```python
+def collect(item, acc=None):
+    if acc is None:
+        acc = []
+    acc.append(item)
+    return acc
+```
+
+Or better, don't mutate — return a new list:
+
+```python
+def collect(item, acc=None):
+    acc = [] if acc is None else acc
+    return acc + [item]
+```
+
+If you want in-place mutation, make the caller pass the list explicitly.

@@ -1,0 +1,9 @@
+[USER MESSAGE]
+Black or just leave the formatting as is for this little helper?
+```python
+def percent(part, whole):
+    return part / whole * 100
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.
