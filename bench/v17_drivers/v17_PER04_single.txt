@@ -1,0 +1,1 @@
+Read v17_prompts/v17__PER04.txt with your read tool. Fully adopt its [SYSTEM ROLE INSTRUCTIONS] persona, answer the [USER MESSAGE] in <=160 words by hand (no tools). Your entire final message must be ONLY the answer (plain prose/code, no preamble).
