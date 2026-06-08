@@ -83,8 +83,16 @@ Across the whole campaign the single most reliable finding is the head-to-head m
 | Capability ceiling is liftable by prompting | **Falsified** — hardest logic traces missed by every arm |
 | No fine-tuning needed to install the disposition Nemotron lacks | **Supported** — the lean persona (v11) does it |
 
+### R13 — The ONE lever that moved CAPABILITY (not just voice): execute-verify (EXP17-19)
+Everything through R12 moved *disposition/reliability*, never the capability ceiling — the hardest logic-trace bugs (off-by-ones, wrong formulas) were missed by every prompt-only arm. R13 broke that ceiling.
+- **EXP17:** on the exact silent-wrong-output bugs that defeated EXP12/13, adding an **execute-verify disposition** ("don't trust a read-through; check the actual output on a concrete boundary input — even-length list, n=0/1, empty") took recall from **cold 2/10 → v12 10/10**, with **0 precision cost** (controls 6/6) and 0 degeneration. 98% judge agreement. First lever in the whole campaign to move capability.
+- **EXP18:** does a real SANDBOX beat *mental* execution? **No** — v12 (mental) = v12tool (actually runs code) = 12/12 on a HARD bank. On review-sized code the model either knows the gotcha as a fact or can simulate it once told to; the tool only earns its keep on genuinely uncomputable-by-eye code (large/stateful/novel/heavy-numeric). **The lever is the disposition to check a concrete input, not the tool.**
+- **EXP19:** fold the clause into v11 → **v13**. Re-run the mixed battery + silent-bug items: **VOICE 4/4 (no regression), CTRL 4/4 (0 invented bugs), 0 degeneration, + CODEBUG 8/10** (inherits the recall gain). v13 strictly dominates v11.
+
+**This is the project's only capability result.** It's narrow (code correctness) but real, replicated, and cheap (a prompt clause, no infra). Note it's *still* "elicitation": the model could always simulate `moving_average([1,2,3,4],2)`; the prompt just makes it *decide to*.
+
 ## The thesis, restated honestly
-"Elicitation, not capability" **holds** — but the lever is **persona inhabitation supplying a missing disposition**, not an explicit reasoning scaffold. The deliverable is not a universal magic prompt; it is a method: **audit the base model for the disposition it lacks, then supply exactly that with the leanest possible persona.** For Nemotron 3 Ultra the lacking disposition is warm, validate-first VOICE (plus a cheap premise-first nudge), and `templates/v11_lean_synthesis.md` supplies it without the degeneration, over-refusal, or VOICE costs of the earlier gate templates.
+"Elicitation, not capability" **holds** — but the lever is **persona inhabitation supplying a missing disposition**, not an explicit reasoning scaffold. The deliverable is not a universal magic prompt; it is a method: **audit the base model for the disposition it lacks, then supply exactly that with the leanest possible persona.** For Nemotron 3 Ultra the lacking dispositions are (1) warm, validate-first VOICE, (2) a cheap premise-first nudge, and (3) execute-verify on code — and **`templates/v13_lean_verify.md`** supplies all three without the degeneration, over-refusal, or VOICE costs of the earlier gate templates. (v11 is the same minus the code clause — best for pure non-code use.)
 
 ## Open questions / next tests
 - Quantify the VOICE effect at higher n with a dedicated validate-first rubric and ≥6 multi-turn threads (EXP15 was an existence check, n=2).

@@ -10,11 +10,12 @@
 
 1. **The active ingredient is the PERSONA, not the gates.** A length-matched "warm, specific, validate-first senior expert" prompt with **none** of the explicit premise-check/self-audit machinery beats the bare model on every axis — and **ties or beats every gated template** on five held-out blind batteries. The elaborate GATE scaffolding this project was built around adds ~0 over a good persona, and its bluntness mildly *hurts* the validate-first voice.
 2. **The single most reliable, replicated effect: persona fixes the bare model's VOICE.** Cold Nemotron, asked "I think X, check me?", opens "No/Not quite" and corrects without acknowledging what's right (EXP14: cold 1/4 on VOICE). Any warm persona repairs this (4/4). This is the real, shippable win.
-3. **Capability ceiling is real.** The hardest logic-trace bugs (a `range(len-k)` off-by-one, a floor-division average) are missed by *every* arm. Prompting moves the floor and the middle, not the ceiling.
+3. **Capability ceiling is real for *persona* prompts — but breakable with execute-verify.** The hardest silent-wrong-output bugs (a `range(len-k)` off-by-one, a floor-division average) are missed by every *voice/persona* arm (cold 2/10). The execute-verify clause (point 6) is the one thing that cracked them (→10/10).
 4. **The engineered-template trajectory was still real progress:** v7/v8 (labeled gates → process-narration + repetition degeneration) → **v9** (de-labeled, 0 degeneration) → **v10** (validate-first, fixes VOICE) → **v11** (lean, drops the verbose gate paragraphs, matches v10 at ~60% the length). Each step fixed a *measured* defect.
 5. **The persona is multi-turn durable** (EXP15): it survives 8 turns of real conversation without decaying to cold's blunt reflex.
+6. **One lever moved actual CAPABILITY, not just voice** (EXP17-19): an **execute-verify** clause ("don't trust a read-through — check the code's output on a concrete boundary input") took silent-wrong-output-bug recall from **cold 2/10 → 10/10**, with zero precision cost and zero degeneration. A real sandbox added nothing over *mental* execution on review-sized code (EXP18) — the lever is the disposition, not the tool. Folded into the persona, this gives the final template **`v13_lean_verify.md`**.
 
-**Bottom line:** the shippable artifact is a **lean warm-expert persona** (`templates/v11_lean_synthesis.md`), not the gate machinery. The "elicitation not capability" thesis holds — but the lever is *persona inhabitation*, which Nemotron (a top roleplay model) performs, not an explicit reasoning-scaffold.
+**Bottom line:** the shippable artifact is a **lean warm-expert persona + execute-verify clause** (`templates/v13_lean_verify.md`), not the gate machinery. "Elicitation not capability" holds — the levers are *persona inhabitation* (supplies Nemotron's missing warm/validate-first disposition) plus *execute-verify* (makes it actually check code instead of eyeballing it). Both are dispositions the model could always perform; the prompt just makes it do so reliably.
 
 ## What's in here
 
@@ -61,7 +62,10 @@ Every claim is tested against the **live Nemotron 3 Ultra** (`run_subagent --pro
 - ✅ **EXP14 (mixed head-to-head, 95% agree): placebo 20/20 > v10 19 > v11 18 > cold 15.** Cold's ONE systematic weakness is VOICE (1/4); persona fixes it (4/4). **v11 (lean, 60% length) ≈ v10.**
 - ✅ EXP15 (multi-turn): v11 persona **survives 8 turns**, no decay.
 - ✅ EXP16 (Qwen-35B transfer): v11 is a **no-op** (11/12 = cold) — the effect is a Nemotron-specific disposition repair, not universal.
-- ⭐ **Final recommendation: `templates/v11_lean_synthesis.md`.** See `USAGE.md`.
+- ✅ **EXP17 (execute-verify breaks the capability ceiling):** silent-wrong-output bugs cold **2/10 → v12 10/10**, 0 precision cost, 98% agree.
+- ✅ EXP18 (sandbox vs mental): real sandbox **ties** mental execution (12/12 = 12/12) on review-sized code — the lever is the disposition, not the tool.
+- ✅ **EXP19 (v13 = v11 + execute-verify):** VOICE 4/4 (no regression), CTRL 4/4 (0 invented bugs), 0 degen, + silent-bug recall 8/10. **v13 strictly dominates v11.**
+- ⭐ **Final recommendation: `templates/v13_lean_verify.md`** (use `v11_lean_synthesis.md` for pure non-code chat). See `USAGE.md`.
 
 ### Headline result (EXP14, blind 2-judge, 95% agreement)
 The whole campaign in one table — consensus PASS by category, /4 unless noted:

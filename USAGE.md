@@ -3,9 +3,9 @@
 This project's deliverable is **not** a magic prompt. It's a method plus one concrete artifact that applies it to Nemotron 3 Ultra.
 
 ## TL;DR
-- **Recommended prompt:** `templates/v11_lean_synthesis.md` (the system-prompt block between the BEGIN/END markers).
-- **What it reliably buys you on Nemotron 3 Ultra:** a warm, *validate-first* voice (acknowledges what's right before correcting), specificity, decisiveness, and a cheap premise-first reflex — with **zero** of the degeneration / over-refusal / process-narration that earlier versions had.
-- **What it does NOT buy you:** more raw capability. It will not make the model catch a subtle off-by-one it would otherwise miss, and it will not beat a plain warm-expert prompt on premise/bug catching. Those are baseline capability, already present.
+- **Recommended prompt:** `templates/v13_lean_verify.md` (the system-prompt block between the BEGIN/END markers). For pure non-code chat, `templates/v11_lean_synthesis.md` (same minus the code clause) is equivalent.
+- **What it reliably buys you on Nemotron 3 Ultra:** (1) a warm, *validate-first* voice (acknowledges what's right before correcting), specificity, decisiveness, a cheap premise-first reflex — with **zero** degeneration / over-refusal / process-narration; PLUS (2) **execute-verify on code**: it checks a function's actual output on a boundary input instead of eyeballing it, which catches silent-wrong-output bugs the bare model misses (recall **2/10 → 10/10** on the hardest off-by-one/wrong-formula items, with no increase in false alarms).
+- **What it does NOT buy you:** general raw intelligence. Outside code-correctness, it does not beat a plain warm-expert prompt on premise/bug catching — those are baseline capability already present. The execute-verify gain is specific to "is this code actually correct" tasks.
 
 ## When to use it
 Use v11 when the bare model's **default disposition** is the problem — for Nemotron specifically, when you dislike that it:
@@ -14,6 +14,12 @@ Use v11 when the bare model's **default disposition** is the problem — for Nem
 - is terser/colder than you want.
 
 **Do NOT bother** if your base model is already warm and validate-first. We tested this: on **Qwen3.6-35B**, v11 was a measured **no-op** (cold 11/12 = v11 11/12) because Qwen already validates-first. Adding a persona to a model that already has the disposition just costs tokens.
+
+## The execute-verify lever (the one capability gain)
+The single change that improved *correctness* (not just tone) was a clause telling the model: **when code is involved, don't trust a read-through — check the actual output on a concrete boundary input (even-length list, n=0/1, the empty case) before judging it.** On silent-wrong-output bugs (off-by-ones, floor-division averages, dropped-last-window) this took recall from cold 2/10 to 10/10, with no extra false positives.
+- **You do NOT need a sandbox for review-sized snippets.** Mentally checking a concrete input tied actually running the code (EXP18) — Nemotron either knows the gotcha as a fact or can simulate small functions once told to.
+- **Use a real sandbox** only when the output genuinely can't be predicted by eye: large/stateful code, real I/O, heavy numeric work, unfamiliar libraries. There the disposition still helps but the tool is what guarantees the answer.
+- It's baked into `v13`. If you're on `v11`, the clause to add is one sentence (see `templates/v13_lean_verify.md` diff).
 
 ## The method (the generalizable part)
 1. **Audit the bare model.** Run 4-6 "I think X, check me?" partial-truth probes and a few "review this code / sanity-check this plan" tasks with NO system prompt. Note which *dispositions* are missing (cold corrections? option-dumping? hedging? padding? premise-acceptance?).
