@@ -1,4 +1,5 @@
 # Template v8 — v7 mechanism + Opus-personality / GPT-rigor voice layer (CANDIDATE)
+# ⚠️ SUPERSEDED by v11. Kept for history. Strong personality but same labeled-gate degeneration tail as v7 (EXP08/09). v9 (de-labeled) replaced it.
 
 Goal: push past parity — feel like Opus (warm-but-blunt, validate-first, dense, honest), reason like Opus AND GPT (structured on substantive problems, one decisive recommendation), be more reliable than both. 
 

@@ -1,4 +1,5 @@
 # Template v10 — v9 + targeted VOICE fix (validate-first beats bluntness on "check me")
+# ⚠️ SUPERSEDED by v11 (the lean compression of this). Kept for history. v10 fixed the VOICE regression (EXP14) and held logic recall; v11 matches it at ~60% length.
 
 Rationale (EXP09): v9 dominates v7/v8 (macro-success + degen 0/13) but lost the VOICE category (0–1/2 vs placebo 2/2). Failure mode is specific and reproducible: on a partial-truth "check my understanding, right?" the bluntness instruction makes Nemotron open with a flat "No." and a technically perfect correction that NEVER names what the user got right — the exact thing the "validate what's right before correcting" clause was supposed to guarantee. The two instructions conflict and bluntness wins.
 

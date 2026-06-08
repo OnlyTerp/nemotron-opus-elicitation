@@ -1,4 +1,5 @@
 # Template v7 — frozen v3 + ONE additive clause (minimal fix)
+# ⚠️ SUPERSEDED by v11. Kept for history. Labeled "GATE 1/GATE 2" scaffolding caused process-narration ("Premise check:") + repetition degeneration (EXP08/09, 2/13 degen). Never beat the length-matched persona placebo.
 
 Rationale (EXP06): v5/v6's 3-way triage fixed over-refusal but coupled it to a SOUND-default that systematically killed buried-practice recall (CUDA 0/4, 0/2+). v3's only proven defect was over-refusal on deliverables (SHA-256); its precision was already clean (EXP05 FPR 0/8). So v7 = v3 verbatim + a single clause: *when a premise is broken, deliver the corrected work — don't refuse/ask.* Nothing else changes — the unconditional GATE 1 that catches CUDA is preserved.
 

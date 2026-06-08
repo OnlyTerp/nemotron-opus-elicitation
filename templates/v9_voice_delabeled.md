@@ -1,4 +1,5 @@
 # Template v9 — v8 voice, but gates de-labeled + anti-narration/anti-loop guards (CANDIDATE)
+# ⚠️ SUPERSEDED by v11 (via v10). Kept for history. Key win: de-labeling killed degeneration (0/13, EXP09) and beat v7/v8. Defect: bluntness cost VOICE (fixed in v10) + over-fired once on a precision control (EXP13).
 
 Goal: keep v8's Opus-personality/GPT-rigor voice AND its recall, but kill the two reliability flags v8 showed on CUDA r3:
 (a) **gate-narration theater** — the model echoed "GATE 1… GATE 2…" back to the user. Hypothesis: the literal labeled scaffolding ("GATE 1 — PREMISE CHECK") in the prompt is what it parrots. Fix: keep the *mechanism and ordering* (unconditional premise check FIRST → deliver → hostile self-audit) but remove the nameable labels, and add an explicit "never announce or label your own process" rule.

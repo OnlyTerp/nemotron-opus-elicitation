@@ -1,4 +1,5 @@
 # Template v11 — lean synthesis (persona-forward; gate machinery compressed to one clause)
+# ⭐ RECOMMENDED (final). See USAGE.md. Matches v10 at ~60% length (EXP14); 0 degeneration; multi-turn-durable (EXP15). For Nemotron 3 Ultra; audit your base model first (no-op on already-warm models like Qwen — EXP16).
 
 Rationale (EXP09-13): the campaign's robust, replicated finding is that the **warm-expert persona** is the active ingredient — it's what beats the bare model on premise-catching, code-review recall, and reliability. The explicit two-paragraph GATE machinery (premise-check + hostile self-audit) did NOT reliably beat a length-matched persona placebo (tied/lost EXP09/10/11/13; won once in EXP12 on an effect that didn't replicate). It also carried mild costs: bluntness hurt VOICE (fixed in v10), and v9's harder skepticism over-fired once on a precision control (EXP13 LGB08).
 

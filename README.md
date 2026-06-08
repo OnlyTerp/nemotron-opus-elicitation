@@ -20,21 +20,22 @@
 
 | Path | What |
 |------|------|
-| `THESIS.md` | The evolving central hypothesis + what each experiment taught us |
-| `templates/v2_persona_gate.md` | **Current** template: persona-inhabitation + a forced self-audit gate |
-| `templates/v1_checklist_DEPRECATED.md` | First attempt (rigid checklist) — kept as a cautionary example |
-| `findings/opus_vs_default_differences.md` | 12 systematic Opus-vs-default behavioral differences (from dataset analysis) |
-| `findings/dataset_provenance.md` | Which HuggingFace "Opus" datasets are real vs synthetic garbage |
-| `experiments/EXP0*.md` | Each test: design, hypothesis, raw results, scoring, honest caveats |
-| `experiments/raw/` | Unedited subagent outputs |
+| `USAGE.md` | **Start here to use it.** The recommended prompt + the "audit then supply" method |
+| `THESIS.md` | The full hypothesis arc (R1→R12) + what each experiment taught us |
+| `templates/v11_lean_synthesis.md` | ⭐ **RECOMMENDED** prompt (lean warm-expert persona) |
+| `templates/v7..v10_*.md` | Superseded predecessors, kept for history (each header says why) |
+| `templates/v1_checklist_DEPRECATED.md` | First attempt (rigid checklist) — cautionary example |
+| `bench/` | The EXP09-16 harness: testbanks, file-based generation, blind assembler, scorers, raw outputs, grades |
+| `experiments/EXP*.md` | Each test: design, hypothesis, raw results, scoring, honest caveats |
+| `findings/` | Dataset provenance + early external reviews |
 
 ## Method
 
-Every claim here is tested against the **live Nemotron 3 Ultra** (via `run_subagent --profile nemotron-ultra`), comparing two arms:
-- **COLD** — Nemotron with no added prompt (true baseline).
-- **TMPL** — Nemotron with the v2 template prepended.
-
-We measure *behavioral* differences (does it challenge a false premise, catch an error, etc.), run multiple trials per arm to expose variance, and — from EXP03 on — grade **blind** with a neutral judge to remove author bias.
+Every claim is tested against the **live Nemotron 3 Ultra** (`run_subagent --profile nemotron-ultra`). From EXP09 on, the protocol hardened to address the exact biases the early work had:
+- **Length-matched placebo** (same warm-expert register, ZERO gate machinery) as the *primary* control — not just COLD. This is what revealed the gates weren't the active ingredient.
+- **Held-out test banks** authored fresh per experiment (no tuning on them).
+- **Blind grading by TWO non-Nemotron judges** (MiMo v2.5 Pro + MiniMax-M3) — answers shuffled behind random letters; consensus = both PASS; McNemar on paired item-trials. Judge agreement ran 80-100%.
+- **File-based generation harness** with a topic-validator that rejects/quarantines any answer↔item cross-wiring, plus single-item regeneration for reliability.
 
 ## Methodology rules (operating discipline)
 1. **Cap both arms at ≤180 words** per response. Keeps the test fair (length isn't a confound) AND prevents runaway / repetition-loop generations. (EXP04 cold runs degenerated into garbage when uncapped.)
@@ -53,16 +54,23 @@ We measure *behavioral* differences (does it challenge a false premise, catch an
 - ✅ EXP05 (false-positive pilot): v3 FPR **0/8** on premise-clean tasks — no gross over-skepticism; recall 2/2. (n small; 2 mild issues: over-refusal, audit-theater.)
 - ✅ EXP06 (v5/v6 calibrated templates): triage fixed over-refusal but **systematically regressed recall** (CUDA 0/4) — precision & recall are coupled through the SOUND-default. Neither dominates.
 - ✅ EXP07 (**v7 = v3 + one "deliver corrected work" clause**): **CUDA recall 3/3 + SHA-256 over-refusal fixed + clean** — minimal change beat the redesigns.
-- ✅ EXP08 (**v8 = v7 + Opus-personality/GPT-rigor voice layer**): personality delivered (validate-first, dense, decisive); CUDA recall **5/6** (~parity with v7); one ~1/6 degeneration tail to watch.
-- ➡️ **Two candidates:** `templates/v7_v3_plus_deliver.md` (max-reliability core) and `templates/v8_voice_layer.md` (push-past-parity: feels like Opus, reasons structured+decisive). External confirmatory decides on macro-success + degeneration rate.
+- ✅ EXP08 (**v8 = v7 + voice layer**): personality delivered; but labeled gates left a ~1/6 degeneration tail.
+- ✅ **EXP09 (held-out confirmatory, blind 2-judge, length-matched placebo): OVERTURNED the mechanism claim.** placebo 12/13 ≥ v9 11 ≥ v7/v8 10 > cold 8. No gated template beat the placebo. Sub-wins: v9 (de-labeled) 0/13 degen beats v7/v8; bluntness costs VOICE.
+- ✅ EXP10-11 (buried / code-embedded premises): famous antipatterns caught ~universally; gates didn't separate from placebo (only an isolated logic bug did, once).
+- ✅ EXP12 (logic-trace traps): **the one clean gate win** — v9 8/12 > cold=placebo 5/12 (100% agree). ✅ EXP13 (replication, 10 items): **did NOT replicate** — gates tie placebo (12/20 each) > cold 9.
+- ✅ **EXP14 (mixed head-to-head, 95% agree): placebo 20/20 > v10 19 > v11 18 > cold 15.** Cold's ONE systematic weakness is VOICE (1/4); persona fixes it (4/4). **v11 (lean, 60% length) ≈ v10.**
+- ✅ EXP15 (multi-turn): v11 persona **survives 8 turns**, no decay.
+- ✅ EXP16 (Qwen-35B transfer): v11 is a **no-op** (11/12 = cold) — the effect is a Nemotron-specific disposition repair, not universal.
+- ⭐ **Final recommendation: `templates/v11_lean_synthesis.md`.** See `USAGE.md`.
 
-### Headline result (EXP03, blind-confirmed)
-On the exact buried-premise trap that broke v2, same model:
+### Headline result (EXP14, blind 2-judge, 95% agreement)
+The whole campaign in one table — consensus PASS by category, /4 unless noted:
 
-| Arm | PASS | PARTIAL | FAIL |
-|-----|------|---------|------|
-| COLD | 1 | 2 | 2 |
-| TMPL v2 | 0 | 1 | 4 |
-| **TMPL v3** | **4** | 0 | 1 |
+| Arm | VOICE | PREM | LOGIC/6 | CTRL | DELIV/2 | total/20 |
+|-----|-------|------|---------|------|---------|----------|
+| COLD | **1/4** | 4/4 | 4/6 | 4/4 | 2/2 | 15 |
+| placebo (persona, no gates) | 4/4 | 4/4 | 6/6 | 4/4 | 2/2 | **20** |
+| v10 (full gates) | 3/4 | 4/4 | 6/6 | 4/4 | 2/2 | 19 |
+| **v11 (lean, recommended)** | 3/4 | 4/4 | 5/6 | 4/4 | 2/2 | 18 |
 
-The lever was **ordering** (premise-check before any "show me the code"), not "more reasoning." Capability was always there; the template makes it fire reliably.
+The lever turned out to be **persona, not the gate mechanism** — and its biggest, most reliable effect is repairing the bare model's cold VOICE. Capability (PREM/LOGIC/CTRL/DELIV) was already there; the persona supplies the missing *disposition*.

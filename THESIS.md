@@ -50,18 +50,43 @@ Two honest corrections that LOWER our confidence:
 
 **Lesson:** I over-engineered (v5/v6). The over-refusal defect was a one-line additive fix; importing the whole precision-triage caused the regression. **Minimal change to the thing that works beat elaborate redesign.** v7 is the leading candidate — pending the external confirmatory benchmark (still the gate for any real claim).
 
-## Where the evidence stands
+### R8 — The confirmatory OVERTURNED the mechanism claim: PERSONA > gates (EXP09)
+We finally ran the test the reviewers demanded: a held-out battery (13 fresh items: false-premise, clean, safety, deliver, voice), blind-graded by **two non-Nemotron judges** (MiMo, MiniMax, 92% agreement), with a **length-matched placebo** (same warm-expert register, ZERO gate machinery) as the primary control. Result: **placebo 12/13 ≥ v9 11 ≥ v7/v8 10 > cold 8.** No gated template beat the placebo on a single item. The strong claim — "our premise-check/self-audit *mechanism* is the active ingredient" — is **not supported**. On visible/everyday tasks, a warm-expert persona with none of the machinery is the whole effect. Two real sub-wins survived: **v9 (de-labeled) beat v7/v8 and had 0/13 degeneration** vs their 2/13 "Premise check:" narration leak; and **bluntness measurably cost the VOICE category** (placebo 2/2, templates 0/2).
+
+### R9 — The gates' last refuge (buried/code premises) mostly didn't save them (EXP10-13)
+- EXP10 (prose-narrated buried antipatterns): all arms ~12/12 — stating the bad practice in words makes it catchable by anyone; didn't discriminate.
+- EXP11 (code-embedded famous bugs: SQLi, race, leak): caught ~universally; only a binary-search infinite-loop (COD01) discriminated, and only a gate arm caught it once. v10 best (11/12).
+- EXP12 (logic-trace traps): **the one clean gate win** — v9 8/12 > cold=placebo 5/12, 100% judge agreement; LOG01 off-by-one caught ONLY by gates.
+- EXP13 (replication, 10 fresh logic items): **the EXP12 win did NOT replicate.** cold 9/20 < placebo=v9=v10 12/20. Gates beat cold (b=4/c=1) but **tie placebo** (v9 vs placebo 0/0). The hardest traces (LGB01/06) defeat everyone — a real capability ceiling.
+
+**Net across EXP09-13: the gate machinery never reliably beat a length-matched persona placebo.** Its marginal value over persona is ~0, occasionally negative.
+
+### R10 — The template trajectory was still real engineering (v7→v11)
+Each version fixed a *measured* defect, even though none beat the placebo:
+v7/v8 (labeled GATE 1/GATE 2) → **process-narration + repetition degeneration** (EXP08/09) → **v9** removes the labels → **0 degeneration** + beats v7/v8 → **v10** adds one validate-first clause → **fixes the VOICE regression** (EXP14: VOICE recovered, logic recall held) → **v11** compresses the two verbose gate paragraphs to one nudge → **matches v10 at ~60% length** (EXP14: 18 vs 19/20, within noise). The lean persona is the efficient frontier.
+
+### R11 — The ONE robust, replicated effect: persona fixes Nemotron's cold VOICE (EXP14)
+Across the whole campaign the single most reliable finding is the head-to-head mixed battery (95% judge agreement): **cold's only systematic weakness is VOICE — 1/4.** Asked "I think X, check me?", bare Nemotron opens "No/Not quite" and corrects without acknowledging what's right. **Every persona arm repairs this to ~4/4.** PREM/LOGIC/CTRL/DELIV the bare model already does well; the persona's real job is supplying the warm, validate-first disposition Nemotron lacks by default.
+
+### R12 — The effect is DURABLE but MODEL-SPECIFIC (EXP15-16)
+- **EXP15 (multi-turn):** v11's validate-first voice survives 8 turns of real conversation — late-turn partial-truth probes are handled identically to cold-start. Bluntness scales with how-wrong the claim is, not with turn depth. Not decay.
+- **EXP16 (Qwen-35B transfer):** on a different base model the persona is a **no-op** (cold 11/12 = v11 11/12). Qwen's bare model is *already* validate-first, so there's no deficit to repair. **The persona effect is not a universal LLM law — it's the repair of a specific Nemotron-baseline deficiency.** This sharpens the elicitation-gap thesis: the prompt supplies a *missing disposition*; where the disposition already exists, it does nothing.
+
+## Where the evidence stands (final)
 
 | Claim | Status |
 |-------|--------|
-| Nemotron has the raw capability | **Strongly supported** (high ceiling, cold often nails it) |
-| Prompting can make good reasoning reliable | **Supported** on explicit premises (EXP02) |
-| A single generic template always helps | **Falsified** (EXP03 regression) |
-| Template effect depends on task shape | **Supported** — helps on explicit claims, hurts when a "need more info" exit pre-empts the audit |
-| No fine-tuning needed | **Still open** — plausible, but only with a template that fixes the R3 ordering bug |
+| Nemotron has the raw capability | **Strongly supported** (high ceiling; cold catches most premises/bugs) |
+| The gate MECHANISM (premise-check + self-audit) is the active ingredient | **Falsified** — never beats a length-matched persona placebo (EXP09-13) |
+| A warm-expert PERSONA beats the bare model | **Supported** — esp. VOICE (1/4→4/4), replicated, multi-turn-durable |
+| The persona effect is universal across models | **Falsified** — no-op on Qwen-35B (already warm); it repairs a *Nemotron-specific* deficit |
+| Capability ceiling is liftable by prompting | **Falsified** — hardest logic traces missed by every arm |
+| No fine-tuning needed to install the disposition Nemotron lacks | **Supported** — the lean persona (v11) does it |
+
+## The thesis, restated honestly
+"Elicitation, not capability" **holds** — but the lever is **persona inhabitation supplying a missing disposition**, not an explicit reasoning scaffold. The deliverable is not a universal magic prompt; it is a method: **audit the base model for the disposition it lacks, then supply exactly that with the leanest possible persona.** For Nemotron 3 Ultra the lacking disposition is warm, validate-first VOICE (plus a cheap premise-first nudge), and `templates/v11_lean_synthesis.md` supplies it without the degeneration, over-refusal, or VOICE costs of the earlier gate templates.
 
 ## Open questions / next tests
-- Does v3 (premise-first ordering) fix the EXP03 regression? (Re-run EXP03 with v3.)
-- Bigger n (>=10/arm) for statistical confidence; report ratios + variance.
-- Test the *ceiling*: a premise hard enough that cold rarely catches it — does any template lift it?
-- Personality durability under multi-turn pressure (roleplay claim) — not yet tested.
+- Quantify the VOICE effect at higher n with a dedicated validate-first rubric and ≥6 multi-turn threads (EXP15 was an existence check, n=2).
+- Does a model whose baseline is blunt in a *different* way (not VOICE) benefit from a differently-targeted persona? (Generalize the "audit then supply" method.)
+- The capability ceiling (LGB01/06-class traces): is it liftable at all by prompting, or only by tools (run-the-code) / fine-tuning?
