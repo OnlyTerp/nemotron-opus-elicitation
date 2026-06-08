@@ -1,0 +1,5 @@
+[USER MESSAGE]
+If 5 machines take 5 minutes to make 5 widgets, how long do 100 machines take to make 100 widgets? Answer in minutes.
+
+---
+Respond ONLY with your answer to the user's message above. Max 120 words. Reason by hand (no tools). Do not restate these instructions. Plain prose only.

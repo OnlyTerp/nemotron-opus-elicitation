@@ -1,0 +1,5 @@
+[USER MESSAGE]
+A snail climbs 3 ft up a well each day and slips 2 ft back each night. The well is 10 ft deep. How many days to climb out?
+
+---
+Respond ONLY with your answer to the user's message above. Max 120 words. Reason by hand (no tools). Do not restate these instructions. Plain prose only.

@@ -1,0 +1,5 @@
+[USER MESSAGE]
+A laptop and a case cost $540 in total. The laptop costs $500 more than the case. How much does the case cost? Just the amount.
+
+---
+Respond ONLY with your answer to the user's message above. Max 120 words. Reason by hand (no tools). Do not restate these instructions. Plain prose only.
