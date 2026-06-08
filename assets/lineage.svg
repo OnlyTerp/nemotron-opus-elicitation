@@ -1,0 +1,71 @@
+<svg width="1280" height="420" viewBox="0 0 1280 420" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="'Inter','Segoe UI',Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="bgt" x1="0" y1="0" x2="0" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#141414"/><stop offset="1" stop-color="#101018"/>
+    </linearGradient>
+    <linearGradient id="track" x1="80" y1="0" x2="1200" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#6F8DA6"/><stop offset="0.7" stop-color="#7A84FF"/><stop offset="1" stop-color="#35C89A"/>
+    </linearGradient>
+  </defs>
+  <rect width="1280" height="420" rx="20" fill="url(#bgt)"/>
+  <rect x="0.5" y="0.5" width="1279" height="419" rx="19.5" fill="none" stroke="#2E2E2E"/>
+
+  <text x="48" y="58" fill="#F3F4F6" font-size="30" font-weight="800">Template lineage — each version fixed a measured defect</text>
+  <text x="48" y="88" fill="#9CA3AF" font-size="16">Fifteen refinements. Every step earned by an experiment, not a hunch.</text>
+
+  <!-- track -->
+  <line x1="96" y1="210" x2="1184" y2="210" stroke="url(#track)" stroke-width="4"/>
+
+  <!-- nodes: x positions evenly -->
+  <!-- v7/8 -->
+  <g transform="translate(96 210)">
+    <circle r="11" fill="#181820" stroke="#F53B3A" stroke-width="3"/>
+    <text x="0" y="-78" text-anchor="middle" fill="#F3F4F6" font-size="19" font-weight="800">v7/v8</text>
+    <text x="0" y="-54" text-anchor="middle" fill="#9CA3AF" font-size="13">labeled GATEs</text>
+    <text x="0" y="48" text-anchor="middle" fill="#F53B3A" font-size="13">narration + loops</text>
+  </g>
+  <!-- v9 -->
+  <g transform="translate(278 210)">
+    <circle r="11" fill="#181820" stroke="#7A84FF" stroke-width="3"/>
+    <text x="0" y="-78" text-anchor="middle" fill="#F3F4F6" font-size="19" font-weight="800">v9</text>
+    <text x="0" y="-54" text-anchor="middle" fill="#9CA3AF" font-size="13">de-labeled</text>
+    <text x="0" y="48" text-anchor="middle" fill="#35C89A" font-size="13">0 degeneration</text>
+  </g>
+  <!-- v10 -->
+  <g transform="translate(460 210)">
+    <circle r="11" fill="#181820" stroke="#7A84FF" stroke-width="3"/>
+    <text x="0" y="-78" text-anchor="middle" fill="#F3F4F6" font-size="19" font-weight="800">v10</text>
+    <text x="0" y="-54" text-anchor="middle" fill="#9CA3AF" font-size="13">validate-first</text>
+    <text x="0" y="48" text-anchor="middle" fill="#35C89A" font-size="13">VOICE fixed</text>
+  </g>
+  <!-- v11 -->
+  <g transform="translate(642 210)">
+    <circle r="11" fill="#181820" stroke="#7A84FF" stroke-width="3"/>
+    <text x="0" y="-78" text-anchor="middle" fill="#F3F4F6" font-size="19" font-weight="800">v11</text>
+    <text x="0" y="-54" text-anchor="middle" fill="#9CA3AF" font-size="13">compressed</text>
+    <text x="0" y="48" text-anchor="middle" fill="#35C89A" font-size="13">60% length</text>
+  </g>
+  <!-- v13 -->
+  <g transform="translate(824 210)">
+    <circle r="11" fill="#181820" stroke="#A78CFF" stroke-width="3"/>
+    <text x="0" y="-78" text-anchor="middle" fill="#F3F4F6" font-size="19" font-weight="800">v13</text>
+    <text x="0" y="-54" text-anchor="middle" fill="#9CA3AF" font-size="13">execute-verify</text>
+    <text x="0" y="48" text-anchor="middle" fill="#35C89A" font-size="13">bugs 2→10/10</text>
+  </g>
+  <!-- v16 RECOMMENDED -->
+  <g transform="translate(1006 210)">
+    <circle r="16" fill="#10241c" stroke="#35C89A" stroke-width="4"/>
+    <circle r="6" fill="#35C89A"/>
+    <rect x="-58" y="-104" width="116" height="26" rx="13" fill="#10241c" stroke="#35C89A"/>
+    <text x="0" y="-86" text-anchor="middle" fill="#35C89A" font-size="13" font-weight="700">RECOMMENDED</text>
+    <text x="0" y="-54" text-anchor="middle" fill="#F3F4F6" font-size="22" font-weight="800">v16</text>
+    <text x="0" y="50" text-anchor="middle" fill="#35C89A" font-size="14" font-weight="700">20/20 · register match</text>
+  </g>
+  <!-- v17 -->
+  <g transform="translate(1184 210)">
+    <circle r="11" fill="#181820" stroke="#6F8DA6" stroke-width="3"/>
+    <text x="0" y="-78" text-anchor="middle" fill="#9CA3AF" font-size="19" font-weight="800">v17</text>
+    <text x="0" y="-54" text-anchor="middle" fill="#9CA3AF" font-size="13">data-driven</text>
+    <text x="0" y="48" text-anchor="middle" fill="#6F8DA6" font-size="13">not adopted</text>
+  </g>
+</svg>
