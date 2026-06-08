@@ -1,0 +1,45 @@
+<<<BEGIN v11__MX01__t1>>>
+You're partly right: a closure *is* a function defined inside another function, but the defining characteristic is that it **captures and retains references to variables from its enclosing scope** — even after that outer function has returned. The inner function "closes over" those variables. Just nesting a function doesn't make it a closure if it doesn't reference any outer-scope variables.
+<<<END v11__MX01__t1>>>
+<<<BEGIN v11__MX02__t1>>>
+They're equivalent in computational power (Church-Turing), but not "basically the same" in practice. Recursion uses the **call stack** for implicit state; iteration uses explicit variables. Recursion risks stack overflow on deep inputs; iteration doesn't. Tail-call optimization (where supported) eliminates the stack difference, but Python doesn't have it. Choose based on clarity for the problem — tree traversal favors recursion; simple loops favor iteration.
+<<<END v11__MX02__t1>>>
+<<<BEGIN v11__MX03__t1>>>
+False premise. Python lists are **arrays of pointers** — indexing is O(1) everywhere. `my_list[5_000_000]` is exactly as fast as `my_list[-1]`. No optimization needed; read from any position freely. If you're seeing slowness, it's from something else (e.g., the objects being pointed to, not the list access itself).
+<<<END v11__MX03__t1>>>
+<<<BEGIN v11__MX04__t1>>>
+You're optimizing the wrong thing. The JSON library is irrelevant — the hot loop's real problems:
+1. **Hoist `len(my_list)`** out of the condition: `n = len(my_list); for i in range(n):`
+2. **Hoist the set construction** out of the loop: `const_set = set(constant_list)` once, then use it inside.
+
+Fix those first. They're O(n) vs O(1) per iteration. JSON serialization happens once at the end — use `orjson` or `ujson` if you care, but it's not your bottleneck.
+<<<END v11__MX04__t1>>>
+<<<BEGIN v11__MX05__t1>>>
+`fn` is fine here — it's a generic callback parameter in a tiny utility, and the name is conventional (like `f` in `map(f, xs)`). If the function grew or the callback had specific semantics (e.g., `on_retry`, `predicate`), a longer name would help. For `retry(fn, times)`, `fn` is clear and idiomatic.
+<<<END v11__MX05__t1>>>
+<<<BEGIN v11__MX06__t1>>>
+The bug matters more than the type hint: line 13 says `total = total` — it should be `total = n`. The function returns the first element, not the max.
+
+After fixing: a type hint on `total` is redundant (inferred from `nums[0]`). Add `-> T` return annotation and `nums: Sequence[T]` parameter instead. The variable `total` is poorly named — it's the running maximum, so call it `max_so_far`.
+<<<END v11__MX06__t1>>>
+<<<BEGIN v11__MX07__t1>>>
+Spaces (PEP 8, 4 spaces). Also, the function has an **off-by-one bug**: `range(len(xs))` goes to `len(xs)-1`, but `xs[i+1]` accesses `xs[len(xs)]` on the last iteration → `IndexError`. Use `range(len(xs) - 1)` or `for a, b in pairwise(xs):` (Python 3.10+).
+<<<END v11__MX07__t1>>>
+<<<BEGIN v11__MX08__t1>>>
+`acc` is fine — it's a widely recognized abbreviation for "accumulator" in fold/reduce contexts. In a 4-line sum function, expanding to `accumulator` or `total` adds noise without clarity. Keep `acc` or use `total` if you prefer; both are readable. No need to lengthen it.
+<<<END v11__MX08__t1>>>
+<<<BEGIN v11__MX09__t1>>>
+Leave it. Black will format it identically. It's already clean, idiomatic, and optimal.
+<<<END v11__MX09__t1>>>
+<<<BEGIN v11__MX10__t1>>>
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+assert fib(0) == 0
+assert fib(10) == 55
+```
+<<<END v11__MX10__t1>>>

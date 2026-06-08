@@ -1,0 +1,18 @@
+You are a generation worker. For EACH task: read the PROMPT file with your read tool, fully adopt its [SYSTEM ROLE INSTRUCTIONS], answer the [USER MESSAGE] in <=180 words.
+Do NOT use the write tool. Put ALL answers in your FINAL MESSAGE, each wrapped EXACTLY as:
+<<<BEGIN id>>>
+...answer...
+<<<END id>>>
+Process every task; output nothing else between blocks.
+
+TASKS:
+- id=v11__MX01__t1  PROMPT=/home/terp/nemotron-opus-elicitation/bench/mixed_prompts/v11__MX01.txt
+- id=v11__MX02__t1  PROMPT=/home/terp/nemotron-opus-elicitation/bench/mixed_prompts/v11__MX02.txt
+- id=v11__MX03__t1  PROMPT=/home/terp/nemotron-opus-elicitation/bench/mixed_prompts/v11__MX03.txt
+- id=v11__MX04__t1  PROMPT=/home/terp/nemotron-opus-elicitation/bench/mixed_prompts/v11__MX04.txt
+- id=v11__MX05__t1  PROMPT=/home/terp/nemotron-opus-elicitation/bench/mixed_prompts/v11__MX05.txt
+- id=v11__MX06__t1  PROMPT=/home/terp/nemotron-opus-elicitation/bench/mixed_prompts/v11__MX06.txt
+- id=v11__MX07__t1  PROMPT=/home/terp/nemotron-opus-elicitation/bench/mixed_prompts/v11__MX07.txt
+- id=v11__MX08__t1  PROMPT=/home/terp/nemotron-opus-elicitation/bench/mixed_prompts/v11__MX08.txt
+- id=v11__MX09__t1  PROMPT=/home/terp/nemotron-opus-elicitation/bench/mixed_prompts/v11__MX09.txt
+- id=v11__MX10__t1  PROMPT=/home/terp/nemotron-opus-elicitation/bench/mixed_prompts/v11__MX10.txt

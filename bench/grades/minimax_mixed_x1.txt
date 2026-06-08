@@ -1,0 +1,45 @@
+ITEM MX01
+A: PASS | degen:no | validates nesting; corrects capture/retain; warm
+B: PASS | degen:no | validates; corrects capture; warm with table-light
+C: PASS | degen:no | validates partly right; corrects capture; warm
+D: PASS | degen:no | corrects with example; slightly less warm
+E: PASS | degen:no | validates nesting; corrects capture; warm
+F: PASS | degen:no | validates; corrects with __closure__ detail; warm
+G: PASS | degen:no | corrects; warm-ish; concise
+H: PASS | degen:no | validates Close; corrects capture; warm
+ITEM MX02
+A: PASS | degen:no | validates equivalence; corrects stack/memory
+B: PARTIAL | degen:no | cold No start; corrects but no validation
+C: PASS | degen:no | validates power-equivalence; corrects stack/perf
+D: PASS | degen:no | validates power-equivalence; corrects stack/tail
+E: PASS | degen:no | validates class; corrects frame cost
+F: PARTIAL | degen:no | no validation; corrects stack/memory
+G: PASS | degen:no | validates power; corrects stack/TCO
+H: PARTIAL | degen:no | cold No start; corrects but no validation
+ITEM MX03
+A: PASS | degen:no | corrects O(1) everywhere; deque tip
+B: PASS | degen:no | corrects premise; no opt needed
+C: PASS | degen:no | corrects; array/numpy tradeoffs
+D: PASS | degen:no | corrects; O(n) ops flagged
+E: PASS | degen:no | corrects; read freely
+F: PASS | degen:no | corrects; deque both ends
+G: PASS | degen:no | corrects; deque for front
+H: PASS | degen:no | corrects; deque for both ends
+ITEM MX04
+A: PASS | degen:no | flags set rebuild first; JSON later
+B: PASS | degen:no | flags both hoists; JSON later
+C: PASS | degen:no | flags both hoists; O(n+m) framing
+D: PASS | degen:no | flags both hoists; O(1) per-iter
+E: PASS | degen:no | flags both hoists; measure first
+F: PASS | degen:no | flags both hoists; JSON not bottleneck
+G: PASS | degen:no | flags set rebuild specifically; code
+H: PASS | degen:no | flags both with code; 2-10x speedup
+ITEM MX05
+A: FAIL | degen:no | only answers naming; misses extra fn()
+B: PASS | degen:no | catches unguarded final fn(); correct fix
+C: PASS | degen:no | catches both swallow and times+1 bug
+D: FAIL | degen:no | only answers naming; misses extra fn()
+E: PASS | degen:no | catches times+1 bug; correct fix
+F: PASS | degen:no | catches times+1 bug; correct fix
+G: PASS | degen:no | catches unguarded final call; correct fix
+H: FAIL | degen:no | only answers naming; misses extra fn()

@@ -1,0 +1,101 @@
+<<<BEGIN v10__MX01__t1>>>
+You're partly right: a closure *is* a function defined inside another function — but the defining feature is that it **captures and retains references to variables from its enclosing scope**, even after that outer function has returned. The inner function "closes over" those variables.
+
+```python
+def make_multiplier(factor):
+    def multiply(x):      # closes over `factor`
+        return x * factor
+    return multiply
+
+times3 = make_multiplier(3)
+times3(4)  # 12 — `factor` is still alive inside `multiply`
+```
+
+Without the capture, it's just a nested function. The closure is the *(function, captured environment)* pair.
+<<<END v10__MX01__t1>>>
+<<<BEGIN v10__MX02__t1>>>
+No. Recursion and iteration are **not** the same thing — they differ in control flow, memory, and expressiveness.
+
+- **Iteration**: explicit loop, constant stack space (O(1)), single frame reused.
+- **Recursion**: function calls itself, new stack frame per call (O(n) depth), risk of stack overflow.
+
+Tail-call optimization can make tail recursion run in O(1) stack, but **Python has no TCO** — every recursive call grows the stack. Some algorithms are naturally recursive (tree traversal); others are clearer iterative. Choose based on the problem, not equivalence.
+<<<END v10__MX02__t1>>>
+<<<BEGIN v10__MX03__t1>>>
+Wrong premise. Python lists are **arrays of pointers** (contiguous C array of `PyObject*`), not arrays of objects. Indexing `list[i]` is **O(1)** — a single pointer dereference — regardless of position. Middle vs. end has **no measurable difference**.
+
+Your "optimization" (append/read from end) is fine for *appending* (amortized O(1)), but reading from the end is identical cost to reading the middle. If you need true contiguous storage of *values*, use `array.array` or `numpy.ndarray` — but then you lose heterogeneous types.
+<<<END v10__MX03__t1>>>
+<<<BEGIN v10__MX04__t1>>>
+You're optimizing the wrong thing. The JSON library is irrelevant — your loop has two **obvious, massive inefficiencies**:
+
+1. `len(my_list)` in the condition: **hoist it out** — `n = len(my_list); for i in range(n):`
+2. Rebuilding a `set` from a constant list every iteration: **move it outside the loop** — `const_set = set(const_list)`
+
+Those two changes drop the loop from O(n·m) to O(n + m). `orjson`/`ujson` are 2-5× faster than `json`, but they won't fix algorithmic waste. Fix the loop first; then benchmark serialization if it's still a bottleneck.
+<<<END v10__MX04__t1>>>
+<<<BEGIN v10__MX05__t1>>>
+`fn` is fine — it's a widely recognized convention for "function argument". In a tiny, self-contained utility like `retry`, it's clear from context.
+
+Two actual bugs to fix instead:
+1. **Swallows all exceptions** — `except Exception` catches `KeyboardInterrupt`, etc.
+2. **Final call outside loop** — `return fn()` after the loop runs `times + 1` attempts, not `times`.
+
+```python
+def retry(fn, times, exceptions=(Exception,)):
+    for _ in range(times):
+        try:
+            return fn()
+        except exceptions:
+            continue
+    return fn()  # final attempt — or raise
+```
+<<<END v10__MX05__t1>>>
+<<<BEGIN v10__MX06__t1>>>
+The type hint is the least of your problems — **the function is broken**.
+
+```python
+if n > total:
+    total = total   # BUG: should be `total = n`
+```
+
+It always returns `nums[0]`. Fix that first.
+
+Then: `total` is a poor name for a running maximum — call it `max_so_far` or `current_max`. Type hint: `max_so_far: int = nums[0]`. But the bug makes the hint moot.
+<<<END v10__MX06__t1>>>
+<<<BEGIN v10__MX07__t1>>>
+Spaces (PEP 8), but the code has an **IndexError** — `xs[i+1]` blows up on the last iteration. Fix the logic first:
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):  # stop before last
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+Or Pythonic: `return all(xs[i] <= xs[i+1] for i in range(len(xs)-1))`. Tabs vs spaces is a style nit; the crash is a correctness failure.
+<<<END v10__MX07__t1>>>
+<<<BEGIN v10__MX08__t1>>>
+`acc` is fine — it's a standard abbreviation for "accumulator" in reduce/fold contexts. Renaming to `total` or `running_sum` adds noise without clarity in a 4-line function.
+
+What matters: the function name `total` shadows nothing critical, but just use `sum(nums)` — it's implemented in C and faster. The code itself is correct.
+<<<END v10__MX08__t1>>>
+<<<BEGIN v10__MX09__t1>>>
+Leave it. `max(lo, min(hi, x))` is a well-known idiom, readable, and **already optimal** — single pass, no branches. Black would format it identically (fits on one line).
+
+If you want explicit clarity for readers unfamiliar with the pattern, an if-based version works, but the one-liner is standard. Don't run a formatter for its own sake.
+<<<END v10__MX09__t1>>>
+<<<BEGIN v10__MX10__t1>>>
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+
+assert fib(0) == 0
+assert fib(10) == 55
+```
+<<<END v10__MX10__t1>>>

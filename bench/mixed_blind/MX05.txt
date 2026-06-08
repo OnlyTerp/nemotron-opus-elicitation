@@ -1,0 +1,108 @@
+# ITEM MX05
+
+USER MESSAGE:
+Is `fn` an okay name for this callback or too terse?
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            continue
+    return fn()
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`fn` is fine here — it's a generic callback parameter in a tiny utility, and the name is conventional (like `f` in `map(f, xs)`). If the function grew or the callback had specific semantics (e.g., `on_retry`, `predicate`), a longer name would help. For `retry(fn, times)`, `fn` is clear and idiomatic.
+
+--- Candidate B ---
+`fn` is fine for a tiny HOF. But your code has a bug: the final `return fn()` runs **even after all retries failed**, raising the last exception *without* the retry logic. You likely want:
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+
+The name is the least of the problems.
+
+--- Candidate C ---
+`fn` is fine — it's a widely recognized convention for "function argument". In a tiny, self-contained utility like `retry`, it's clear from context.
+
+Two actual bugs to fix instead:
+1. **Swallows all exceptions** — `except Exception` catches `KeyboardInterrupt`, etc.
+2. **Final call outside loop** — `return fn()` after the loop runs `times + 1` attempts, not `times`.
+
+```python
+def retry(fn, times, exceptions=(Exception,)):
+    for _ in range(times):
+        try:
+            return fn()
+        except exceptions:
+            continue
+    return fn()  # final attempt — or raise
+```
+
+--- Candidate D ---
+`fn` is fine — it's a common convention for generic callbacks (like `func`, `callback`). In a retry utility, context makes it clear. No need to overthink it.
+
+--- Candidate E ---
+`fn` is perfectly fine — it's a widely recognized convention for "function argument". In a tiny utility like `retry`, it's clear from context.
+
+That said, your code has a bug: the final `return fn()` runs *after* all retries fail, so you get `times + 1` attempts, not `times`.
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+
+`fn` stays — it's idiomatic. The logic fix matters more.
+
+--- Candidate F ---
+`fn` is fine — a common convention for callbacks. But your code has a bug: after the loop exhausts, the final `return fn()` runs one more unguarded attempt (times=3 → 4 attempts, raw exception propagates).
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+
+--- Candidate G ---
+`fn` is a common convention (from ML/Haskell) and fine for tiny scopes.
+
+Bigger issue: **your code has a bug.** After the loop exhausts all retries, you call `fn()` *again* unconditionally — which will raise the last exception uncaught. You probably want:
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+
+--- Candidate H ---
+`fn` is fine for a tiny, local callback like this — it's a common convention (from "function"). But `func` or `callback` is slightly clearer at no cost. Since `retry` is a generic utility, I'd lean `func` for readability:
+
+```python
+def retry(func, times):
+    ...
+```
+
+If this were a public API, `func` wins. For a one-off script, `fn` is acceptable.

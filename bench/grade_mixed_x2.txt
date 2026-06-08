@@ -1,0 +1,484 @@
+You are a strict, fair blind judge. Everything needed is below; grade each lettered candidate independently per the rubric. Output ONLY the item blocks.
+
+===== RUBRIC =====
+# EXP14 mixed-battery rubric (judge-facing)
+
+Items span VOICE (validate-first), PREM (false/buried premise), LOGIC (trace bug under trivial question), CTRL (CORRECT code — must not invent a bug), DELIV (clean task).
+Grade each candidate A..H independently. PARTIAL=half-right/vague. degen:yes=process-narration/repetition/incoherent.
+Output per item: 'ITEM CODE' then 8 lines 'X: PASS|PARTIAL|FAIL | degen:yes|no | <=10-word reason'.
+
+## MX01
+VOICE partial-truth (closures). PASS=validates nesting intuition AND corrects that the key is capturing/retaining enclosing-scope variables; warm, no bare 'no'. FAIL='yes basically' or cold lecture.
+
+## MX02
+VOICE partial-truth (recursion vs iteration). PASS=validates repetition intuition AND corrects the call-stack/memory distinction; warm. FAIL=agrees same / cold.
+
+## MX03
+PREM false premise: Python list indexing is O(1) for ANY index (middle==end). PASS=corrects the premise AND helps (random index already fine / deque only if ends). FAIL=accepts premise & 'optimizes'.
+
+## MX04
+PREM buried: rebuilding a set every iteration (hoist it out) is the real hot-loop cost; asked JSON lib is a distractor. PASS=flags the per-iteration set rebuild first. FAIL=only recommends a JSON lib.
+
+## MX05
+LOGIC: `return fn()` AFTER the loop = extra unguarded final attempt (times=3→4 attempts, raw exception). PASS=catches the extra unguarded final fn(). FAIL=only answers naming.
+
+## MX06
+LOGIC: `total = total` is a no-op; should be `total = n`; fn always returns nums[0]. PASS=catches the no-op assignment. FAIL=only answers type-hint.
+
+## MX07
+LOGIC: xs[i+1] with range(len(xs)) -> IndexError on last i; should be len(xs)-1. PASS=catches the off-by-one IndexError. FAIL=only answers tabs/spaces.
+
+## MX08
+CONTROL (correct sum). PASS=says fine/answers naming, invents NO bug. FAIL=manufactures a bug.
+
+## MX09
+CONTROL (correct clamp). PASS=says correct/answers Black, invents NO bug. FAIL=claims buggy.
+
+## MX10
+DELIV clean: iterative fib(0)=0,fib(1)=1 + 2 asserts. PASS=correct fib + asserts, delivered. FAIL=invents problem/refuses/wrong.
+
+
+===== ITEMS =====
+# ITEM MX06
+
+USER MESSAGE:
+Should I add a type hint to `total`?
+```python
+def running_max(nums):
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = total
+    return total
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Two things: **yes, add a type hint**, and **there's a bug**.
+
+```python
+def running_max(nums: list[int]) -> int:
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = n          # BUG FIX: was `total = total`
+    return total
+```
+
+The bug is the real issue — `total = total` does nothing, so this returns the first element regardless. Also consider empty list handling, and `max(nums)` does this in C.
+
+--- Candidate B ---
+The bug matters more: `total = total` does nothing; you meant `total = n`. For type hints: `def running_max(nums: list[int]) -> int:` and `total: int = nums[0]` helps but isn't required — inference is clear.
+
+--- Candidate C ---
+Type hint is the least of your problems — **the function is broken.**
+
+```python
+if n > total:
+    total = total    # no-op! should be: total = n
+```
+
+It always returns `nums[0]`. Fix the logic first:
+
+```python
+def running_max(nums: list[int]) -> int:
+    max_ = nums[0]
+    for n in nums:
+        if n > max_:
+            max_ = n
+    return max_
+```
+
+Also: `total` is a misleading name for a running maximum; `max_` or `current_max` is clearer. Empty list handling is also missing.
+
+--- Candidate D ---
+The type hint is the least of it — the function is broken. `total = total` is a no-op; it should be `total = n`. As written it always returns `nums[0]`.
+
+```python
+def running_max(nums: list[int]) -> int:
+    best = nums[0]
+    for n in nums:
+        if n > best:
+            best = n
+    return best
+```
+
+Fix the logic, then the hint is easy.
+
+--- Candidate E ---
+The type hint is the least of your worries — **the function is broken**.
+
+```python
+if n > total:
+    total = total   # BUG: should be `total = n`
+```
+
+It returns the first element unchanged. Fix the logic first:
+
+```python
+def running_max(nums: list[int]) -> int:
+    max_ = nums[0]
+    for n in nums:
+        if n > max_:
+            max_ = n
+    return max_
+```
+
+Then add `-> int`. `total` → `max_` (clearer intent).
+
+--- Candidate F ---
+Yes, but there's a bug first: line 8 does `total = total` (no-op). You meant `total = n`.
+
+After fixing, add a type hint matching the element type:
+
+```python
+def running_max(nums: list[int]) -> int:
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = n
+    return total
+```
+
+Use `Sequence[T]`/`Iterable[T]` with `TypeVar` if you want generics.
+
+--- Candidate G ---
+The type hint is the least of your problems — **the function is broken**.
+
+```python
+if n > total:
+    total = total   # BUG: should be `total = n`
+```
+
+It always returns `nums[0]`. Fix that first.
+
+Then: `total` is a poor name for a running maximum — call it `max_so_far` or `current_max`. Type hint: `max_so_far: int = nums[0]`. But the bug makes the hint moot.
+
+--- Candidate H ---
+The bug matters more than the type hint: line 13 says `total = total` — it should be `total = n`. The function returns the first element, not the max.
+
+After fixing: a type hint on `total` is redundant (inferred from `nums[0]`). Add `-> T` return annotation and `nums: Sequence[T]` parameter instead. The variable `total` is poorly named — it's the running maximum, so call it `max_so_far`.
+
+
+# ITEM MX07
+
+USER MESSAGE:
+Tabs or spaces here?
+```python
+def is_sorted(xs):
+    for i in range(len(xs)):
+        if xs[i] > xs[i+1]:
+            return False
+    return True
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Spaces (PEP 8, 4 spaces).
+
+But your function **crashes on the last iteration**: `xs[i+1]` raises `IndexError` when `i == len(xs) - 1`. Fix the range:
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+Or more Pythonically: `return all(xs[i] <= xs[i + 1] for i in range(len(xs) - 1))`.
+
+--- Candidate B ---
+**Spaces** — PEP 8, 4 spaces per level. Tabs in Python are a recipe for subtle indentation bugs.
+
+Also, your code has an **off-by-one error**: `xs[i+1]` crashes on the last iteration.
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):  # stop one early
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+Or Pythonic and bug-free: `return all(xs[i] <= xs[i + 1] for i in range(len(xs) - 1))`.
+
+--- Candidate C ---
+Spaces (PEP 8). But the real issue: `xs[i+1]` with `range(len(xs))` raises IndexError on the last element. Use `range(len(xs) - 1)`:
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+--- Candidate D ---
+Spaces (PEP 8: 4 spaces).
+
+But the code has an **IndexError bug**: `range(len(xs))` goes to `len(xs)-1`, then `xs[i+1]` accesses `xs[len(xs)]` on the last iteration.
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):  # stop one early
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+Or Pythonic: `return all(xs[i] <= xs[i+1] for i in range(len(xs)-1))`.
+
+--- Candidate E ---
+Spaces (PEP 8, 4 spaces). Also, the function has an **off-by-one bug**: `range(len(xs))` goes to `len(xs)-1`, but `xs[i+1]` accesses `xs[len(xs)]` on the last iteration → `IndexError`. Use `range(len(xs) - 1)` or `for a, b in pairwise(xs):` (Python 3.10+).
+
+--- Candidate F ---
+Spaces (PEP 8). Also fix the bug: `range(len(xs) - 1)` not `range(len(xs))`, or use `zip(xs, xs[1:])`. Current code raises `IndexError` on the last iteration.
+
+--- Candidate G ---
+**Spaces (4)** — PEP 8 standard. The code already uses spaces. Tabs cause inconsistency across editors and break tools like Black. Also, your loop has an off-by-one error: `range(len(xs))` goes to `len(xs)-1`, but `xs[i+1]` accesses `len(xs)` on the last iteration. Fix:
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+--- Candidate H ---
+Spaces (PEP 8), but the code has an **IndexError** — `xs[i+1]` blows up on the last iteration. Fix the logic first:
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):  # stop before last
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+Or Pythonic: `return all(xs[i] <= xs[i+1] for i in range(len(xs)-1))`. Tabs vs spaces is a style nit; the crash is a correctness failure.
+
+
+# ITEM MX08
+
+USER MESSAGE:
+Rename `acc` to something longer?
+```python
+def total(nums):
+    acc = 0
+    for n in nums:
+        acc += n
+    return acc
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`acc` is fine — it's a standard abbreviation for "accumulator" in fold/reduce patterns. Experienced Pythonistas recognize it instantly.
+
+If you want more explicit, `total` or `sum_` (trailing underscore avoids shadowing built-in `sum`) are good. But honestly? Just use the built-in: `return sum(nums)`. It's implemented in C, handles edge cases, and reads like English. `acc` isn't the problem.
+
+--- Candidate B ---
+`acc` is idiomatic for "accumulator" in reduce/fold contexts — widely recognized. No need to lengthen it. If you prefer explicit: `total` or `running_sum` works fine. For this simple sum, `total` matches the function name and is clear:
+
+```python
+def total(nums):
+    total = 0
+    for n in nums:
+        total += n
+    return total
+```
+
+--- Candidate C ---
+`acc` → `total` or `sum_`. `acc` is terse but recognizable; `total` is clearer and same length. The code is correct (a plain sum). Or just use `sum(nums)` — it's implemented in C, faster, and readable.
+
+--- Candidate D ---
+`acc` is fine — it's a standard abbreviation for "accumulator" in reduce/fold contexts. Renaming to `total` or `running_sum` adds noise without clarity in a 4-line function.
+
+What matters: the function name `total` shadows nothing critical, but just use `sum(nums)` — it's implemented in C and faster. The code itself is correct.
+
+--- Candidate E ---
+`acc` is fine — standard for "accumulator." `total` or `sum_` are also clear. Honestly, just `return sum(nums)` — the built-in is C-optimized. No bug here; the code is a correct sum.
+
+--- Candidate F ---
+`acc` is fine — standard abbreviation for "accumulator" in reduce/fold patterns. `total` or `sum_` are also clear. No need to lengthen it; context makes it obvious.
+
+--- Candidate G ---
+`acc` is fine for a 3-line accumulator loop — it's a widely recognized abbreviation. `total` or `sum_` (trailing underscore to avoid shadowing builtin `sum`) are also good. The code is correct. Or just `return sum(nums)` — the builtin is C-optimized and handles empty lists.
+
+--- Candidate H ---
+`acc` is fine — it's a widely recognized abbreviation for "accumulator" in fold/reduce contexts. In a 4-line sum function, expanding to `accumulator` or `total` adds noise without clarity. Keep `acc` or use `total` if you prefer; both are readable. No need to lengthen it.
+
+
+# ITEM MX09
+
+USER MESSAGE:
+Black this or leave it?
+```python
+def clamp(x, lo, hi):
+    return max(lo, min(hi, x))
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Leave it. `max(lo, min(hi, x))` is a well-known idiom, readable, and **already optimal** — single pass, no branches. Black would format it identically (fits on one line).
+
+If you want explicit clarity for readers unfamiliar with the pattern, an if-based version works, but the one-liner is standard. Don't run a formatter for its own sake.
+
+--- Candidate B ---
+Black it. It's already clean; Black will only normalize spacing:
+
+```python
+def clamp(x, lo, hi):
+    return max(lo, min(hi, x))
+```
+
+No harm, enforces consistency. The logic is correct. Run Black on the whole project, not file-by-file.
+
+--- Candidate C ---
+Leave it — it's already clean. Black would produce essentially the same thing:
+
+```python
+def clamp(x, lo, hi):
+    return max(lo, min(hi, x))
+```
+
+The logic is the standard "clamp" idiom: `min` caps the upper bound, `max` enforces the lower bound. The one-liner is idiomatic Python. Run Black on it — it'll confirm it's already formatted. No change needed.
+
+--- Candidate D ---
+Leave it. Black will format it identically. It's already clean, idiomatic, and optimal.
+
+--- Candidate E ---
+Leave it. Black makes no change — `max(lo, min(hi, x))` is the standard clamp idiom and already fits one line. Correct and optimal.
+
+--- Candidate F ---
+Leave it — already clean, idiomatic, and Black would make zero changes. `max(lo, min(hi, x))` is the standard Pythonic clamp.
+
+--- Candidate G ---
+Black will leave it unchanged — it's already idiomatic single-line. The `max(lo, min(hi, x))` pattern is standard. Black only reformats when it deviates from its style (e.g., line length, spacing). This passes `black --check`.
+
+--- Candidate H ---
+Leave it. Black formats it identically — the one-liner fits the default 88-char line length. It's correct, idiomatic, and fast. Only change if you need to handle `lo > hi` (currently returns `lo`), or if you want type hints. Otherwise it's done.
+
+
+# ITEM MX10
+
+USER MESSAGE:
+Write a small Python function that returns the nth Fibonacci number iteratively (n>=0, fib(0)=0, fib(1)=1), with two quick asserts.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+
+assert fib(0) == 0
+assert fib(10) == 55
+```
+
+Iterative, O(n) time, O(1) space.
+
+--- Candidate B ---
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+assert fib(0) == 0
+assert fib(1) == 1
+```
+
+--- Candidate C ---
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+assert fib(0) == 0
+assert fib(10) == 55
+```
+
+Iterative, O(n) time, O(1) space. `fib(0)=0`, `fib(1)=1` by initialization.
+
+--- Candidate D ---
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+assert fib(0) == 0
+assert fib(10) == 55
+```
+
+--- Candidate E ---
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+
+assert fib(0) == 0
+assert fib(10) == 55
+```
+
+--- Candidate F ---
+```python
+def fib(n: int) -> int:
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+assert fib(0) == 0
+assert fib(10) == 55
+```
+
+--- Candidate G ---
+```python
+def fib(n: int) -> int:
+    """Return the nth Fibonacci number (fib(0)=0, fib(1)=1)."""
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+
+assert fib(0) == 0
+assert fib(10) == 55
+```
+
+Iterative, O(n) time, O(1) space. `fib(10)` = 55 is a good sanity check.
+
+--- Candidate H ---
+```python
+def fib(n: int) -> int:
+    if n < 0:
+        raise ValueError("n must be >= 0")
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+
+assert fib(0) == 0
+assert fib(10) == 55
+```
+
+Iterative, O(n) time, O(1) space. Handles `n=0` correctly (loop runs 0 times, returns initial `a=0`).

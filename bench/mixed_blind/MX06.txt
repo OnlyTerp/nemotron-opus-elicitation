@@ -1,0 +1,120 @@
+# ITEM MX06
+
+USER MESSAGE:
+Should I add a type hint to `total`?
+```python
+def running_max(nums):
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = total
+    return total
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Two things: **yes, add a type hint**, and **there's a bug**.
+
+```python
+def running_max(nums: list[int]) -> int:
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = n          # BUG FIX: was `total = total`
+    return total
+```
+
+The bug is the real issue — `total = total` does nothing, so this returns the first element regardless. Also consider empty list handling, and `max(nums)` does this in C.
+
+--- Candidate B ---
+The bug matters more: `total = total` does nothing; you meant `total = n`. For type hints: `def running_max(nums: list[int]) -> int:` and `total: int = nums[0]` helps but isn't required — inference is clear.
+
+--- Candidate C ---
+Type hint is the least of your problems — **the function is broken.**
+
+```python
+if n > total:
+    total = total    # no-op! should be: total = n
+```
+
+It always returns `nums[0]`. Fix the logic first:
+
+```python
+def running_max(nums: list[int]) -> int:
+    max_ = nums[0]
+    for n in nums:
+        if n > max_:
+            max_ = n
+    return max_
+```
+
+Also: `total` is a misleading name for a running maximum; `max_` or `current_max` is clearer. Empty list handling is also missing.
+
+--- Candidate D ---
+The type hint is the least of it — the function is broken. `total = total` is a no-op; it should be `total = n`. As written it always returns `nums[0]`.
+
+```python
+def running_max(nums: list[int]) -> int:
+    best = nums[0]
+    for n in nums:
+        if n > best:
+            best = n
+    return best
+```
+
+Fix the logic, then the hint is easy.
+
+--- Candidate E ---
+The type hint is the least of your worries — **the function is broken**.
+
+```python
+if n > total:
+    total = total   # BUG: should be `total = n`
+```
+
+It returns the first element unchanged. Fix the logic first:
+
+```python
+def running_max(nums: list[int]) -> int:
+    max_ = nums[0]
+    for n in nums:
+        if n > max_:
+            max_ = n
+    return max_
+```
+
+Then add `-> int`. `total` → `max_` (clearer intent).
+
+--- Candidate F ---
+Yes, but there's a bug first: line 8 does `total = total` (no-op). You meant `total = n`.
+
+After fixing, add a type hint matching the element type:
+
+```python
+def running_max(nums: list[int]) -> int:
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = n
+    return total
+```
+
+Use `Sequence[T]`/`Iterable[T]` with `TypeVar` if you want generics.
+
+--- Candidate G ---
+The type hint is the least of your problems — **the function is broken**.
+
+```python
+if n > total:
+    total = total   # BUG: should be `total = n`
+```
+
+It always returns `nums[0]`. Fix that first.
+
+Then: `total` is a poor name for a running maximum — call it `max_so_far` or `current_max`. Type hint: `max_so_far: int = nums[0]`. But the bug makes the hint moot.
+
+--- Candidate H ---
+The bug matters more than the type hint: line 13 says `total = total` — it should be `total = n`. The function returns the first element, not the max.
+
+After fixing: a type hint on `total` is redundant (inferred from `nums[0]`). Add `-> T` return annotation and `nums: Sequence[T]` parameter instead. The variable `total` is poorly named — it's the running maximum, so call it `max_so_far`.

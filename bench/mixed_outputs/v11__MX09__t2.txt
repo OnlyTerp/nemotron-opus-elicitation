@@ -1,0 +1,1 @@
+Leave it. Black formats it identically — the one-liner fits the default 88-char line length. It's correct, idiomatic, and fast. Only change if you need to handle `lo > hi` (currently returns `lo`), or if you want type hints. Otherwise it's done.

@@ -1,0 +1,9 @@
+They compute the same class of functions, but they are **not** "basically the same."
+
+| Aspect | Iteration | Recursion |
+|--------|-----------|-----------|
+| Stack | O(1) | O(n) — each call adds a frame |
+| Tail calls | N/A | Optimized only in some languages (not CPython) |
+| Expressiveness | Loops + state | Natural for tree/graph, divide-and-conquer |
+
+In CPython, recursion hits `RecursionError` ~1000 frames deep. Recursion isn't "a loop that calls itself" — it's a function that calls itself with a fresh stack frame each time. That frame cost is the fundamental difference.

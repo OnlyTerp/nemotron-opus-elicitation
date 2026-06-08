@@ -1,0 +1,121 @@
+<<<BEGIN placebo__MX01__t1>>>
+Close! A closure is a function *that remembers the variables from its enclosing scope* — even after that outer function has finished running. The inner function "closes over" those variables, capturing them by reference (in Python) or by value (in some other languages).
+
+```python
+def make_multiplier(factor):
+    def multiply(x):          # this inner function is a closure
+        return x * factor     # it "closes over" `factor`
+    return multiply
+
+times3 = make_multiplier(3)
+times3(4)  # 12 — `factor` is still accessible!
+```
+
+The key distinction: a plain nested function doesn't become a closure unless it actually *uses* variables from outside. And the magic is that those variables stay alive as long as the closure exists. You've got the right intuition — the nesting is the mechanism, but the *capture* is what makes it a closure.
+<<<END placebo__MX01__t1>>>
+<<<BEGIN placebo__MX02__t1>>>
+They're equivalent in *computational power* (anything recursion can do, iteration can do, and vice versa), but they're not "basically the same" in practice.
+
+- **Stack usage**: Recursion consumes call stack; deep recursion hits stack overflow. Iteration uses constant stack space.
+- **Tail calls**: Some languages eliminate tail calls; Python doesn't.
+- **Readability**: Recursion shines for tree/graph traversal; iteration wins for simple loops.
+
+Rule of thumb: use recursion when the problem structure is recursive and depth is bounded; use iteration for simple repetition.
+<<<END placebo__MX02__t1>>>
+<<<BEGIN placebo__MX03__t1>>>
+Actually, Python lists *are* arrays of pointers — but indexing is **O(1) everywhere**. The list object holds a contiguous C array of `PyObject*` pointers. `lst[i]` is a single pointer dereference. Middle, end, beginning — all the same speed.
+
+What *is* slow: inserting/deleting at the front or middle (`O(n)` shift). Reading? Constant time. If you're doing millions of index lookups and it's slow, the bottleneck is what you're doing with the element, not the indexing. For fast front inserts, `collections.deque` gives O(1) both ends. But don't optimize indexing — it's already optimal.
+<<<END placebo__MX03__t1>>>
+<<<BEGIN placebo__MX04__t1>>>
+The JSON library isn't your bottleneck — those two loop-invariant things are:
+
+```python
+n = len(my_list)          # hoist out of condition
+const_set = set(constant_list)  # build ONCE before loop
+i = 0
+while i < n:
+    if items[i] in const_set:
+        ...
+    i += 1
+```
+
+That alone often gives 2-10x speedup. *Then* if serialization is still hot, `orjson` or `msgspec` are faster than `json` — but measure first. Premature optimization of the wrong thing is the classic trap.
+<<<END placebo__MX04__t1>>>
+<<<BEGIN placebo__MX05__t1>>>
+`fn` is perfectly fine — it's a widely recognized convention for "function argument". In a tiny utility like `retry`, it's clear from context.
+
+That said, your code has a bug: the final `return fn()` runs *after* all retries fail, so you get `times + 1` attempts, not `times`.
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+
+`fn` stays — it's idiomatic. The logic fix matters more.
+<<<END placebo__MX05__t1>>>
+<<<BEGIN placebo__MX06__t1>>>
+Two things: **yes, add a type hint**, and **there's a bug**.
+
+```python
+def running_max(nums: list[int]) -> int:
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = n          # BUG FIX: was `total = total`
+    return total
+```
+
+The bug is the real issue — `total = total` does nothing, so this returns the first element regardless. Also consider empty list handling, and `max(nums)` does this in C.
+<<<END placebo__MX06__t1>>>
+<<<BEGIN placebo__MX07__t1>>>
+**Spaces** — PEP 8, 4 spaces per level. Tabs in Python are a recipe for subtle indentation bugs.
+
+Also, your code has an **off-by-one error**: `xs[i+1]` crashes on the last iteration.
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):  # stop one early
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+Or Pythonic and bug-free: `return all(xs[i] <= xs[i + 1] for i in range(len(xs) - 1))`.
+<<<END placebo__MX07__t1>>>
+<<<BEGIN placebo__MX08__t1>>>
+`acc` is fine — it's a standard abbreviation for "accumulator" in fold/reduce patterns. Experienced Pythonistas recognize it instantly.
+
+If you want more explicit, `total` or `sum_` (trailing underscore avoids shadowing built-in `sum`) are good. But honestly? Just use the built-in: `return sum(nums)`. It's implemented in C, handles edge cases, and reads like English. `acc` isn't the problem.
+<<<END placebo__MX08__t1>>>
+<<<BEGIN placebo__MX09__t1>>>
+Leave it — it's already clean. Black would produce essentially the same thing:
+
+```python
+def clamp(x, lo, hi):
+    return max(lo, min(hi, x))
+```
+
+The logic is the standard "clamp" idiom: `min` caps the upper bound, `max` enforces the lower bound. The one-liner is idiomatic Python. Run Black on it — it'll confirm it's already formatted. No change needed.
+<<<END placebo__MX09__t1>>>
+<<<BEGIN placebo__MX10__t1>>>
+```python
+def fib(n: int) -> int:
+    """Return the nth Fibonacci number (fib(0)=0, fib(1)=1)."""
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+
+assert fib(0) == 0
+assert fib(10) == 55
+```
+
+Iterative, O(n) time, O(1) space. `fib(10)` = 55 is a good sanity check.
+<<<END placebo__MX10__t1>>>

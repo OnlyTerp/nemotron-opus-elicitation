@@ -1,0 +1,9 @@
+Spaces (PEP 8). But the real issue: `xs[i+1]` with `range(len(xs))` raises IndexError on the last element. Use `range(len(xs) - 1)`:
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```

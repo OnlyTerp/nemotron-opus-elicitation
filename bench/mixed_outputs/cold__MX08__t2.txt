@@ -1,0 +1,1 @@
+`acc` is fine — standard abbreviation for "accumulator" in reduce/fold patterns. `total` or `sum_` are also clear. No need to lengthen it; context makes it obvious.

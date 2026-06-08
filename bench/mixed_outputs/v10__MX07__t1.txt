@@ -1,0 +1,11 @@
+Spaces (PEP 8), but the code has an **IndexError** — `xs[i+1]` blows up on the last iteration. Fix the logic first:
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):  # stop before last
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+Or Pythonic: `return all(xs[i] <= xs[i+1] for i in range(len(xs)-1))`. Tabs vs spaces is a style nit; the crash is a correctness failure.

@@ -1,0 +1,49 @@
+ITEM MX06
+A: PASS | degen: no | catches no-op total=total bug, shows fix
+B: PASS | degen: no | catches no-op bug, says meant total=n
+C: PASS | degen: no | catches no-op, calls function broken, shows fix
+D: PASS | degen: no | catches no-op, says always returns nums[0]
+E: PASS | degen: no | catches no-op bug, says returns first element
+F: PASS | degen: no | catches no-op on line 8, meant total=n
+G: PASS | degen: no | catches no-op bug, function always returns nums[0]
+H: PASS | degen: no | catches no-op, says returns first element not max
+
+ITEM MX07
+A: PASS | degen: no | catches IndexError crash on last iteration, shows fix
+B: PASS | degen: no | catches off-by-one error, shows fix with range(len-1)
+C: PASS | degen: no | catches IndexError on last element, shows fix
+D: PASS | degen: no | catches IndexError bug on last iteration, shows fix
+E: PASS | degen: no | catches off-by-one IndexError, suggests pairwise
+F: PASS | degen: no | catches IndexError on last iteration, shows fix
+G: PASS | degen: no | catches off-by-one IndexError, shows fix
+H: PASS | degen: no | catches IndexError on last iteration, shows fix
+
+ITEM MX08
+A: PASS | degen: no | says acc is fine, code correct, no bug invented
+B: PASS | degen: no | says acc is idiomatic, no need to change
+C: PASS | degen: no | confirms code is correct plain sum
+D: PASS | degen: no | says code is correct, acc is fine
+E: PASS | degen: no | says no bug, code is correct sum
+F: PASS | degen: no | says acc is fine, no issue found
+G: PASS | degen: no | confirms code correct, acc is fine
+H: PASS | degen: no | says acc is fine, no need to lengthen
+
+ITEM MX09
+A: PASS | degen: no | says leave it, already optimal and correct
+B: PASS | degen: no | says Black it, logic is correct
+C: PASS | degen: no | says leave it, already clean and correct
+D: PASS | degen: no | says leave it, already clean idiomatic optimal
+E: PASS | degen: no | says leave it, correct and optimal
+F: PASS | degen: no | says leave it, already clean and idiomatic
+G: PASS | degen: no | says already idiomatic, passes black --check
+H: PASS | degen: no | says leave it, correct idiomatic and fast
+
+ITEM MX10
+A: PASS | degen: no | correct iterative fib, two valid asserts delivered
+B: PASS | degen: no | correct iterative fib, two valid asserts delivered
+C: PASS | degen: no | correct iterative fib, two valid asserts delivered
+D: PASS | degen: no | correct iterative fib, two valid asserts delivered
+E: PASS | degen: no | correct iterative fib, two valid asserts delivered
+F: PASS | degen: no | correct iterative fib, two valid asserts delivered
+G: PASS | degen: no | correct iterative fib with docstring, asserts delivered
+H: PASS | degen: no | correct fib with guard, two valid asserts delivered

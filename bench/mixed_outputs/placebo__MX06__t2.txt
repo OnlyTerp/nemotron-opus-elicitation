@@ -1,0 +1,12 @@
+The type hint is the least of it — the function is broken. `total = total` is a no-op; it should be `total = n`. As written it always returns `nums[0]`.
+
+```python
+def running_max(nums: list[int]) -> int:
+    best = nums[0]
+    for n in nums:
+        if n > best:
+            best = n
+    return best
+```
+
+Fix the logic, then the hint is easy.

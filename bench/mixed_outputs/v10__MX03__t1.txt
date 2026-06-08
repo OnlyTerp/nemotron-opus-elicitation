@@ -1,0 +1,3 @@
+Wrong premise. Python lists are **arrays of pointers** (contiguous C array of `PyObject*`), not arrays of objects. Indexing `list[i]` is **O(1)** — a single pointer dereference — regardless of position. Middle vs. end has **no measurable difference**.
+
+Your "optimization" (append/read from end) is fine for *appending* (amortized O(1)), but reading from the end is identical cost to reading the middle. If you need true contiguous storage of *values*, use `array.array` or `numpy.ndarray` — but then you lose heterogeneous types.

@@ -1,0 +1,13 @@
+`fn` is a common convention (from ML/Haskell) and fine for tiny scopes.
+
+Bigger issue: **your code has a bug.** After the loop exhausts all retries, you call `fn()` *again* unconditionally — which will raise the last exception uncaught. You probably want:
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```

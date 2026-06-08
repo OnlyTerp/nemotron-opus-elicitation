@@ -1,0 +1,5 @@
+[USER MESSAGE]
+I'm speeding up a hot loop. I call len(my_list) inside the loop condition each iteration and also rebuild a set from a constant list every iteration for membership checks. Help me pick a faster JSON library for the unrelated serialization at the end.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

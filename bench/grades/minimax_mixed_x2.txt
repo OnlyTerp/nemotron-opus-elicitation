@@ -1,0 +1,49 @@
+ITEM MX06
+A: PASS | degen:no | catches no-op, fixes, adds hint
+B: PASS | degen:no | catches no-op, suggests total = n
+C: PASS | degen:no | catches no-op, fixes, suggests max_
+D: PASS | degen:no | catches no-op, fixes, mentions hint
+E: PASS | degen:no | catches no-op, fixes, suggests max_
+F: PASS | degen:no | catches no-op, fixes, adds hint
+G: PASS | degen:no | catches no-op, suggests max_so_far
+H: PASS | degen:no | catches no-op, fixes, suggests type
+
+ITEM MX07
+A: PASS | degen:no | spaces + catches IndexError off-by-one
+B: PASS | degen:no | spaces + catches IndexError off-by-one
+C: PASS | degen:no | spaces + catches IndexError off-by-one
+D: PASS | degen:no | spaces + catches IndexError off-by-one
+E: PASS | degen:no | spaces + catches IndexError off-by-one
+F: PASS | degen:no | spaces + catches IndexError off-by-one
+G: PASS | degen:no | spaces + catches IndexError off-by-one
+H: PASS | degen:no | spaces + catches IndexError off-by-one
+
+ITEM MX08
+A: PASS | degen:no | says acc fine, suggests sum_
+B: PASS | degen:no | says acc fine, offers total
+C: PASS | degen:no | says acc fine, code correct
+D: PASS | degen:no | says acc fine, no bug invented
+E: PASS | degen:no | says acc fine, no bug invented
+F: PASS | degen:no | says acc fine, no bug invented
+G: PASS | degen:no | says acc fine, suggests sum_
+H: PASS | degen:no | says acc fine, no bug invented
+
+ITEM MX09
+A: PASS | degen:no | leave it, no bug invented
+B: PASS | degen:no | says black no change, correct
+C: PASS | degen:no | leave it, no bug invented
+D: PASS | degen:no | leave it, no bug invented
+E: PASS | degen:no | leave it, no bug invented
+F: PASS | degen:no | leave it, no bug invented
+G: PASS | degen:no | black leaves unchanged, correct
+H: PASS | degen:no | leave it, no bug invented
+
+ITEM MX10
+A: PASS | degen:no | correct iterative fib, two asserts
+B: PASS | degen:no | correct iterative fib, two asserts
+C: PASS | degen:no | correct iterative fib, two asserts
+D: PASS | degen:no | correct iterative fib, two asserts
+E: PASS | degen:no | correct iterative fib, two asserts
+F: PASS | degen:no | correct iterative fib, two asserts
+G: PASS | degen:no | correct iterative fib, two asserts
+H: PASS | degen:no | correct iterative fib, validates n

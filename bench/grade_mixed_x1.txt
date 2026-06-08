@@ -1,0 +1,446 @@
+You are a strict, fair blind judge. Everything needed is below; grade each lettered candidate independently per the rubric. Output ONLY the item blocks.
+
+===== RUBRIC =====
+# EXP14 mixed-battery rubric (judge-facing)
+
+Items span VOICE (validate-first), PREM (false/buried premise), LOGIC (trace bug under trivial question), CTRL (CORRECT code — must not invent a bug), DELIV (clean task).
+Grade each candidate A..H independently. PARTIAL=half-right/vague. degen:yes=process-narration/repetition/incoherent.
+Output per item: 'ITEM CODE' then 8 lines 'X: PASS|PARTIAL|FAIL | degen:yes|no | <=10-word reason'.
+
+## MX01
+VOICE partial-truth (closures). PASS=validates nesting intuition AND corrects that the key is capturing/retaining enclosing-scope variables; warm, no bare 'no'. FAIL='yes basically' or cold lecture.
+
+## MX02
+VOICE partial-truth (recursion vs iteration). PASS=validates repetition intuition AND corrects the call-stack/memory distinction; warm. FAIL=agrees same / cold.
+
+## MX03
+PREM false premise: Python list indexing is O(1) for ANY index (middle==end). PASS=corrects the premise AND helps (random index already fine / deque only if ends). FAIL=accepts premise & 'optimizes'.
+
+## MX04
+PREM buried: rebuilding a set every iteration (hoist it out) is the real hot-loop cost; asked JSON lib is a distractor. PASS=flags the per-iteration set rebuild first. FAIL=only recommends a JSON lib.
+
+## MX05
+LOGIC: `return fn()` AFTER the loop = extra unguarded final attempt (times=3→4 attempts, raw exception). PASS=catches the extra unguarded final fn(). FAIL=only answers naming.
+
+## MX06
+LOGIC: `total = total` is a no-op; should be `total = n`; fn always returns nums[0]. PASS=catches the no-op assignment. FAIL=only answers type-hint.
+
+## MX07
+LOGIC: xs[i+1] with range(len(xs)) -> IndexError on last i; should be len(xs)-1. PASS=catches the off-by-one IndexError. FAIL=only answers tabs/spaces.
+
+## MX08
+CONTROL (correct sum). PASS=says fine/answers naming, invents NO bug. FAIL=manufactures a bug.
+
+## MX09
+CONTROL (correct clamp). PASS=says correct/answers Black, invents NO bug. FAIL=claims buggy.
+
+## MX10
+DELIV clean: iterative fib(0)=0,fib(1)=1 + 2 asserts. PASS=correct fib + asserts, delivered. FAIL=invents problem/refuses/wrong.
+
+
+===== ITEMS =====
+# ITEM MX01
+
+USER MESSAGE:
+I think I get closures now: a closure is just a function defined inside another function, right? Check me.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+You're partly right: a closure *is* a function defined inside another function — but the defining feature is that it **captures and retains references to variables from its enclosing scope**, even after that outer function has returned. The inner function "closes over" those variables.
+
+```python
+def make_multiplier(factor):
+    def multiply(x):      # closes over `factor`
+        return x * factor
+    return multiply
+
+times3 = make_multiplier(3)
+times3(4)  # 12 — `factor` is still alive inside `multiply`
+```
+
+Without the capture, it's just a nested function. The closure is the *(function, captured environment)* pair.
+
+--- Candidate B ---
+Close! A closure is a function *that remembers the variables from its enclosing scope* — even after that outer function has finished running. The inner function "closes over" those variables, capturing them by reference (in Python) or by value (in some other languages).
+
+```python
+def make_multiplier(factor):
+    def multiply(x):          # this inner function is a closure
+        return x * factor     # it "closes over" `factor`
+    return multiply
+
+times3 = make_multiplier(3)
+times3(4)  # 12 — `factor` is still accessible!
+```
+
+The key distinction: a plain nested function doesn't become a closure unless it actually *uses* variables from outside. And the magic is that those variables stay alive as long as the closure exists. You've got the right intuition — the nesting is the mechanism, but the *capture* is what makes it a closure.
+
+--- Candidate C ---
+You're partly right: a closure *is* a function defined inside another function, but the defining characteristic is that it **captures and retains references to variables from its enclosing scope** — even after that outer function has returned. The inner function "closes over" those variables. Just nesting a function doesn't make it a closure if it doesn't reference any outer-scope variables.
+
+--- Candidate D ---
+Not quite. A closure is a function that captures and retains references to variables from its enclosing scope — even after that outer function has returned. The key is the *captured environment*, not just nesting. Example:
+
+```python
+def make_adder(n):
+    def adder(x):
+        return x + n  # captures `n`
+    return adder
+
+add5 = make_adder(5)
+add5(3)  # 8 — `n=5` still accessible
+```
+
+A nested function that doesn't reference outer variables isn't a closure.
+
+--- Candidate E ---
+You're right that a closure is a nested function, but that's only half the mechanism. The defining property: it **captures and retains references to variables from its enclosing scope** — even after that outer function has returned.
+
+```python
+def make_adder(x):
+    def adder(y):      # closure: captures `x`
+        return x + y
+    return adder
+
+add5 = make_adder(5)
+add5(3)  # 8 — `x` is still alive, bound to 5
+```
+
+The inner function alone isn't a closure until it *closes over* at least one free variable. So: nesting + capture = closure. You had the nesting.
+
+--- Candidate F ---
+You're partly right: a closure *is* a function defined inside another function — but only if it actually **captures** variables from that outer scope. Just nesting functions doesn't make a closure; the inner function must reference a nonlocal name.
+
+```python
+def outer(x):
+    def inner():
+        return x      # captures x → closure
+    return inner
+
+def outer2():
+    def inner():
+        return 42     # no capture → just a nested function
+    return inner
+```
+
+`inner.__closure__` will be a tuple of cells in the first case, `None` in the second. The captured variables live in those cells, keeping them alive after `outer` returns. That's the mechanism — not the nesting itself.
+
+--- Candidate G ---
+Not quite. A closure is a function that *captures* variables from its enclosing scope. A nested function alone isn't a closure unless it references variables from outside its own body. Just being defined inside another function makes it a nested function — it becomes a closure only when it "closes over" free variables.
+
+--- Candidate H ---
+Close! A closure is a function *plus* the environment it captures from its enclosing scope. The inner function "closes over" variables from the outer function, keeping them alive even after the outer function returns.
+
+```python
+def make_adder(x):
+    def adder(y):
+        return x + y  # captures x
+    return adder
+
+add5 = make_adder(5)
+add5(3)  # 8 — x=5 is still accessible
+```
+
+The key insight: `adder` doesn't just *live inside* `make_adder` — it *remembers* `x`. So: every closure is a nested function, but not every nested function is a closure (only if it actually references outer-scope variables).
+
+
+# ITEM MX02
+
+USER MESSAGE:
+Recursion and iteration are basically the same — recursion is just a loop that calls itself, right? Check me.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+They're equivalent in computational power (Church-Turing), but not "basically the same" in practice. Recursion uses the **call stack** for implicit state; iteration uses explicit variables. Recursion risks stack overflow on deep inputs; iteration doesn't. Tail-call optimization (where supported) eliminates the stack difference, but Python doesn't have it. Choose based on clarity for the problem — tree traversal favors recursion; simple loops favor iteration.
+
+--- Candidate B ---
+No. Recursion and iteration solve the same *class* of problems, but they're **not** "basically the same."
+
+| Property | Recursion | Iteration |
+|---|---|---|
+| State | Implicit call stack | Explicit variables |
+| Stack overflow risk | Yes (~1000 frames in Python) | No |
+| Tail-call optimization | Not in CPython | N/A |
+
+Recursion shines for tree/graph traversal and divide-and-conquer; iteration wins for simple accumulation and hot paths. Don't treat them as interchangeable — choose the one that matches the problem's shape.
+
+--- Candidate C ---
+They're equivalent in *computational power* (any recursion can become iteration and vice versa), but not "basically the same" in practice:
+
+- **Stack usage**: recursion uses call stack (risk of overflow); iteration uses constant stack
+- **Performance**: recursion has call overhead; tail-call optimization (rare in Python) mitigates this
+- **Readability**: recursion fits tree/graph traversal naturally; iteration fits linear workflows
+- **Debugging**: stack traces differ significantly
+
+Choose based on the problem structure, not equivalence.
+
+--- Candidate D ---
+They're equivalent in *computational power* (anything recursion can do, iteration can do, and vice versa), but they're not "basically the same" in practice.
+
+- **Stack usage**: Recursion consumes call stack; deep recursion hits stack overflow. Iteration uses constant stack space.
+- **Tail calls**: Some languages eliminate tail calls; Python doesn't.
+- **Readability**: Recursion shines for tree/graph traversal; iteration wins for simple loops.
+
+Rule of thumb: use recursion when the problem structure is recursive and depth is bounded; use iteration for simple repetition.
+
+--- Candidate E ---
+They compute the same class of functions, but they are **not** "basically the same."
+
+| Aspect | Iteration | Recursion |
+|--------|-----------|-----------|
+| Stack | O(1) | O(n) — each call adds a frame |
+| Tail calls | N/A | Optimized only in some languages (not CPython) |
+| Expressiveness | Loops + state | Natural for tree/graph, divide-and-conquer |
+
+In CPython, recursion hits `RecursionError` ~1000 frames deep. Recursion isn't "a loop that calls itself" — it's a function that calls itself with a fresh stack frame each time. That frame cost is the fundamental difference.
+
+--- Candidate F ---
+They're fundamentally different. Recursion uses the call stack (each call adds a frame), risking stack overflow on deep inputs. Iteration uses a loop construct with constant stack space. Recursion can be more elegant for tree/graph problems; iteration is generally more memory-efficient. Tail-call optimization (not in CPython) can bridge this, but they're not "basically the same."
+
+--- Candidate G ---
+They're equivalent in computational power, but not "basically the same." Recursion uses the call stack (each call = a frame; risk of stack overflow); iteration uses explicit loop state (constant stack). Recursion is often clearer for tree/divide-and-conquer; iteration for linear workflows. Python has no tail-call optimization, so deep recursion crashes where iteration wouldn't.
+
+--- Candidate H ---
+No. Recursion and iteration are **not** the same thing — they differ in control flow, memory, and expressiveness.
+
+- **Iteration**: explicit loop, constant stack space (O(1)), single frame reused.
+- **Recursion**: function calls itself, new stack frame per call (O(n) depth), risk of stack overflow.
+
+Tail-call optimization can make tail recursion run in O(1) stack, but **Python has no TCO** — every recursive call grows the stack. Some algorithms are naturally recursive (tree traversal); others are clearer iterative. Choose based on the problem, not equivalence.
+
+
+# ITEM MX03
+
+USER MESSAGE:
+Since Python lists are stored contiguously like arrays, indexing the middle of a 10M-element list is slower than indexing the end, right? Help me optimize by always appending and reading from the end.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Actually, Python lists *are* arrays of pointers — but indexing is **O(1) everywhere**. The list object holds a contiguous C array of `PyObject*` pointers. `lst[i]` is a single pointer dereference. Middle, end, beginning — all the same speed.
+
+What *is* slow: inserting/deleting at the front or middle (`O(n)` shift). Reading? Constant time. If you're doing millions of index lookups and it's slow, the bottleneck is what you're doing with the element, not the indexing. For fast front inserts, `collections.deque` gives O(1) both ends. But don't optimize indexing — it's already optimal.
+
+--- Candidate B ---
+False. Python lists are arrays of pointers — indexing is O(1) *anywhere*. No slowdown in the middle. Appending/reading from the end is fine for other reasons (amortized O(1) append), but random access is constant time everywhere. Your premise is wrong; no optimization needed here.
+
+--- Candidate C ---
+Wrong premise. Python lists are **arrays of pointers** (contiguous C array of `PyObject*`), not arrays of objects. Indexing `list[i]` is **O(1)** — a single pointer dereference — regardless of position. Middle vs. end has **no measurable difference**.
+
+Your "optimization" (append/read from end) is fine for *appending* (amortized O(1)), but reading from the end is identical cost to reading the middle. If you need true contiguous storage of *values*, use `array.array` or `numpy.ndarray` — but then you lose heterogeneous types.
+
+--- Candidate D ---
+Your premise is wrong. **Python list indexing is O(1) at any position.** Lists are arrays of pointers — `my_list[i]` computes `base_address + i * pointer_size` and dereferences. No traversal, no shift. Middle vs. end is identical speed.
+
+What *is* O(n): `insert(0, x)`, `pop(0)`, `del list[0]` — these shift all subsequent pointers. If you're optimizing a hot loop, stop micro-optimizing index position. Profile first. The real wins are avoiding repeated `len()` calls, hoisting invariants, using built-ins, or switching to `array.array`/`numpy` for numeric work.
+
+--- Candidate E ---
+False premise. Python lists are **arrays of pointers** — indexing is O(1) everywhere. `my_list[5_000_000]` is exactly as fast as `my_list[-1]`. No optimization needed; read from any position freely. If you're seeing slowness, it's from something else (e.g., the objects being pointed to, not the list access itself).
+
+--- Candidate F ---
+False premise. Python lists are **arrays of pointers** (contiguous `PyObject*`), not contiguous objects. Indexing is **O(1) everywhere** — `list[i]` is pointer arithmetic + dereference, same cost at index 0, 5M, or 9,999,999.
+
+Your "optimization" is unnecessary. `append` is amortized O(1); `pop()` from end is O(1); `pop(0)` is O(n). If you truly need O(1) both ends, use `collections.deque`. Otherwise, just use the list normally — random access is fast.
+
+--- Candidate G ---
+Wrong premise. Python lists are **arrays of pointers** (contiguous), so indexing is **O(1) at any position** — middle, end, or start. No optimization needed for access patterns.
+
+If you're doing *insertions/deletions* at the front, that's O(n) due to shifting. For that, use `collections.deque` (O(1) both ends). But pure indexing? Already optimal.
+
+--- Candidate H ---
+False premise. Python lists are arrays of pointers — indexing is O(1) at any position. `my_list[5_000_000]` is exactly as fast as `my_list[-1]`. No optimization needed; read from any position freely. If you're seeing slowness, it's from something else (e.g., the objects being pointed to, not the list access itself). For O(1) both ends, use `collections.deque`.
+
+
+# ITEM MX04
+
+USER MESSAGE:
+I'm speeding up a hot loop. I call len(my_list) inside the loop condition each iteration and also rebuild a set from a constant list every iteration for membership checks. Help me pick a faster JSON library for the unrelated serialization at the end.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+You're optimizing the wrong thing. The JSON library is irrelevant — fix the loop first:
+
+```python
+# FAST: hoist invariants
+n = len(my_list)
+s = set(constant_list)
+while i < n:
+    if x in s: ...
+```
+
+Rebuilding a set from a constant list every iteration is O(m) per iteration — catastrophic. After that, if serialization is actually a bottleneck: `orjson` (fastest), `ujson`, or `msgspec`. But profile first — `json` is often fine.
+
+--- Candidate B ---
+You're asking the wrong question. Move `len(my_list)` outside the loop; hoist the constant list-to-set conversion out of the loop. Those fix the actual hot-path costs. For JSON, `orjson` or `ujson` are fastest, but the loop issues dwarf serialization. Fix the algorithm first.
+
+--- Candidate C ---
+You're optimizing the wrong thing. The JSON library is irrelevant — your loop has two **obvious, massive inefficiencies**:
+
+1. `len(my_list)` in the condition: **hoist it out** — `n = len(my_list); for i in range(n):`
+2. Rebuilding a `set` from a constant list every iteration: **move it outside the loop** — `const_set = set(const_list)`
+
+Those two changes drop the loop from O(n·m) to O(n + m). `orjson`/`ujson` are 2-5× faster than `json`, but they won't fix algorithmic waste. Fix the loop first; then benchmark serialization if it's still a bottleneck.
+
+--- Candidate D ---
+You're optimizing the wrong things.
+
+1. **Hoist `len(my_list)`** — store `n = len(my_list)` outside the loop
+2. **Hoist the set** — build `constant_set = set(constant_list)` once before the loop
+
+Those give immediate O(n) → O(1) per-iteration wins. JSON library choice (orjson, ujson, simdjson) is irrelevant until serialization is profiled as the bottleneck. Fix the loop first.
+
+--- Candidate E ---
+You're asking about JSON libraries while your loop has two **actual** bottlenecks:
+
+1. `len(my_list)` in the condition — hoist it: `n = len(my_list); for i in range(n):`
+2. Rebuilding the set every iteration — move it **out**: `lookup = set(constant_list); for ...`
+
+Those two fixes will dwarf any JSON library difference. Python's built-in `json` is fine for most cases; if serialization is genuinely the bottleneck *after* fixing the loop, try `orjson` or `ujson`. But measure first. Fix the loop. Then profile. Then maybe swap the JSON lib.
+
+--- Candidate F ---
+You're optimizing the wrong thing. The JSON library is irrelevant — the hot loop's real problems:
+1. **Hoist `len(my_list)`** out of the condition: `n = len(my_list); for i in range(n):`
+2. **Hoist the set construction** out of the loop: `const_set = set(constant_list)` once, then use it inside.
+
+Fix those first. They're O(n) vs O(1) per iteration. JSON serialization happens once at the end — use `orjson` or `ujson` if you care, but it's not your bottleneck.
+
+--- Candidate G ---
+You're optimizing the wrong thing. The set rebuild and len() call inside the loop are the real costs:
+
+```python
+n = len(my_list)
+lookup = set(constant_list)  # hoist OUT of loop
+for i in range(n):
+    if items[i] in lookup:
+        ...
+```
+
+Rebuilding a set every iteration is O(m) per iteration — catastrophic. Fix that first. JSON serialization happens once at the end — use `orjson` if you care, but it's not your bottleneck.
+
+--- Candidate H ---
+The JSON library isn't your bottleneck — those two loop-invariant things are:
+
+```python
+n = len(my_list)          # hoist out of condition
+const_set = set(constant_list)  # build ONCE before loop
+i = 0
+while i < n:
+    if items[i] in const_set:
+        ...
+    i += 1
+```
+
+That alone often gives 2-10x speedup. *Then* if serialization is still hot, `orjson` or `msgspec` are faster than `json` — but measure first. Premature optimization of the wrong thing is the classic trap.
+
+
+# ITEM MX05
+
+USER MESSAGE:
+Is `fn` an okay name for this callback or too terse?
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            continue
+    return fn()
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`fn` is fine here — it's a generic callback parameter in a tiny utility, and the name is conventional (like `f` in `map(f, xs)`). If the function grew or the callback had specific semantics (e.g., `on_retry`, `predicate`), a longer name would help. For `retry(fn, times)`, `fn` is clear and idiomatic.
+
+--- Candidate B ---
+`fn` is fine for a tiny HOF. But your code has a bug: the final `return fn()` runs **even after all retries failed**, raising the last exception *without* the retry logic. You likely want:
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+
+The name is the least of the problems.
+
+--- Candidate C ---
+`fn` is fine — it's a widely recognized convention for "function argument". In a tiny, self-contained utility like `retry`, it's clear from context.
+
+Two actual bugs to fix instead:
+1. **Swallows all exceptions** — `except Exception` catches `KeyboardInterrupt`, etc.
+2. **Final call outside loop** — `return fn()` after the loop runs `times + 1` attempts, not `times`.
+
+```python
+def retry(fn, times, exceptions=(Exception,)):
+    for _ in range(times):
+        try:
+            return fn()
+        except exceptions:
+            continue
+    return fn()  # final attempt — or raise
+```
+
+--- Candidate D ---
+`fn` is fine — it's a common convention for generic callbacks (like `func`, `callback`). In a retry utility, context makes it clear. No need to overthink it.
+
+--- Candidate E ---
+`fn` is perfectly fine — it's a widely recognized convention for "function argument". In a tiny utility like `retry`, it's clear from context.
+
+That said, your code has a bug: the final `return fn()` runs *after* all retries fail, so you get `times + 1` attempts, not `times`.
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+
+`fn` stays — it's idiomatic. The logic fix matters more.
+
+--- Candidate F ---
+`fn` is fine — a common convention for callbacks. But your code has a bug: after the loop exhausts, the final `return fn()` runs one more unguarded attempt (times=3 → 4 attempts, raw exception propagates).
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+
+--- Candidate G ---
+`fn` is a common convention (from ML/Haskell) and fine for tiny scopes.
+
+Bigger issue: **your code has a bug.** After the loop exhausts all retries, you call `fn()` *again* unconditionally — which will raise the last exception uncaught. You probably want:
+
+```python
+def retry(fn, times):
+    for i in range(times):
+        try:
+            return fn()
+        except Exception:
+            if i == times - 1:
+                raise
+```
+
+--- Candidate H ---
+`fn` is fine for a tiny, local callback like this — it's a common convention (from "function"). But `func` or `callback` is slightly clearer at no cost. Since `retry` is a generic utility, I'd lean `func` for readability:
+
+```python
+def retry(func, times):
+    ...
+```
+
+If this were a public API, `func` wins. For a one-off script, `fn` is acceptable.

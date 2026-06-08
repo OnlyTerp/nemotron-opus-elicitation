@@ -1,0 +1,5 @@
+[USER MESSAGE]
+Write a small Python function that returns the nth Fibonacci number iteratively (n>=0, fib(0)=0, fib(1)=1), with two quick asserts.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.
