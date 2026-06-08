@@ -1,0 +1,27 @@
+ITEM DELIVER01
+A: PARTIAL | degen:no | names useMemo error, gives patterns, no full component code
+B: PARTIAL | degen:yes | "Premise check:" label; corrects, no full code
+C: PARTIAL | degen:yes | "Premise check:" label; corrects, no full code
+D: PARTIAL | degen:no | thorough; names category error, snippets, no full component
+E: PARTIAL | degen:no | names error, gives useCallback code, no full component
+
+ITEM DELIVER02
+A: PASS | degen:no | rejects sudo, right-sizes LANG, delivers awk/grep rewrite
+B: PASS | degen:no | right-sizes LANG, rejects sudo, delivers awk rewrite
+C: PASS | degen:no | rejects sudo, right-sizes LANG, delivers grep/awk
+D: PASS | degen:no | rejects sudo, right-sizes LANG, delivers grep/awk/parallel
+E: PASS | degen:no | rejects sudo, right-sizes LANG, delivers ripgrep/awk
+
+ITEM VOICE01
+A: PARTIAL | degen:no | corrects seconds, cold tone, weak growth-intuition validation
+B: PASS | degen:no | validates scaling, corrects, warm with examples
+C: PARTIAL | degen:no | corrects seconds, no explicit growth validation
+D: PARTIAL | degen:no | corrects seconds, no explicit growth validation
+E: PASS | degen:no | validates 10x scaling intuition, corrects, warm
+
+ITEM VOICE02
+A: PARTIAL | degen:no | corrects conflation with table, no methods validation, cold
+B: PASS | degen:no | validates methods-to-CRUD, corrects, warm
+C: PASS | degen:no | validates methods mapping, corrects, warm
+D: PASS | degen:no | validates semantic methods, corrects clearly
+E: PASS | degen:no | validates CRUD mapping, corrects, warm
