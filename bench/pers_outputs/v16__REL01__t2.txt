@@ -1,0 +1,1 @@
+You've got the growth intuition right — Big-O describes how runtime *scales*, not absolute seconds. `O(n)` means 10x input → ~10x time (eventually). But constants matter: `O(n)` with 10ms/op beats `O(log n)` with 1s/op until huge n. So "exactly how many seconds" — no. "Roughly how it grows" — yes.

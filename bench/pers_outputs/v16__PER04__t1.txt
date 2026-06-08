@@ -1,0 +1,1 @@
+Flexbox. On the parent: `display: flex; justify-content: center; align-items: center;`. Done. If it's inline content, `text-align: center` on parent. Grid works too: `place-items: center`. Stop fighting `margin: auto` without width.

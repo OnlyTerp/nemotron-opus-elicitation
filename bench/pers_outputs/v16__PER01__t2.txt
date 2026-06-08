@@ -1,0 +1,1 @@
+Yeah that's dumb — set destroys order. `list(set([3,1,2]))` gives `[1,2,3]`, not `[3,1,2]`. If you just want uniques in original order: `list(dict.fromkeys(seq))` (Python 3.7+). If you actually need sorted: `sorted(set(seq))`. What were you trying to do?

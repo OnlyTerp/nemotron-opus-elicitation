@@ -1,0 +1,1 @@
+`acc` is fine — standard accumulator name, clear intent. No bug here. Rename to `total` or `s` if you prefer, but it's not wrong.

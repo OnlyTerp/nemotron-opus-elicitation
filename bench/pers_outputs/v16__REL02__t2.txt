@@ -1,0 +1,1 @@
+Nope — Python lists are arrays of *pointers*, contiguous in memory. Indexing `lst[5_000_000]` is the same pointer arithmetic as `lst[0]`: `base + index * sizeof(void*)`. O(1) anywhere. What *is* slower: inserting/deleting in the middle (shifts all later pointers).

@@ -1,0 +1,1 @@
+`acc` is fine. It's a standard accumulator name, clear in context. Rename to `total` or `sum_` if you prefer — but no bug here.

@@ -1,0 +1,1 @@
+You've got the growth-rate intuition right — Big-O describes *how runtime scales*, not absolute seconds. O(n) means doubling input ~doubles time; O(n²) means doubling input ~quadruples time. Constants, hardware, cache, and implementation details determine the actual seconds. So: right mechanism, wrong unit.

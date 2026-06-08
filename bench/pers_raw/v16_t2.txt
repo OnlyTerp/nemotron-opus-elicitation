@@ -1,0 +1,30 @@
+<<<BEGIN v16__PER01__t2>>>
+Yeah that's dumb — set destroys order. `list(set([3,1,2]))` gives `[1,2,3]`, not `[3,1,2]`. If you just want uniques in original order: `list(dict.fromkeys(seq))` (Python 3.7+). If you actually need sorted: `sorted(set(seq))`. What were you trying to do?
+<<<END v16__PER01__t2>>>
+<<<BEGIN v16__PER02__t2>>>
+Hell yeah, that's sick! But — train loss 0.03 with what val loss? If val is still ~5, you're memorizing. If val dropped with it (say 0.05), you might be fine. Check: plot both curves. If they diverge (train ↓, val ↑), add dropout/weight decay/early stopping. Also: what's your dataset size vs params? 0.03 on tiny data = suspicious.
+<<<END v16__PER02__t2>>>
+<<<BEGIN v16__PER03__t2>>>
+You're right, it's not. Asyncio only helps I/O-bound work (network, disk) by overlapping waits. CPU-bound? GIL blocks all threads anyway. Use `multiprocessing` or `ProcessPoolExecutor` for true parallelism. Or rewrite the hot path in Rust/Cython/Numba if it's numeric.
+<<<END v16__PER03__t2>>>
+<<<BEGIN v16__PER04__t2>>>
+```css
+.parent { display: flex; justify-content: center; align-items: center; }
+```
+Done. Flexbox centers both axes. If you need IE11 support (why), use `margin: auto` on the child with defined width. Grid works too: `display: grid; place-items: center;`.
+<<<END v16__PER04__t2>>>
+<<<BEGIN v16__PER05__t2>>>
+Honestly not bad for 3am — logic's clean, base cases right. But it's O(2^n) so `fib(40)` takes ~1s, `fib(50)` ~2min. For real use: `@lru_cache` on top or iterative loop. Type hint? `def fib(n: int) -> int:` — cheap, helps catch `fib("oops")`.
+<<<END v16__PER05__t2>>>
+<<<BEGIN v16__REL01__t2>>>
+You've got the growth intuition right — Big-O describes how runtime *scales*, not absolute seconds. `O(n)` means 10x input → ~10x time (eventually). But constants matter: `O(n)` with 10ms/op beats `O(log n)` with 1s/op until huge n. So "exactly how many seconds" — no. "Roughly how it grows" — yes.
+<<<END v16__REL01__t2>>>
+<<<BEGIN v16__REL02__t2>>>
+Nope — Python lists are arrays of *pointers*, contiguous in memory. Indexing `lst[5_000_000]` is the same pointer arithmetic as `lst[0]`: `base + index * sizeof(void*)`. O(1) anywhere. What *is* slower: inserting/deleting in the middle (shifts all later pointers).
+<<<END v16__REL02__t2>>>
+<<<BEGIN v16__REL03__t2>>>
+Type hint? Sure, `total: int` (or whatever `nums[0]` is). But line 13: `total = total` is a no-op — you meant `total = n`. Function returns first element always. Fix that first.
+<<<END v16__REL03__t2>>>
+<<<BEGIN v16__REL04__t2>>>
+`acc` is fine. Clear, idiomatic for "accumulator." Rename only if the function does something non-obvious (e.g., `weighted_sum` → `weighted_total`). No bug here.
+<<<END v16__REL04__t2>>>

@@ -1,0 +1,1 @@
+Hell yeah, that's sick! But — train loss 0.03 with what val loss? If val is still ~5, you're memorizing. If val dropped with it (say 0.05), you might be fine. Check: plot both curves. If they diverge (train ↓, val ↑), add dropout/weight decay/early stopping. Also: what's your dataset size vs params? 0.03 on tiny data = suspicious.
