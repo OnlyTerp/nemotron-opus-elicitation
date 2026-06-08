@@ -15,7 +15,9 @@
 5. **The persona is multi-turn durable** (EXP15): it survives 8 turns of real conversation without decaying to cold's blunt reflex.
 6. **One lever moved actual CAPABILITY, not just voice** (EXP17-19): an **execute-verify** clause ("don't trust a read-through — check the code's output on a concrete boundary input") took silent-wrong-output-bug recall from **cold 2/10 → 10/10**, with zero precision cost and zero degeneration. A real sandbox added nothing over *mental* execution on review-sized code (EXP18) — the lever is the disposition, not the tool. Folded into the persona, this gives the final template **`v13_lean_verify.md`**.
 
-**Bottom line:** the shippable artifact is a **lean warm-expert persona + execute-verify clause** (`templates/v13_lean_verify.md`), not the gate machinery. "Elicitation not capability" holds — the levers are *persona inhabitation* (supplies Nemotron's missing warm/validate-first disposition) plus *execute-verify* (makes it actually check code instead of eyeballing it). Both are dispositions the model could always perform; the prompt just makes it do so reliably.
+7. **Register calibration makes it feel human** (EXP22-23): adding "match the user's register and energy — professional when they're professional, casual when they're casual" gave v16 the personality to say "Hell yeah" and "Nope" naturally, while scoring a perfect 20/20 on the reliability battery (v13 was 29/30). Zero regressions on any axis.
+
+**Bottom line:** the shippable artifact is **`templates/v16_personality_calibrate.md`** — a 353-word lean persona that supplies three active levers: *validate-first voice* (fixes Nemotron's cold bluntness), *execute-verify on code* (lifts silent-bug recall from 2/10 to 10/10), and *register calibration* (matches the user's energy naturally). All three are dispositions the model could always perform; the prompt just makes them fire reliably. No gates, no scaffolding, no over-engineering — just the dispositions Nemotron was missing.
 
 ## What's in here
 
@@ -64,8 +66,9 @@ Every claim is tested against the **live Nemotron 3 Ultra** (`run_subagent --pro
 - ✅ EXP16 (Qwen-35B transfer): v11 is a **no-op** (11/12 = cold) — the effect is a Nemotron-specific disposition repair, not universal.
 - ✅ **EXP17 (execute-verify breaks the capability ceiling):** silent-wrong-output bugs cold **2/10 → v12 10/10**, 0 precision cost, 98% agree.
 - ✅ EXP18 (sandbox vs mental): real sandbox **ties** mental execution (12/12 = 12/12) on review-sized code — the lever is the disposition, not the tool.
-- ✅ **EXP19 (v13 = v11 + execute-verify):** VOICE 4/4 (no regression), CTRL 4/4 (0 invented bugs), 0 degen, + silent-bug recall 8/10. **v13 strictly dominates v11.**
-- ⭐ **Final recommendation: `templates/v13_lean_verify.md`** (use `v11_lean_synthesis.md` for pure non-code chat). See `USAGE.md`.
+- ✅ **EXP19 (v13 = v11 + execute-verify):** VOICE 4/4, CTRL 4/4, 0 degen, + silent-bug recall 8/10. v13 dominates v11.
+- ✅ **EXP22-23 (v16 = v13 + register calibration):** 20/20 on mixed battery (100% agree), personality matches casual energy ("Hell yeah", "Nope", "Done"), zero regressions. **v16 strictly dominates v13.**
+- ⭐ **Final recommendation: `templates/v16_personality_calibrate.md`** — 353 words, three active levers, no gates. See `USAGE.md`.
 
 ### Headline result (EXP14, blind 2-judge, 95% agreement)
 The whole campaign in one table — consensus PASS by category, /4 unless noted:
