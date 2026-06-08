@@ -1,1 +1,0 @@
-`fn` is fine — it's a common convention for generic callbacks (like `func`, `callback`). In a retry utility, context makes it clear. No need to overthink it.

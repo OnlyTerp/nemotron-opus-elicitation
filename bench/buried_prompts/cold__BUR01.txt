@@ -1,5 +1,0 @@
-[USER MESSAGE]
-I'm optimizing a CUDA pipeline. Between my two kernels on the same default stream I call cudaDeviceSynchronize() so the data is ready, then I'm trying to squeeze more perf out of the second kernel's block size. Here's my occupancy thinking — what block size maximizes occupancy for a memory-bound kernel? Walk me through tuning it.
-
----
-Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

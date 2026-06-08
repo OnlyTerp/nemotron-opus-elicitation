@@ -1,7 +1,0 @@
-Creating a new `sync.Mutex` per request provides **zero** thread-safety — each goroutine gets its own mutex, so nothing is actually protected. The mutex must be shared (package-level or struct field) to serialize access.
-
-But you likely don't need a mutex at all. If handlers only read shared config, use immutable data. If they write, use a shared mutex or, better, design for lock-free operation (channels, sharded counters, `sync/atomic`).
-
-`GOMAXPROCS` defaults to CPU cores — leave it. Worker pool size: start with `GOMAXPROCS * 2` for I/O-bound work, `GOMAXPROCS` for CPU-bound. Tune via load testing, not guessing.
-
-Fix the mutex scope first. Then benchmark.

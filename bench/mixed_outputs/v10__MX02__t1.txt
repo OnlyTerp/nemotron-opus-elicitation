@@ -1,6 +1,0 @@
-No. Recursion and iteration are **not** the same thing — they differ in control flow, memory, and expressiveness.
-
-- **Iteration**: explicit loop, constant stack space (O(1)), single frame reused.
-- **Recursion**: function calls itself, new stack frame per call (O(n) depth), risk of stack overflow.
-
-Tail-call optimization can make tail recursion run in O(1) stack, but **Python has no TCO** — every recursive call grows the stack. Some algorithms are naturally recursive (tree traversal); others are clearer iterative. Choose based on the problem, not equivalence.

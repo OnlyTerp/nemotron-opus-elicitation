@@ -1,3 +1,0 @@
-False premise. Python lists are **arrays of pointers** (contiguous `PyObject*`), not contiguous objects. Indexing is **O(1) everywhere** — `list[i]` is pointer arithmetic + dereference, same cost at index 0, 5M, or 9,999,999.
-
-Your "optimization" is unnecessary. `append` is amortized O(1); `pop()` from end is O(1); `pop(0)` is O(n). If you truly need O(1) both ends, use `collections.deque`. Otherwise, just use the list normally — random access is fast.

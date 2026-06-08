@@ -1,1 +1,0 @@
-`fn` is fine here — it's a generic callback parameter in a tiny utility, and the name is conventional (like `f` in `map(f, xs)`). If the function grew or the callback had specific semantics (e.g., `on_retry`, `predicate`), a longer name would help. For `retry(fn, times)`, `fn` is clear and idiomatic.

@@ -1,3 +1,0 @@
-The bug matters more than the type hint: line 13 says `total = total` — it should be `total = n`. The function returns the first element, not the max.
-
-After fixing: a type hint on `total` is redundant (inferred from `nums[0]`). Add `-> T` return annotation and `nums: Sequence[T]` parameter instead. The variable `total` is poorly named — it's the running maximum, so call it `max_so_far`.

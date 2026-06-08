@@ -1,5 +1,0 @@
-Creating a new `sync.Mutex` per request provides **zero synchronization** — each goroutine gets its own private mutex, so there's no shared state to protect. The mutex is allocated, locked, unlocked, and GC'd every request for no reason.
-
-Remove it entirely. If your handler has no shared mutable state (the typical case), it's already thread-safe. If there *is* shared state (e.g., a map, counter, cache), declare **one** mutex at package/struct level and share it.
-
-`GOMAXPROCS` defaults to CPU cores (good). Worker pool size: for CPU-bound work, `runtime.NumCPU()`; for I/O-bound (DB, HTTP), 2–4× cores. But first: delete the per-request mutex. It's not just useless — it allocates memory and triggers GC pressure on every request.

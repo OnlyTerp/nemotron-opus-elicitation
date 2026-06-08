@@ -1,7 +1,0 @@
-Sorting a 5GB file before `grep` is counterproductive — `sort` is O(n log n) and I/O-heavy; `grep` is O(n) streaming. You added massive overhead for zero benefit (grep doesn't use sort order).
-
-Just run: `grep -c ERROR huge.log` — single pass, max throughput.
-
-If you must parallelize (e.g., multiple patterns), split the file: `split -l 1000000 huge.log chunk_` then `xargs -P 8 -I{} grep -c ERROR {}` and sum results. But for a single pattern, plain `grep -c` saturates disk bandwidth — parallelism won't help.
-
-Drop the sort. Use `grep -c` directly.

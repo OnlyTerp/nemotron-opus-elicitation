@@ -1,8 +1,0 @@
-`fn` is fine for a tiny, local callback like this — it's a common convention (from "function"). But `func` or `callback` is slightly clearer at no cost. Since `retry` is a generic utility, I'd lean `func` for readability:
-
-```python
-def retry(func, times):
-    ...
-```
-
-If this were a public API, `func` wins. For a one-off script, `fn` is acceptable.

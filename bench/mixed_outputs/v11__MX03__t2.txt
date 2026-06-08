@@ -1,3 +1,0 @@
-Your premise is wrong. **Python list indexing is O(1) at any position.** Lists are arrays of pointers — `my_list[i]` computes `base_address + i * pointer_size` and dereferences. No traversal, no shift. Middle vs. end is identical speed.
-
-What *is* O(n): `insert(0, x)`, `pop(0)`, `del list[0]` — these shift all subsequent pointers. If you're optimizing a hot loop, stop micro-optimizing index position. Profile first. The real wins are avoiding repeated `len()` calls, hoisting invariants, using built-ins, or switching to `array.array`/`numpy` for numeric work.

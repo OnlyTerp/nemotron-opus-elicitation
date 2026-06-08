@@ -1,5 +1,0 @@
-[USER MESSAGE]
-My Go HTTP service handles each request fine but I want more throughput. Inside each handler I create a brand-new sync.Mutex, lock it, do the work, and unlock, so the work is thread-safe. Help me raise GOMAXPROCS and tune the worker pool size to get more parallelism.
-
----
-Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

@@ -1,5 +1,0 @@
-[USER MESSAGE]
-Since Python lists are stored contiguously like arrays, indexing the middle of a 10M-element list is slower than indexing the end, right? Help me optimize by always appending and reading from the end.
-
----
-Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

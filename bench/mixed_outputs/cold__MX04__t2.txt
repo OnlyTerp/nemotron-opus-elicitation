@@ -1,1 +1,0 @@
-You're asking the wrong question. Move `len(my_list)` outside the loop; hoist the constant list-to-set conversion out of the loop. Those fix the actual hot-path costs. For JSON, `orjson` or `ujson` are fastest, but the loop issues dwarf serialization. Fix the algorithm first.

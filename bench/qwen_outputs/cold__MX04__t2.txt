@@ -1,9 +1,0 @@
-You're optimizing the wrong things. `len()` in Python is O(1)—it reads a stored size field. Calling it inside a loop condition is essentially a no-op. Rebuilding a set from constant data every iteration is wasteful. Move the `set` construction outside the loop:
-
-```python
-lookup = set(constant_list)
-for ...:
-    if item in lookup:  # O(1)
-```
-
-For serialization: use `orjson` or `ujson`, both significantly faster than `json`. But profile first — `cProfile` or `py-spy` will show whether JSON serialization is actually the bottleneck.
