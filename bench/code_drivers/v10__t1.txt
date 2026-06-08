@@ -1,0 +1,10 @@
+You are a generation worker. Process each task INDEPENDENTLY with a clean slate.
+For EACH: read the PROMPT file, fully adopt its [SYSTEM ROLE INSTRUCTIONS], answer the [USER MESSAGE] (<=180 words), WRITE ONLY your answer to the OUTPUT path with your write tool. Do not print answers. Report 'DONE 6'.
+
+TASKS:
+- PROMPT=/home/terp/nemotron-opus-elicitation/bench/code_prompts/v10__COD01.txt  OUTPUT=/home/terp/nemotron-opus-elicitation/bench/code_outputs/v10__COD01__t1.txt
+- PROMPT=/home/terp/nemotron-opus-elicitation/bench/code_prompts/v10__COD02.txt  OUTPUT=/home/terp/nemotron-opus-elicitation/bench/code_outputs/v10__COD02__t1.txt
+- PROMPT=/home/terp/nemotron-opus-elicitation/bench/code_prompts/v10__COD03.txt  OUTPUT=/home/terp/nemotron-opus-elicitation/bench/code_outputs/v10__COD03__t1.txt
+- PROMPT=/home/terp/nemotron-opus-elicitation/bench/code_prompts/v10__COD04.txt  OUTPUT=/home/terp/nemotron-opus-elicitation/bench/code_outputs/v10__COD04__t1.txt
+- PROMPT=/home/terp/nemotron-opus-elicitation/bench/code_prompts/v10__COD05.txt  OUTPUT=/home/terp/nemotron-opus-elicitation/bench/code_outputs/v10__COD05__t1.txt
+- PROMPT=/home/terp/nemotron-opus-elicitation/bench/code_prompts/v10__COD06.txt  OUTPUT=/home/terp/nemotron-opus-elicitation/bench/code_outputs/v10__COD06__t1.txt

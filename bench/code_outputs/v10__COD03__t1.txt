@@ -1,0 +1,11 @@
+`getData` is terrible—it says nothing about *what* data, *from where*, or *how*. It fetches JSON from URLs, so name it `fetchJsonFromUrls`.
+
+**Critical bug:** `forEach` doesn't await the async callbacks. The function returns `[]` before any fetch completes. Use `Promise.all` with `map`:
+
+```js
+async function fetchJsonFromUrls(urls) {
+  return Promise.all(urls.map(async u => (await fetch(u)).json()));
+}
+```
+
+This fixes the bug, names the operation precisely, and is shorter.

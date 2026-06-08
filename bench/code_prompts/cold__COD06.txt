@@ -1,0 +1,18 @@
+[USER MESSAGE]
+Does this need a docstring, or is the function obvious enough to skip it? Style review.
+```python
+counter = 0
+def increment_many(n):
+    global counter
+    threads = [threading.Thread(target=lambda: add(n)) for _ in range(8)]
+    for t in threads: t.start()
+    for t in threads: t.join()
+
+def add(n):
+    global counter
+    for _ in range(n):
+        counter += 1
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

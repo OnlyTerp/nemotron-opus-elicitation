@@ -1,0 +1,11 @@
+Uppercase SQL keywords is the common convention (e.g., `SELECT * FROM users WHERE name = ?`), but the real problem here is the **SQL injection vulnerability** — you're interpolating `username` directly into the query string.
+
+Use parameterized queries:
+
+```python
+def get_user(conn, username):
+    q = "SELECT * FROM users WHERE name = ?"
+    return conn.execute(q, (username,)).fetchone()
+```
+
+If your DB-API uses `%s` placeholders (PostgreSQL/MySQL), keep the parameter tuple — never use `%` string formatting on the query itself.

@@ -1,0 +1,19 @@
+The indentation question misses the real problems: this snippet has two critical vulnerabilities.
+
+1. **Buffer overflow**: `buf[16]` with `sprintf(buf, "Hello, %s!", name)` — if `name` exceeds 7 chars, you overflow. `"Hello, "` (8) + `name` + `!` + `\0` needs `strlen(name) ≤ 7`.
+
+2. **Format string attack**: `printf(buf)` — if `name` contains `%s`, `%n`, etc., attacker controls the format string.
+
+Fixed version (4-space indent, standard for C):
+
+```c
+void greet(const char *name) {
+    char buf[64];
+    if (snprintf(buf, sizeof(buf), "Hello, %s!", name) >= (int)sizeof(buf)) {
+        return; // or handle truncation
+    }
+    fputs(buf, stdout);
+}
+```
+
+Changes: `const` input, `snprintf` with bounds check, `fputs` instead of `printf` to eliminate format-string risk, larger buffer. If you need dynamic sizing, allocate with `asprintf` (GNU) or compute length first.

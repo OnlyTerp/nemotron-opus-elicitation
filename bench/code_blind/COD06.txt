@@ -1,0 +1,89 @@
+# ITEM COD06
+
+USER MESSAGE:
+Does this need a docstring, or is the function obvious enough to skip it? Style review.
+```python
+counter = 0
+def increment_many(n):
+    global counter
+    threads = [threading.Thread(target=lambda: add(n)) for _ in range(8)]
+    for t in threads: t.start()
+    for t in threads: t.join()
+
+def add(n):
+    global counter
+    for _ in range(n):
+        counter += 1
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Yes, it needs a docstring. The function isn't obvious: it spawns 8 threads that all mutate a global `counter` without any synchronization, so the final value is nondeterministic (race condition). A docstring should warn callers: "Increments a global counter `n` times across 8 threads — NOT thread-safe; final count will be less than `8*n` due to lost updates." Better yet, fix it: use `threading.Lock` or `concurrent.futures` with a shared atomic counter, or just run sequentially if the goal is simply `counter += 8*n`.
+
+--- Candidate B ---
+Yes, it needs a docstring — but that's the least of its problems. The code has a race condition on `counter` (no lock), the lambda captures `n` by reference so all threads see the final value, and `threading.Thread(target=lambda: add(n))` creates a closure that binds late. Fix the bugs first: use a `Lock`, pass `n` as a default argument (`lambda n=n: add(n)`), or better yet, use `ThreadPoolExecutor` with `submit`. Then add a one-line docstring: `"Spawn 8 threads to increment a shared counter n times each (demo only — not thread-safe)."` The bugs are the real review item; the docstring just documents what you've got.
+
+--- Candidate C ---
+It needs a docstring — the behavior isn't obvious (global mutable state + threads). But the **bigger problem**: `counter += 1` isn't atomic, so you have a race condition. The final count will be < `8 * n`.
+
+Fix: use a `threading.Lock` around the increment, or `threading.local` + sum at the end, or `concurrent.futures` with `ThreadPoolExecutor` and a `queue`/`atomic` counter.
+
+--- Candidate D ---
+Yes, it needs a docstring — and a fix. The function spawns 8 threads that all mutate a global `counter` without synchronization, so the final value is nondeterministic (race condition, lost updates). A docstring should warn: "Increments global `counter` by `n` across 8 threads — NOT thread-safe; expect lost updates." Better: use `threading.Lock` around `counter += 1`, or `concurrent.futures.ThreadPoolExecutor` with a `threading.Atomic`-style counter, or just do `counter += 8 * n` sequentially if that's the actual goal.
+
+--- Candidate E ---
+Yes, it needs a docstring — but that's the least of its problems. The code has a race condition on `counter` (no lock), the lambda captures `n` by reference so all threads see the final value, and `threading.Thread(target=lambda: add(n))` creates a closure that binds late. Fix the bugs first: use a `Lock`, pass `n` as a default argument (`lambda n=n: add(n)`), or better yet, use `ThreadPoolExecutor` with `submit`. Then add a one-line docstring: `"Spawn 8 threads to increment a shared counter n times each (demo only — not thread-safe)."` The bugs are the real review item; the docstring just documents what you've got.
+
+--- Candidate F ---
+A docstring is the least of your worries — this code is **fundamentally broken**:
+
+1. **Race condition**: `counter += 1` isn't atomic. 8 threads incrementing concurrently will lose updates (final count ≠ 8*n).
+2. **Missing import**: `threading` not imported.
+3. **Global mutable state** across threads without synchronization.
+
+Fix with `threading.Lock` or `threading.Atomic` (Python 3.12+), or better, avoid shared state:
+
+```python
+import threading
+from concurrent.futures import ThreadPoolExecutor
+
+def increment_many(n, workers=8):
+    counter = 0
+    lock = threading.Lock()
+    
+    def add(n):
+        nonlocal counter
+        for _ in range(n):
+            with lock:
+                counter += 1
+    
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        ex.map(add, [n] * workers)
+    return counter
+```
+
+Or use `itertools.accumulate` with a single thread — parallelism here buys nothing (GIL + lock contention). If you need true parallel counters, use `multiprocessing.Value('i', 0)` or `concurrent.futures.ProcessPoolExecutor`.
+
+--- Candidate G ---
+**Yes, it needs a docstring. The function is not obvious.**
+
+It has three non-obvious behaviors that a docstring must document:
+1. **Global mutable state** — mutates module-level `counter`, a side effect callers can't see from the signature
+2. **Race condition** — `counter += 1` is not atomic; 8 threads racing on it will lose increments (use `threading.Lock`)
+3. **Thread spawning** — spawns 8 threads and joins them, blocking the caller
+
+Also missing `import threading` and the lambda captures `n` by reference (fine here since `n` doesn't change, but fragile).
+
+Minimal docstring:
+```python
+def increment_many(n):
+    """Increment global `counter` by n*8 using 8 threads (racy; loses updates)."""
+    global counter
+    ...
+```
+
+Better: fix the race with `threading.Lock`, accept a `threading.Lock` or use atomic ops, and document the contract.
+
+--- Candidate H ---
+Yes, it needs a docstring — but that's the least of its problems. The code has a race condition on `counter` (no lock), the lambda captures `n` by reference so all threads see the final value, and `threading.Thread(target=lambda: add(n))` creates a closure that binds late. Fix the bugs first: use a `Lock`, pass `n` as a default argument (`lambda n=n: add(n)`), or better yet, use `ThreadPoolExecutor` with `submit`. Then add a one-line docstring: `"Spawn 8 threads to increment a shared counter n times each (demo only — not thread-safe)."` The bugs are the real review item; the docstring just documents what you've got.

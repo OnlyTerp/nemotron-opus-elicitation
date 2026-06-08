@@ -1,0 +1,11 @@
+**1024 bytes is far too small** for modern NVMe SSDs. Optimal I/O size on NVMe is typically **128 KiB–1 MiB** (131,072–1,048,576 bytes); SATA SSDs benefit from 64–128 KiB. Python's own `shutil.copyfileobj` defaults to **16 KiB (16384)** — a conservative but safe default. For modern NVMe, **128 KiB (131072)** or **256 KiB (262144)** is a better default; 1 MiB (1048576) is fine for large sequential copies on NVMe.
+
+```python
+def copy_file(src, dst):
+    CHUNK = 131072   # 128 KiB — good default for modern NVMe/SATA SSDs
+    with open(src, 'rb') as f, open(dst, 'wb') as g:
+        while (b := f.read(CHUNK)):
+            g.write(b)
+```
+
+Also use `with` statements (auto-close on error) and the walrus operator for cleaner loop.

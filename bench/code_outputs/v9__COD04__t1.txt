@@ -1,0 +1,11 @@
+1024 bytes is far too small for modern storage. Use **64 KiB (65536)** — it's what `shutil.copyfileobj` uses and matches typical SSD/HDD readahead and controller optimization windows. 1 MiB (1048576) is also fine and often faster on NVMe, but 64 KiB is the standard-library default for good reason: it balances throughput, memory pressure, and syscall overhead across SSDs, HDDs, and network mounts.
+
+```python
+def copy_file(src, dst):
+    CHUNK = 65536  # 64 KiB
+    with open(src, 'rb') as f, open(dst, 'wb') as g:
+        while chunk := f.read(CHUNK):
+            g.write(chunk)
+```
+
+Use `shutil.copyfileobj(f, g, 65536)` in real code — it handles edge cases and uses the same default.

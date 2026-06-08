@@ -1,0 +1,3 @@
+Spaces (4 spaces) — that's the dominant convention in C codebases (Linux kernel, LLVM, musl, glibc, etc.). Tabs are mostly a kernel holdout. If your repo has a `.editorconfig` or `.clang-format`, follow that; otherwise 4 spaces is the safe default.
+
+The snippet itself has a format-string bug: `printf(buf)` treats `buf` as a format string. If `name` contains `%s` or `%n`, you get UB. Use `printf("%s", buf);` or `puts(buf);` instead.

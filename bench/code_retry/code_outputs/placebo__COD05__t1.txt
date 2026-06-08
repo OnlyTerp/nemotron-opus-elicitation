@@ -1,0 +1,11 @@
+That snippet has a buffer overflow (`sprintf` into `buf[16]` with unbounded `name`) and a format-string vulnerability (`printf(buf)`). Fix those first — tabs vs spaces is the least of its problems.
+
+```c
+void greet(const char *name) {
+    char buf[64];
+    snprintf(buf, sizeof(buf), "Hello, %s!", name);
+    puts(buf);
+}
+```
+
+As for indentation: follow whatever the repo uses (check `.editorconfig` or a nearby `.c` file). Most C projects use 4-space tabs or 4 spaces; either is fine as long as you're consistent.

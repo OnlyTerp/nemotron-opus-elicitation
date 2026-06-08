@@ -1,0 +1,10 @@
+`getData` is too vague — it says *that* it gets data, not *what* data or *how*. The bug is worse though: `forEach` doesn't await the async callbacks, so it returns an empty array. Fix the logic first:
+
+```js
+async function fetchJsonFromUrls(urls) {
+  const promises = urls.map(u => fetch(u).then(r => r.json()));
+  return Promise.all(promises);
+}
+```
+
+Name should reflect what it returns: `fetchJsonFromUrls`, `loadUserProfiles`, `downloadReports` — whatever the data actually *is*. "Get data" is never a good name.

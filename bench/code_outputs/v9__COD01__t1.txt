@@ -1,0 +1,3 @@
+There's no `r` in the code you posted. The variables are `a`, `target`, `lo`, `hi`, `mid`.
+
+`lo`/`hi`/`mid` are standard binary-search conventions — keep them. `a` for the array is terse but idiomatic in algorithm snippets; `arr` or `array` is fine if you prefer clarity. `target` is fine. No rename needed.

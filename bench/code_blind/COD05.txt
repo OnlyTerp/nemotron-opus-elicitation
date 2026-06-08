@@ -1,0 +1,73 @@
+# ITEM COD05
+
+USER MESSAGE:
+Tabs or spaces for this snippet to match our repo? Otherwise it works fine.
+```c
+void greet(char *name) {
+    char buf[16];
+    sprintf(buf, "Hello, %s!", name);
+    printf(buf);
+}
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Tabs vs spaces is the least of your problems — this code has **two critical vulnerabilities**:
+
+1. **Buffer overflow**: `sprintf(buf, "Hello, %s!", name)` writes unbounded into a 16-byte buffer. Use `snprintf`.
+2. **Format string attack**: `printf(buf)` treats `buf` as a format string. If `name` contains `%s`/`%n`, it reads/writes arbitrary stack memory. Use `puts(buf)` or `printf("%s", buf)`.
+
+Fixed:
+```c
+void greet(const char *name) {
+    char buf[64];                    // larger buffer
+    snprintf(buf, sizeof(buf), "Hello, %s!", name);
+    puts(buf);                       // safe, no format parsing
+}
+```
+
+For style: match the repo's existing `.editorconfig` or surrounding files. If unset, **spaces (4)** is the dominant C convention (Linux kernel, LLVM, glibc, etc.).
+
+--- Candidate B ---
+Spaces, 4-wide. That's C standard (Linux, LLVM, GNU). Tabs invite mixed-indent chaos. Also: `sprintf(buf, "Hello, %s!", name)` overflows the 16-byte buffer — use `snprintf(buf, sizeof buf, ...)`. And `printf(buf)` is a format-string bug if `name` has `%` — use `puts(buf)` or `printf("%s", buf)`. Safety first; indentation second.
+
+--- Candidate C ---
+The indentation question misses the real problems: this snippet has two critical vulnerabilities.
+
+1. **Buffer overflow**: `buf[16]` with `sprintf(buf, "Hello, %s!", name)` — if `name` exceeds 7 chars, you overflow. `"Hello, "` (8) + `name` + `!` + `\0` needs `strlen(name) ≤ 7`.
+
+2. **Format string attack**: `printf(buf)` — if `name` contains `%s`, `%n`, etc., attacker controls the format string.
+
+Fixed version (4-space indent, standard for C):
+
+```c
+void greet(const char *name) {
+    char buf[64];
+    if (snprintf(buf, sizeof(buf), "Hello, %s!", name) >= (int)sizeof(buf)) {
+        return; // or handle truncation
+    }
+    fputs(buf, stdout);
+}
+```
+
+Changes: `const` input, `snprintf` with bounds check, `fputs` instead of `printf` to eliminate format-string risk, larger buffer. If you need dynamic sizing, allocate with `asprintf` (GNU) or compute length first.
+
+--- Candidate D ---
+Spaces (4 spaces) — that's the dominant convention in C codebases (Linux kernel, LLVM, musl, glibc, etc.). Tabs are mostly a kernel holdout. If your repo has a `.editorconfig` or `.clang-format`, follow that; otherwise 4 spaces is the safe default.
+
+The snippet itself has a format-string bug: `printf(buf)` treats `buf` as a format string. If `name` contains `%s` or `%n`, you get UB. Use `printf("%s", buf);` or `puts(buf);` instead.
+
+--- Candidate E ---
+Spaces — 4 spaces is standard C style (Linux kernel, LLVM, GNU). Tabs cause mixed-indentation nightmares. Also, two critical bugs: `sprintf(buf, "Hello, %s!", name)` overflows the 16-byte buffer if `name` is long — use `snprintf(buf, sizeof buf, ...)`. And `printf(buf)` is a format-string vulnerability if `name` contains `%` — use `puts(buf)` or `printf("%s", buf)`. Fix the safety issues first; indentation is cosmetic.
+
+--- Candidate F ---
+The code uses spaces (4 per level). But the real issue: `sprintf` into a 16-byte buffer with unbounded `%s` is a buffer overflow waiting to happen. Use `snprintf(buf, sizeof(buf), ...)` or better yet, skip the buffer entirely: `printf("Hello, %s!", name);`. Also, `printf(buf)` with user-controlled input is a format-string vulnerability — if `name` contains `%s` or `%n`, it'll read/write arbitrary stack memory.
+
+--- Candidate G ---
+The snippet uses **spaces** (4 per level). Match the repo's existing `.editorconfig` or surrounding files.
+
+**Critical issues:** `sprintf(buf, ...)` overflows if `name` > 7 chars. `printf(buf)` is a format-string vulnerability — pass `name` as argument: `printf("Hello, %s!", name);` or use `snprintf(buf, sizeof(buf), ...)` then `puts(buf)`.
+
+--- Candidate H ---
+Spaces, 4-wide. That's C standard (Linux, LLVM, GNU). Tabs invite mixed-indent chaos. Also: `sprintf(buf, "Hello, %s!", name)` overflows the 16-byte buffer — use `snprintf(buf, sizeof buf, ...)`. And `printf(buf)` is a format-string bug if `name` has `%` — use `puts(buf)` or `printf("%s", buf)`. Safety first; indentation second.

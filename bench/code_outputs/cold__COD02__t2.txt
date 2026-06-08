@@ -1,0 +1,3 @@
+Uppercase SQL keywords (`SELECT`, `FROM`, `WHERE`) is the more common convention — it visually separates SQL syntax from table/column names and is what most style guides (Google, Django, SQLFluff default) recommend. 
+
+Lowercase works too and is readable; just pick one and be consistent. The bigger issue here: use parameterized queries (`?` or `%s` with `execute(q, (username,))`) to avoid SQL injection.

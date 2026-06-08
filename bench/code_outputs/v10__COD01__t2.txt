@@ -1,0 +1,3 @@
+There's no `r` in the code you posted. The variables are `a`, `target`, `lo`, `hi`, `mid`.
+
+For binary search, `lo`/`hi`/`mid` are standard and fine — anyone who knows the algorithm reads them instantly. Single letters like `l`/`h`/`m` would be worse (confusable with `1`/`I`). If you had a variable `r` (e.g., for "result"), rename it: `idx` or `pos` is clearer and still short.

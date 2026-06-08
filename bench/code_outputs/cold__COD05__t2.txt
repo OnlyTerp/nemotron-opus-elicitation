@@ -1,0 +1,3 @@
+The snippet uses **spaces** (4 per level). Match the repo's existing `.editorconfig` or surrounding files.
+
+**Critical issues:** `sprintf(buf, ...)` overflows if `name` > 7 chars. `printf(buf)` is a format-string vulnerability — pass `name` as argument: `printf("Hello, %s!", name);` or use `snprintf(buf, sizeof(buf), ...)` then `puts(buf)`.

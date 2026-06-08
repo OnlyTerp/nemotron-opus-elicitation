@@ -1,0 +1,3 @@
+It needs a docstring — the behavior isn't obvious (global mutable state + threads). But the **bigger problem**: `counter += 1` isn't atomic, so you have a race condition. The final count will be < `8 * n`.
+
+Fix: use a `threading.Lock` around the increment, or `threading.local` + sum at the end, or `concurrent.futures` with `ThreadPoolExecutor` and a `queue`/`atomic` counter.

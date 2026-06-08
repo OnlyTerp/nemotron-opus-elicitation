@@ -1,0 +1,23 @@
+`getData` is too vague — it doesn't convey *what* data, *from where*, or *what shape* it returns. Prefer something like `fetchJsonFromUrls` or `getUserProfiles` depending on the actual purpose.
+
+**Also, the code is broken:** `forEach` doesn't wait for async callbacks, so it returns `[]` immediately. Use `Promise.all` with `map`:
+
+```js
+async function fetchJsonFromUrls(urls) {
+  const responses = await Promise.all(urls.map(u => fetch(u)));
+  return Promise.all(responses.map(r => r.json()));
+}
+```
+
+Or sequentially if you need to limit concurrency:
+
+```js
+async function fetchJsonFromUrls(urls) {
+  const results = [];
+  for (const u of urls) {
+    const r = await fetch(u);
+    results.push(await r.json());
+  }
+  return results;
+}
+```

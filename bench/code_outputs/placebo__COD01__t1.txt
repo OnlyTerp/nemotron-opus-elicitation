@@ -1,0 +1,8 @@
+`r` is fine here — it's a standard convention in binary search (like `mid`, `lo`, `hi`). In a 6-line helper with only 4 variables scoped to 6 lines, short names are readable because the scope is tiny and the algorithm is universally recognized. Longer names (`midpoint`, `left`, `right`) add noise without clarity.
+
+Short names shine when:
+- Scope is tiny (≤10 lines)
+- Algorithm is canonical (binary search, two-pointer, sliding window)
+- Variable role is obvious from context (`mid` = midpoint, `lo`/`hi` = bounds)
+
+Use longer names when scope grows, the algorithm is custom, or the variable's *purpose* isn't obvious from the algorithm itself.

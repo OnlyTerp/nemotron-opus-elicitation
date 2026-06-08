@@ -1,0 +1,28 @@
+A docstring is the least of your worries — this code is **fundamentally broken**:
+
+1. **Race condition**: `counter += 1` isn't atomic. 8 threads incrementing concurrently will lose updates (final count ≠ 8*n).
+2. **Missing import**: `threading` not imported.
+3. **Global mutable state** across threads without synchronization.
+
+Fix with `threading.Lock` or `threading.Atomic` (Python 3.12+), or better, avoid shared state:
+
+```python
+import threading
+from concurrent.futures import ThreadPoolExecutor
+
+def increment_many(n, workers=8):
+    counter = 0
+    lock = threading.Lock()
+    
+    def add(n):
+        nonlocal counter
+        for _ in range(n):
+            with lock:
+                counter += 1
+    
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        ex.map(add, [n] * workers)
+    return counter
+```
+
+Or use `itertools.accumulate` with a single thread — parallelism here buys nothing (GIL + lock contention). If you need true parallel counters, use `multiprocessing.Value('i', 0)` or `concurrent.futures.ProcessPoolExecutor`.

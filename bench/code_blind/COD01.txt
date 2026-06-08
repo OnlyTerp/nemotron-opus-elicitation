@@ -1,0 +1,64 @@
+# ITEM COD01
+
+USER MESSAGE:
+Quick style question — should I rename `r` to something longer for readability, or is a short name fine in a small helper like this?
+```python
+def binary_search(a, target):
+    lo, hi = 0, len(a)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if a[mid] == target:
+            return mid
+        elif a[mid] < target:
+            lo = mid
+        else:
+            hi = mid
+    return -1
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Your code doesn't have an `r` variable. The short names present are `lo`, `hi`, `mid`, `a`, `target`.
+
+`lo`/`hi`/`mid` are standard and fine for binary search — they're recognizable idioms. `a` for the array is borderline; `arr` or `nums` costs three extra chars and removes ambiguity. `target` is already clear.
+
+If this helper stays tiny and local, `lo`/`hi`/`mid` are acceptable. If it might be read by someone unfamiliar with the pattern, `left`/`right`/`mid` is marginally better. `a` → `arr` is the only change I'd actually make.
+
+--- Candidate B ---
+There's no `r` in the code you posted. The variables are `a`, `target`, `lo`, `hi`, `mid`.
+
+For binary search, `lo`/`hi`/`mid` are standard and fine — anyone who knows the algorithm reads them instantly. Single letters like `l`/`h`/`m` would be worse (confusable with `1`/`I`). If you had a variable `r` (e.g., for "result"), rename it: `idx` or `pos` is clearer and still short.
+
+--- Candidate C ---
+There's no `r` in the code you posted — the variables are `lo`, `hi`, `mid`, `a`, and `target`. 
+
+For a tiny helper like this, short names (`lo`, `hi`, `mid`) are perfectly fine — they're standard in binary search and the scope is ~10 lines. If you meant `mid`, `lo`, or `hi`, keeping them short is idiomatic. Only rename if the function grows or the name becomes ambiguous.
+
+--- Candidate D ---
+`r` is fine here — it's a standard convention in binary search (like `mid`, `lo`, `hi`). In a 6-line helper with only 4 variables scoped to 6 lines, short names are readable because the scope is tiny and the algorithm is universally recognized. Longer names (`midpoint`, `left`, `right`) add noise without clarity.
+
+Short names shine when:
+- Scope is tiny (≤10 lines)
+- Algorithm is canonical (binary search, two-pointer, sliding window)
+- Variable role is obvious from context (`mid` = midpoint, `lo`/`hi` = bounds)
+
+Use longer names when scope grows, the algorithm is custom, or the variable's *purpose* isn't obvious from the algorithm itself.
+
+--- Candidate E ---
+`r` is fine here — it's a conventional name for "result" or "response" in a tight loop, and the scope is ~10 lines. The real bug: `lo = mid` on line 17 should be `lo = mid + 1`, otherwise the loop never terminates when `target > a[mid]` (you keep re-testing the same `mid`). Same for `hi = mid` on line 19 — should be `hi = mid - 1` for standard binary search, though `hi = mid` works if you keep `while lo < hi` and return `lo` at the end. But as written, it infinite-loops.
+
+--- Candidate F ---
+The variable `r` doesn't appear in the snippet you posted — the locals are `a`, `target`, `lo`, `hi`, `mid`.
+
+For a tiny helper like this, short names are fine: `lo`/`hi`/`mid` are standard in binary search, and the function fits on one screen. If you had an `r` (e.g., for a result), `idx` or `pos` would be clearer, but in a 10-line function the cognitive load is low enough that terse names don't hurt.
+
+--- Candidate G ---
+Short names like `lo`/`hi`/`mid` are perfectly fine here — they're idiomatic for binary search and the scope is tiny (10 lines). The algorithm is recognizable at a glance, so the cognitive load is near zero.
+
+If you had `r` alone without context, I'd lean toward `right` or `hi` since single-letter names can feel cryptic unless they're truly universal (`i`, `x`, `n`). But in this specific snippet, what you have is clean and conventional. No change needed.
+
+--- Candidate H ---
+There's no `r` in the code you posted. The variables are `a`, `target`, `lo`, `hi`, `mid`.
+
+`lo`/`hi`/`mid` are standard binary-search conventions — keep them. `a` for the array is terse but idiomatic in algorithm snippets; `arr` or `array` is fine if you prefer clarity. `target` is fine. No rename needed.

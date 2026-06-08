@@ -1,0 +1,11 @@
+It needs a docstring, but the code has worse problems.
+
+**Race condition:** `counter += 1` isn't atomic (LOAD_GLOBAL → INPLACE_ADD → STORE_GLOBAL). Threads interleave; you lose counts.
+
+**Lambda capture:** `lambda: add(n)` binds `n` by reference. All threads see the *final* value of `n`. Fix: `lambda n=n: add(n)` or `partial(add, n)`.
+
+**Missing import:** `threading` not imported.
+
+**Global mutable state:** Hard to test, reason about. Use a class with `Lock` or `ThreadPoolExecutor`.
+
+A docstring should document: `n` meaning, 8 threads spawned, global `counter` side effect, thread-unsafe. But fix the bugs first — documenting broken code is worse than no docs.

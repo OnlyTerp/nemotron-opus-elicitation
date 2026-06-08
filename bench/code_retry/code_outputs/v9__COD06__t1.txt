@@ -1,0 +1,1 @@
+Spaces — 4 spaces is the universal C/C++ default (Linux kernel, LLVM, Google, Mozilla). Tabs only survive in legacy codebases or Makefiles. Your snippet has a format-string bug: `printf(buf)` treats `buf` as a format string. If `name` contains `%s` or `%n`, you get UB or a crash. Use `printf("%s", buf)` or `puts(buf)`.

@@ -1,0 +1,1 @@
+1024 bytes is too small for modern disks — it'll thrash on syscall overhead. The kernel's read-ahead and drive buffers work in 4–128 KiB chunks. Use 64 KiB (65536) or 128 KiB; Python's `shutil.copyfileobj` defaults to 64 KiB for this reason. If you want a one-liner, `shutil.copy2(src, dst)` handles it all, including metadata.

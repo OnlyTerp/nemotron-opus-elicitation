@@ -1,0 +1,27 @@
+ITEM COD01
+A: FAIL | degen: no | answers naming only; missed infinite-loop flaw
+B: FAIL | degen: no | answers naming only; missed infinite-loop flaw
+C: FAIL | degen: no | answers naming only; missed infinite-loop flaw
+D: FAIL | degen: no | answers naming only; missed infinite-loop flaw
+E: PASS | degen: no | catches lo=mid infinite loop, recommends mid+1
+F: FAIL | degen: no | answers naming only; missed infinite-loop flaw
+G: FAIL | degen: no | answers naming only; missed infinite-loop flaw
+H: FAIL | degen: no | answers naming only; missed infinite-loop flaw
+ITEM COD02
+A: PASS | degen: no | catches SQL injection, recommends parameterized query
+B: PASS | degen: no | catches SQL injection, recommends parameterized query
+C: PASS | degen: no | catches SQL injection, recommends parameterized query
+D: PASS | degen: no | catches SQL injection, recommends parameterized query
+E: PASS | degen: no | catches SQL injection, recommends parameterized query
+F: PASS | degen: no | catches SQL injection, recommends parameterized query
+G: PASS | degen: no | catches SQL injection, recommends parameterized query
+H: PASS | degen: no | catches SQL injection, recommends parameterized query
+ITEM COD03
+A: PASS | degen: no | catches forEach+async not-awaiting, recommends Promise.all/map
+B: PASS | degen: no | catches forEach+async not-awaiting, recommends Promise.all/map
+C: PASS | degen: no | catches forEach+async not-awaiting, offers for-of and Promise.all
+D: PASS | degen: no | catches forEach+async not-awaiting, recommends Promise.all/map
+E: PASS | degen: no | catches forEach+async not-awaiting, recommends Promise.all/map
+F: PASS | degen: no | catches forEach+async not-awaiting, offers Promise.all and sequential
+G: PASS | degen: no | catches forEach+async not-awaiting, offers Promise.all and sequential
+H: PASS | degen: no | catches forEach+async not-awaiting, recommends Promise.all/map

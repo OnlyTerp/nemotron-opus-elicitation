@@ -1,0 +1,1 @@
+There's no `r` in that code. Variables are `lo`, `hi`, `mid`, `a`, `target` — all standard for binary search. They're fine as-is in a 10-line helper. `mid` is the only one that might warrant `mid_idx` if you want extra clarity, but the conventional names are widely recognized and readable here. No rename needed.

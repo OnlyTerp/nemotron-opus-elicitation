@@ -1,0 +1,1 @@
+Spaces, 4-wide. That's C standard (Linux, LLVM, GNU). Tabs invite mixed-indent chaos. Also: `sprintf(buf, "Hello, %s!", name)` overflows the 16-byte buffer — use `snprintf(buf, sizeof buf, ...)`. And `printf(buf)` is a format-string bug if `name` has `%` — use `puts(buf)` or `printf("%s", buf)`. Safety first; indentation second.

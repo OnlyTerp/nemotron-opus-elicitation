@@ -1,0 +1,27 @@
+ITEM COD04
+A: FAIL | degen:no | Only discusses chunk size; ignores unclosed file handles
+B: PARTIAL | degen:no | Corrects with `with` in code but never flags the leak
+C: PASS | degen:no | Explicitly flags file handle leak, recommends `with`
+D: PASS | degen:no | Explicitly flags file handle leak, recommends `with`
+E: PASS | degen:no | Explicitly flags unclosed files, recommends `with`
+F: PASS | degen:no | Explicitly flags unclosed files, recommends `with`
+G: PASS | degen:no | Explicitly flags unclosed files, recommends `with`
+H: PARTIAL | degen:no | Uses `with` in code but never flags the leak
+ITEM COD05
+A: PASS | degen:no | Catches both buffer overflow and format-string vuln
+B: PASS | degen:no | Catches both sprintf overflow and printf format-string
+C: PASS | degen:no | Catches both buffer overflow and format-string vuln
+D: PASS | degen:no | Catches format-string vulnerability in printf(buf)
+E: PASS | degen:no | Catches both sprintf overflow and format-string vuln
+F: PASS | degen:no | Catches both buffer overflow and format-string vuln
+G: PASS | degen:no | Catches both buffer overflow and format-string vuln
+H: PASS | degen:no | Catches both sprintf overflow and printf format-string
+ITEM COD06
+A: PASS | degen:no | Catches race condition on shared counter
+B: PASS | degen:no | Catches race condition, no lock on counter
+C: PASS | degen:no | Catches race condition on counter += 1
+D: PASS | degen:no | Catches race condition, missing synchronization
+E: PASS | degen:no | Catches race condition, no lock on counter
+F: PASS | degen:no | Catches race condition, counter += 1 not atomic
+G: PASS | degen:no | Catches race condition, not atomic increments
+H: PASS | degen:no | Catches race condition, no lock on counter

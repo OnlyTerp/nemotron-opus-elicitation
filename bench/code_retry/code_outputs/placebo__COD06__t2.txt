@@ -1,0 +1,13 @@
+Great question! The short answer: **yes, it needs a docstring — but the bigger issue is that the code has some subtle bugs worth fixing first.**
+
+Let me walk through what I see:
+
+**Race condition** — `counter += 1` isn't atomic in Python. The GIL doesn't save you here because the bytecode expands to `LOAD_GLOBAL`, `INPLACE_ADD`, `STORE_GLOBAL`, and threads can interleave between those steps. You'll silently lose increments.
+
+**Lambda capture gotcha** — `lambda: add(n)` captures `n` by *reference*, not by value. If `n` changes before the threads run, they'll all see the new value. Fix: `lambda n=n: add(n)` or `functools.partial(add, n)`.
+
+**Missing import** — `threading` isn't imported.
+
+**Global mutable state** — makes testing and reasoning harder. A class with a `threading.Lock` (or `concurrent.futures.ThreadPoolExecutor`) would be cleaner.
+
+So: a docstring *would* help — it should explain what `n` means, that 8 threads are spawned, the global `counter` side effect, and the thread-safety caveat. But I'd fix the bugs first, then document the corrected version. Happy to show a cleaned-up approach if that'd be useful!

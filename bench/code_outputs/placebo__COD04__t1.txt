@@ -1,0 +1,21 @@
+**1024 bytes is far too small** for modern storage. It forces ~1M syscalls per GB copied — syscall overhead dominates.
+
+**Sensible defaults:**
+- **64 KiB (65536)** — sweet spot for most SSDs/NVMe; matches typical filesystem block sizes
+- **128–256 KiB** — better for high-end NVMe, reduces syscall overhead further
+- **1 MiB** — fine for bulk copies to fast NVMe; diminishing returns beyond this
+
+Python's own `shutil.copyfileobj` defaults to **16 KiB** (`shutil.COPY_BUFSIZE`), and `io.DEFAULT_BUFFER_SIZE` is 8 KiB — both conservative. `shutil.copyfile` uses `os.sendfile` where available (zero-copy, kernel handles chunking).
+
+**Practical default:**
+```python
+CHUNK = 64 * 1024  # 64 KiB — safe, fast everywhere
+```
+
+Or just use the stdlib:
+```python
+import shutil
+shutil.copyfileobj(src, dst, length=64*1024)  # or shutil.copyfile(src, dst) for zero-copy
+```
+
+For modern NVMe, 128–256 KiB wins measurably on large files; 1024 bytes is ~100× slower on syscalls alone.

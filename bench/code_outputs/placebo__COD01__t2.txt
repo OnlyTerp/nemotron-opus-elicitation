@@ -1,0 +1,3 @@
+Short names like `lo`/`hi`/`mid` are perfectly fine here — they're idiomatic for binary search and the scope is tiny (10 lines). The algorithm is recognizable at a glance, so the cognitive load is near zero.
+
+If you had `r` alone without context, I'd lean toward `right` or `hi` since single-letter names can feel cryptic unless they're truly universal (`i`, `x`, `n`). But in this specific snippet, what you have is clean and conventional. No change needed.

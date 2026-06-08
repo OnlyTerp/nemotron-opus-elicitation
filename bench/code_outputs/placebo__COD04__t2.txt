@@ -1,0 +1,10 @@
+1024 bytes is too small — it'll kill throughput with syscall overhead. **16KB–1MB** is the modern sweet spot. Python's `shutil.copyfileobj` defaults to 16KB (16384); many tools use 64KB–1MB.
+
+```python
+def copy_file(src, dst, chunk_size=1024 * 1024):  # 1 MB
+    with open(src, 'rb') as f, open(dst, 'wb') as g:
+        while chunk := f.read(chunk_size):
+            g.write(chunk)
+```
+
+Also: your original leaks file handles — always use `with` blocks. The walrus operator (`:=`) keeps the loop clean in 3.8+.

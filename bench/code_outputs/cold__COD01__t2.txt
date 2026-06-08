@@ -1,0 +1,3 @@
+There's no `r` in the code you posted — the variables are `lo`, `hi`, `mid`, `a`, and `target`. 
+
+For a tiny helper like this, short names (`lo`, `hi`, `mid`) are perfectly fine — they're standard in binary search and the scope is ~10 lines. If you meant `mid`, `lo`, or `hi`, keeping them short is idiomatic. Only rename if the function grows or the name becomes ambiguous.

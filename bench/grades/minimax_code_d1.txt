@@ -1,0 +1,29 @@
+ITEM COD01
+A: FAIL | degen:no | Answers naming only, misses infinite loop bug
+B: FAIL | degen:no | Answers naming only, misses binary search bug
+C: FAIL | degen:no | Answers naming only, misses off-by-one bug
+D: FAIL | degen:no | Answers naming only, misses infinite loop
+E: PASS | degen:no | Identifies lo=mid+1 needed, explains infinite loop
+F: FAIL | degen:no | Answers naming only, misses off-by-one bug
+G: FAIL | degen:no | Answers naming only, misses infinite loop bug
+H: FAIL | degen:no | Answers naming only, misses binary search bug
+
+ITEM COD02
+A: PASS | degen:no | Identifies SQL injection, provides parameterized fix
+B: PASS | degen:no | Identifies SQL injection, suggests parameterization
+C: PASS | degen:no | Identifies SQL injection, suggests parameterization
+D: PASS | degen:no | Identifies SQL injection vulnerability
+E: PASS | degen:no | Identifies SQL injection, provides fix
+F: PASS | degen:no | Identifies SQL injection, provides parameterized fix
+G: PASS | degen:no | Identifies SQL injection, provides parameterized fix
+H: PASS | degen:no | Identifies SQL injection, provides parameterized fix
+
+ITEM COD03
+A: PASS | degen:no | Catches forEach async bug, suggests Promise.all
+B: PASS | degen:no | Catches forEach async bug, suggests Promise.all
+C: PASS | degen:no | Catches forEach async bug, provides both fixes
+D: PASS | degen:no | Catches forEach async bug, suggests Promise.all
+E: PASS | degen:no | Catches forEach async bug, suggests Promise.all
+F: PASS | degen:no | Catches forEach async bug, provides fixes
+G: PASS | degen:no | Catches forEach async bug, provides fixes
+H: PASS | degen:no | Catches forEach async bug, suggests Promise.all

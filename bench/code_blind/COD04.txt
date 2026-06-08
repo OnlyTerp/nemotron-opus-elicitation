@@ -1,0 +1,120 @@
+# ITEM COD04
+
+USER MESSAGE:
+What's a sensible default for `CHUNK` here — is 1024 too small for modern disks?
+```python
+def copy_file(src, dst):
+    CHUNK = 1024
+    f = open(src, 'rb')
+    g = open(dst, 'wb')
+    while True:
+        b = f.read(CHUNK)
+        if not b:
+            break
+        g.write(b)
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+**1024 bytes is far too small** for modern storage. It forces ~1M syscalls per GB copied — syscall overhead dominates.
+
+**Sensible defaults:**
+- **64 KiB (65536)** — sweet spot for most SSDs/NVMe; matches typical filesystem block sizes
+- **128–256 KiB** — better for high-end NVMe, reduces syscall overhead further
+- **1 MiB** — fine for bulk copies to fast NVMe; diminishing returns beyond this
+
+Python's own `shutil.copyfileobj` defaults to **16 KiB** (`shutil.COPY_BUFSIZE`), and `io.DEFAULT_BUFFER_SIZE` is 8 KiB — both conservative. `shutil.copyfile` uses `os.sendfile` where available (zero-copy, kernel handles chunking).
+
+**Practical default:**
+```python
+CHUNK = 64 * 1024  # 64 KiB — safe, fast everywhere
+```
+
+Or just use the stdlib:
+```python
+import shutil
+shutil.copyfileobj(src, dst, length=64*1024)  # or shutil.copyfile(src, dst) for zero-copy
+```
+
+For modern NVMe, 128–256 KiB wins measurably on large files; 1024 bytes is ~100× slower on syscalls alone.
+
+--- Candidate B ---
+1024 is too small — you're making a syscall per KB. Use **64KB–1MB** (65536–1048576). 64KB is a sweet spot: large enough to amortize syscall overhead, small enough to stay in L2 cache and not pressure memory.
+
+Better yet, use `shutil.copyfileobj` which picks a good default (16KB in CPython, but internally uses `sendfile`/`copy_file_range` on Linux where available):
+
+```python
+import shutil
+
+def copy_file(src, dst):
+    with open(src, 'rb') as f, open(dst, 'wb') as g:
+        shutil.copyfileobj(f, g)  # uses 16KB default; kernel handles rest
+```
+
+If you need manual control, 65536 (64KB) is a solid constant.
+
+--- Candidate C ---
+1024 bytes is too small — it'll kill throughput with syscall overhead. **16KB–1MB** is the modern sweet spot. Python's `shutil.copyfileobj` defaults to 16KB (16384); many tools use 64KB–1MB.
+
+```python
+def copy_file(src, dst, chunk_size=1024 * 1024):  # 1 MB
+    with open(src, 'rb') as f, open(dst, 'wb') as g:
+        while chunk := f.read(chunk_size):
+            g.write(chunk)
+```
+
+Also: your original leaks file handles — always use `with` blocks. The walrus operator (`:=`) keeps the loop clean in 3.8+.
+
+--- Candidate D ---
+1024 bytes is too small — you'll make ~1M syscalls per GB. Use 64 KiB (65536) or 128 KiB; modern disks and OS page caches handle larger sequential reads efficiently. Also, the function leaks file handles — use `with open(...) as f:` for both files. And `shutil.copyfileobj(f, g, 65536)` does this correctly in one line. If you must write it manually: `CHUNK = 64 * 1024` and wrap in `with` statements.
+
+--- Candidate E ---
+1024 bytes (1 KiB) is very small for modern disks — you'll make ~1M syscalls per GB. Use **64 KiB–1 MiB** (e.g., `65536` or `1048576`). Python's `shutil.copyfileobj` defaults to 64 KiB; `shutil.copy` uses `os.sendfile` (kernel zero-copy) when available, which is fastest.
+
+Also: use `with open(...)` for both files to ensure they close on error.
+
+--- Candidate F ---
+**1024 bytes is far too small for modern SSDs/NVMe.** The optimal I/O size aligns with the underlying storage layer:
+
+- **4 KB** — minimum filesystem block size (ext4, xfs, NTFS)
+- **64 KB (65536)** — sweet spot: aligns with SSD erase blocks, RAID stripes, and typical readahead; balances latency vs. syscall overhead
+- **128 KB (131072)** — common default in `cp`/`cpio`/`rsync`; optimal for sequential NVMe throughput
+
+**Sensible default: `65536` (64 KiB).** It's the sweet spot used by Go's `io.Copy`, `rsync`, and modern `cp` implementations — large enough to amortize syscall overhead and hit peak SSD throughput, small enough to avoid excessive memory pressure on many concurrent copies.
+
+```python
+def copy_file(src, dst):
+    CHUNK = 65536  # 64 KiB
+    with open(src, 'rb') as f, open(dst, 'wb') as g:
+        while chunk := f.read(CHUNK):
+            g.write(chunk)
+```
+
+(Also: use `with` statements so files close on error.)
+
+--- Candidate G ---
+**1024 bytes is far too small** for modern NVMe SSDs. Optimal I/O size on NVMe is typically **128 KiB–1 MiB** (131,072–1,048,576 bytes); SATA SSDs benefit from 64–128 KiB. Python's own `shutil.copyfileobj` defaults to **16 KiB (16384)** — a conservative but safe default. For modern NVMe, **128 KiB (131072)** or **256 KiB (262144)** is a better default; 1 MiB (1048576) is fine for large sequential copies on NVMe.
+
+```python
+def copy_file(src, dst):
+    CHUNK = 131072   # 128 KiB — good default for modern NVMe/SATA SSDs
+    with open(src, 'rb') as f, open(dst, 'wb') as g:
+        while (b := f.read(CHUNK)):
+            g.write(b)
+```
+
+Also use `with` statements (auto-close on error) and the walrus operator for cleaner loop.
+
+--- Candidate H ---
+1024 bytes is far too small for modern storage. Use **64 KiB (65536)** — it's what `shutil.copyfileobj` uses and matches typical SSD/HDD readahead and controller optimization windows. 1 MiB (1048576) is also fine and often faster on NVMe, but 64 KiB is the standard-library default for good reason: it balances throughput, memory pressure, and syscall overhead across SSDs, HDDs, and network mounts.
+
+```python
+def copy_file(src, dst):
+    CHUNK = 65536  # 64 KiB
+    with open(src, 'rb') as f, open(dst, 'wb') as g:
+        while chunk := f.read(CHUNK):
+            g.write(chunk)
+```
+
+Use `shutil.copyfileobj(f, g, 65536)` in real code — it handles edge cases and uses the same default.
