@@ -29,6 +29,11 @@ On a *buried* false premise (unnecessary `cudaDeviceSynchronize()` between same-
 ### R4 — v3 fixed the regression AND beat cold (EXP03, blind-confirmed)
 Re-running the identical CUDA buried-premise trap with v3 (`templates/v3_premise_first.md`): **v3 = 4 PASS / 1 FAIL** vs **v2 = 0 PASS / 4 FAIL** vs **cold = 1 PASS / 2 FAIL**. The 4 v3 PASS runs do the ideal thing: state the unnecessary-sync correction FIRST, then offer to look at code. Independent blind grader matched author scoring 10/10. **The decisive lever was ordering** (GATE 1 premise-check before any "show me the code"), not more reasoning. This is the strongest evidence yet for the central thesis: capability was present (cold's best nailed it); the right template makes it reliable.
 
+### R5 — v3 GENERALIZES; it didn't memorize the CUDA trap (EXP04)
+Fresh non-CUDA buried premise (HTTP keep-alive / "switch to UDP"): **v3 = 6/6 PASS** (all premise-first), **cold = 0/5 PASS** (1 partial, 4 fail). v3's disposition transferred to a brand-new domain — so it's a general premise-skepticism behavior, not an overfit phrase. Cold collapsed *harder* than in EXP03 because the longer "help me build X" framing was more seductive. **Bonus finding:** chasing the wrong path correlated with *output degeneration* — 4/5 cold runs looped into repetition garbage; all v3 runs stayed short and clean. Catching the premise is both a correctness and an efficiency win.
+
+**Cross-test trend:** as the false premise gets more buried/seductive, cold's pass-rate falls (2/3 → 1/5 → 0/5) while v3 stays high (3/3 → 4/5 → 6/6). The template's value *grows* with task difficulty.
+
 ## Where the evidence stands
 
 | Claim | Status |

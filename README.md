@@ -34,15 +34,21 @@ Every claim here is tested against the **live Nemotron 3 Ultra** (via `run_subag
 
 We measure *behavioral* differences (does it challenge a false premise, catch an error, etc.), run multiple trials per arm to expose variance, and — from EXP03 on — grade **blind** with a neutral judge to remove author bias.
 
+## Methodology rules (operating discipline)
+1. **Cap both arms at ≤180 words** per response. Keeps the test fair (length isn't a confound) AND prevents runaway / repetition-loop generations. (EXP04 cold runs degenerated into garbage when uncapped.)
+2. **Short timeouts; abandon runaways fast.** Never block-wait on a single agent that's run away — drop it.
+3. **Don't over-spawn.** Smallest n that's informative; scale up only when a result is close.
+4. **Blind-grade** when a result favors the author's hypothesis or is close.
+
 ## Status (living)
 
 - ✅ Documented Opus's distinctive reasoning behaviors
 - ✅ Built v2 template (persona + gate)
 - ✅ EXP01 (flagrant bad data): both arms caught it; template avoided an overclaim
 - ✅ EXP02 (obvious false premise, n=3): same ceiling; **template raised the floor** + transferred bluntness
-- ✅ EXP03 (buried false premise, n=5/arm, blind-graded): **v2 regressed (0/5)**, **v3 fixed it and beat cold (4/5 vs 1/5)**
+- ✅ EXP03 (buried false premise CUDA, n=5/arm, blind-graded): **v2 regressed (0/5)**, **v3 fixed it and beat cold (4/5 vs 1/5)**
+- ✅ EXP04 (generalization, buried premise HTTP/UDP, n=6): **v3 6/6 vs cold 0/5** — v3 generalizes, not overfit. Bonus: cold degenerated into garbage loops chasing the wrong path.
 - ➡️ **Current best template: `templates/v3_premise_first.md`**
-- 🔜 EXP04: generalization test — v3 vs cold on a *different* buried premise (non-CUDA), n≥8, blind
 
 ### Headline result (EXP03, blind-confirmed)
 On the exact buried-premise trap that broke v2, same model:
