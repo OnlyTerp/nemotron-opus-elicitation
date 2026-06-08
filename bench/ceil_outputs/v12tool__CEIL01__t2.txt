@@ -1,0 +1,11 @@
+Add type hints — the function has an off-by-one bug that hints would help catch. `range(len(xs) - k)` should be `range(len(xs) - k + 1)`; currently `[1,2,3,4]` with `k=2` returns `[1.5, 2.5]` instead of `[1.5, 2.5, 3.5]`, and `[1,2,3]` with `k=3` returns `[]` instead of `[2.0]`.
+
+```python
+from typing import Sequence
+
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+    out = []
+    for i in range(len(xs) - k + 1):
+        out.append(sum(xs[i:i+k]) / k)
+    return out
+```

@@ -1,0 +1,1 @@
+Rename to `total` or `sum_`. The function *is* `total` — the variable should mirror the function name. `acc` buys you nothing in 4 lines.

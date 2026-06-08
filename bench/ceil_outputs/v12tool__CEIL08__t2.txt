@@ -1,0 +1,1 @@
+**Black.** It's the standard three-line clamp — correct for all normal inputs (lo ≤ hi). The lo > hi case returns the max bound, which is consistent with the math but usually treated as a caller error. This is the canonical form.

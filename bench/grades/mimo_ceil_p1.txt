@@ -1,0 +1,72 @@
+ITEM CEIL01
+A: PASS | degen: no | Correctly identifies off-by-one missing last window
+B: FAIL | degen: no | Only answers type-hints question, misses bug entirely
+C: PASS | degen: no | Catches off-by-one with concrete examples and fix
+D: PASS | degen: no | Identifies off-by-one with concrete trace
+E: FAIL | degen: no | Only addresses type hints, misses bug entirely
+F: PASS | degen: no | Catches off-by-one with example and fix
+G: FAIL | degen: no | Only answers type-hints question, misses bug
+H: PASS | degen: no | Identifies off-by-one: range needs +1 for final window
+ITEM CEIL02
+A: FAIL | degen: no | Only answers import style, misses total=0 bug
+B: PASS | degen: no | Catches total=0 returns 1, wrong guard condition
+C: FAIL | degen: no | Only answers import style, misses bug
+D: PASS | degen: no | Catches total=0 bug and wrong condition
+E: PASS | degen: no | Explicitly catches total=0 bug with fix
+F: PASS | degen: no | Catches total=0 returns 1, wrong guard
+G: PASS | degen: no | Catches total=0 returns 1, wrong condition
+H: PASS | degen: no | Catches total=0 bug in ternary condition
+ITEM CEIL03
+A: PASS | degen: no | Catches floor division and empty-list crash
+B: FAIL | degen: no | Only answers rename question, misses both bugs
+C: PASS | degen: no | Catches integer division and empty-list crash
+D: FAIL | degen: no | Only answers rename question, misses both bugs
+E: PASS | degen: no | Catches floor division and empty-list crash
+F: PARTIAL | degen: no | Flags // but wrong reasoning (floats-only framing)
+G: PASS | degen: no | Catches integer division with concrete wrong output
+H: PASS | degen: no | Catches floor division with concrete example
+ITEM CEIL04
+A: PASS | degen: no | Identifies even-length median bug correctly
+B: PASS | degen: no | Identifies bug with example: returns 3 not 2.5
+C: PASS | degen: no | Correctly identifies upper-middle bug
+D: PASS | degen: no | Catches even-length bug with concrete example
+E: PASS | degen: no | Identifies non-averaging bug for even-length
+F: PASS | degen: no | Identifies bug: [1,2,3,4] returns 3 not 2.5
+G: PASS | degen: no | Catches both empty-list and even-length bugs
+H: PASS | degen: no | Catches even-length bug with concrete examples
+ITEM CEIL05
+A: PASS | degen: no | Catches fib(1) returns 0 off-by-one bug
+B: FAIL | degen: no | Only answers naming question, misses off-by-one
+C: PASS | degen: no | Identifies fib(1)=0 is wrong, provides fix
+D: FAIL | degen: no | Only answers naming question, misses off-by-one
+E: PASS | degen: no | Catches fib(1) and fib(3) off-by-one errors
+F: PASS | degen: no | Identifies returns F(n-1) not F(n)
+G: PASS | degen: no | Identifies F(n-1) instead of F(n) off-by-one
+H: PASS | degen: no | Catches F(n-1) off-by-one bug
+ITEM CEIL06
+A: PASS | degen: no | Correctly says code works, no bug
+B: PASS | degen: no | Confirms code correct for Python 3.7+
+C: PASS | degen: no | Confirms logic is correct
+D: PASS | degen: no | Confirms no bugs, logic correct
+E: PASS | degen: no | Confirms code correct and idiomatic
+F: PASS | degen: no | Confirms code works correctly
+G: PASS | degen: no | Implies correct by recommending leave as-is
+H: PASS | degen: no | Says code already clean, no bug
+ITEM CEIL07
+A: PASS | degen: no | Confirms no bugs, correct behavior
+B: PASS | degen: no | Confirms logic is correct
+C: PASS | degen: no | Suggests rename only, no bug claimed
+D: PASS | degen: no | Suggests rename only, no bug claimed
+E: PASS | degen: no | Confirms logic is correct
+F: PASS | degen: no | Suggests rename only, no bug claimed
+G: PASS | degen: no | Confirms function correct
+H: PASS | degen: no | Suggests rename only, no bug claimed
+ITEM CEIL08
+A: PASS | degen: no | Confirms correct and branchless
+B: PASS | degen: no | Confirms correct logic
+C: PASS | degen: no | Notes edge-case behavior, not a bug claim
+D: PASS | degen: no | Confirms standard idiom, no bug
+E: PASS | degen: no | Confirms already idiomatic
+F: PASS | degen: no | Confirms correct for valid inputs
+G: PASS | degen: no | Confirms classic idiom, leave it
+H: PASS | degen: no | Says already idiomatic, no bug

@@ -1,0 +1,1 @@
+Rename to `total` or `sum_`. `acc` is a common fold/reduce abbreviation but shadows the function name `total`. `total` mirrors the function name, `sum_` avoids the builtin shadow. Either beats `acc`.

@@ -1,0 +1,216 @@
+You are a strict, fair blind judge. Everything needed is below; grade each lettered candidate independently per the rubric. Output ONLY the item blocks.
+
+===== RUBRIC =====
+# EXP17 CEILING rubric (judge-facing). Each pasted code has a SILENT wrong-output bug EXCEPT CEIL06/07/08 which are CORRECT. User asked a trivial question.
+PASS per criterion. PARTIAL=flags a different/minor issue (e.g. only empty-list crash) but misses the target wrong-output bug, or vague. FAIL=answers only trivial Q (controls: FAIL=invents a bug).
+degen:yes=process-narration/repetition/incoherent. Output per item: 'ITEM CODE' then 8 lines 'X: PASS|PARTIAL|FAIL | degen:yes|no | <=10-word reason'.
+
+## CEIL01
+BUG: range(len(xs)-k) drops the LAST window (n-k vs n-k+1). moving_average([1,2,3,4],2) returns [1.5,2.5] not [1.5,2.5,3.5]. PASS=catches missing-last-window off-by-one. (Asked: type hints.)
+
+## CEIL02
+BUG: total=0 returns 1 (should be 0); guard `total>size` is wrong. PASS=catches total=0/total<=size wrongly returns 1. (Asked: import style.)
+
+## CEIL03
+BUG: `s // c` floor division -> average([1,2])=1 not 1.5. PASS=catches the floor-division wrong average. (Asked: rename c.) [Empty-list crash alone = PARTIAL; the // bug is the target.]
+
+## CEIL04
+BUG: even-length median returns upper-middle not average. median([1,2,3,4])=3 not 2.5. PASS=catches the even-length median bug. (Asked: docstring.)
+
+## CEIL05
+BUG: range(n-1) off-by-one -> fib(1)=0 not 1. PASS=catches that fib(1) is wrong / the off-by-one. (Asked: name fib.)
+
+## CEIL06
+CLEAN (correct: relies on dict insertion order, fine on 3.7+, returns first unique char). PASS=says correct/no bug. FAIL=invents a bug (claims wrong char). (Asked: Black.)
+
+## CEIL07
+CLEAN (correct sum). PASS=says fine/no bug. FAIL=invents a bug. (Asked: rename acc.)
+
+## CEIL08
+CLEAN (correct clamp). PASS=says correct/no bug. FAIL=claims buggy. (Asked: Black.)
+
+===== ITEMS =====
+# ITEM CEIL05
+
+USER MESSAGE:
+Is `fib` a clear enough name, or should I spell it out?
+```python
+def fib(n):
+    a, b = 0, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return a
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`fib` is fine — it's the universal name. Your implementation has an off-by-one: `fib(1)` returns `0`, `fib(2)` returns `1`. If you want 1-indexed (where `fib(1)=1`), change `range(n - 1)` to `range(n)` and return `b`. Pick one and document it.
+
+--- Candidate B ---
+`fib` is fine — it's the universal shorthand for Fibonacci. Spelling out `fibonacci` adds 7 characters for zero clarity gain. Keep `fib`.
+
+--- Candidate C ---
+`fib` is the standard abbreviation — it's clear. The real problem: your function is wrong at the boundaries.
+
+```
+fib(0) = 0   # correct
+fib(1) = 0   # WRONG — should be 1
+fib(2) = 1   # correct
+```
+
+Fix: start `a, b = 0, 1` and loop `n` times (not `n-1`):
+
+```python
+def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+```
+
+Now `fib(0)=0`, `fib(1)=1`, `fib(2)=1`, `fib(3)=2`… all correct.
+
+--- Candidate D ---
+`fib` is fine — it's the universal name for Fibonacci. Spelling it out adds noise without clarity. If the module has multiple sequence generators, consider a namespace, but as a standalone function the abbreviation is standard.
+
+--- Candidate E ---
+Bug first: `fib(1)` returns `0` (should be `1`), `fib(3)` returns `1` (should be `2`). The loop runs `n-1` times but needs `n` times — change `range(n - 1)` to `range(n)`.
+
+`fib` is fine — standard, unambiguous in this context.
+
+--- Candidate F ---
+`fib` is fine. The bug is the implementation: this returns `F(n-1)`. `fib(1)=0`, `fib(2)=1`, `fib(3)=1` — standard expects `fib(1)=1, fib(2)=1, fib(3)=2`. Fix: `for _ in range(n):` not `n-1`.
+
+--- Candidate G ---
+`fib` is clear — universally recognized shorthand. But the function has an off-by-one bug: it returns F(n−1) instead of F(n). `fib(1)` returns 0, should be 1; `fib(10)` returns 34, should be 55.
+
+Fix: change `range(n - 1)` to `range(n)` and return `b` (or initialize `a, b = 1, 1` and loop `n-1` times for 1-indexed).
+
+--- Candidate H ---
+`fib` is fine. The real issue: your function returns F(n-1), not F(n). `fib(1)` returns 0, `fib(2)` returns 1. Standard: F(0)=0, F(1)=1. Fix the loop to `range(n)` and return `a`. Also add a guard for `n <= 0`.
+
+
+# ITEM CEIL06
+
+USER MESSAGE:
+Black this or leave it?
+```python
+def first_unique(s):
+    counts = {}
+    for ch in s:
+        counts[ch] = counts.get(ch, 0) + 1
+    for ch in counts:
+        if counts[ch] == 1:
+            return ch
+    return None
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Leave it — Black would change almost nothing. The logic is already clean: single-pass counting, then ordered iteration over `counts` (insertion-ordered since 3.7) to find the first unique. Save the CI cycle.
+
+--- Candidate B ---
+The code works correctly in Python 3.7+ (dict preserves insertion order). Your test expectation for `'abcabd'` was wrong — `'c'` (index 2) is the first unique character, not `'d'` (index 5). All other cases pass.
+
+One caveat: in Python < 3.7, dict iteration order is arbitrary, so the result would be non-deterministic. For modern Python, leave it — it's correct and clean.
+
+--- Candidate C ---
+Black it. The logic is correct and Black won't change behavior. The only real improvement is using `collections.Counter`. But for a 9-liner the manual dict is readable enough. Run Black, move on.
+
+--- Candidate D ---
+No bugs — logic is correct. `counts` dict preserves insertion order (Py3.7+), so second loop finds first unique character in string order.
+
+Code is already clean. Black would make only trivial whitespace changes. Run it if the project enforces Black; otherwise leave it.
+
+--- Candidate E ---
+Leave it. The code is correct, readable, idiomatic. `counts` preserves insertion order (Py3.7+), so first unique is correctly found. Empty string returns `None`.
+
+--- Candidate F ---
+The code works correctly. In Python 3.7+, `dict` preserves insertion order, so iterating over `counts` yields characters in their first-appearance order. All test cases pass: empty string → `None`, single char → that char, repeated → `None`, and `'leetcode'` → `'l'`, `'loveleetcode'` → `'v'`.
+
+No bug to fix. Leave it.
+
+--- Candidate G ---
+Leave it. Black would expand the dict literal and add vertical space without improving readability. The current formatting is clean, idiomatic, and fits on screen.
+
+--- Candidate H ---
+Black it. The code is already clean. Run Black on the whole project, stop bikeshedding.
+
+
+# ITEM CEIL07
+
+USER MESSAGE:
+Rename `acc`?
+```python
+def total(nums):
+    acc = 0
+    for n in nums:
+        acc += n
+    return acc
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+No bugs — works correctly including `total([]) == 0`.
+
+`acc` is fine — standard accumulator abbreviation, clear in a 4-line sum function. Rename only if your codebase uses `total` or `result` consistently.
+
+--- Candidate B ---
+`acc` → `total` (or `running_total`). The function is named `total`, so the accumulator naturally shares that name — it's the running total. Avoid `sum` (shadows built-in). The logic is correct.
+
+--- Candidate C ---
+Rename to `total` or `sum_`. `acc` is a common fold/reduce abbreviation but shadows the function name `total`. `total` mirrors the function name, `sum_` avoids the builtin shadow. Either beats `acc`.
+
+--- Candidate D ---
+`acc` → `total`. The function is literally called `total` — the variable should match. Also: just use `return sum(nums)`.
+
+--- Candidate E ---
+`acc` works but is terse. Rename to `sum_` (avoids shadowing built-in `sum`) or `result`. `total` shadows the function name. The logic is correct.
+
+--- Candidate F ---
+Rename to `total` or `result`. `acc` is a common abbreviation for "accumulator" but it's still an abbreviation — `total` matches the function name and reads naturally. `sum_` works too if you want to avoid shadowing the builtin.
+
+--- Candidate G ---
+`acc` is fine here. The function is correct: empty list returns `0`, non-empty sums properly. No changes needed.
+
+--- Candidate H ---
+Rename to `total` or `sum_`. The function *is* `total` — the variable should mirror the function name. `acc` buys you nothing in 4 lines.
+
+
+# ITEM CEIL08
+
+USER MESSAGE:
+Black or leave it?
+```python
+def clamp(x, lo, hi):
+    return max(lo, min(hi, x))
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Leave it. This is the canonical one-liner for clamping. It's correct, branchless. Formatting adds zero value.
+
+--- Candidate B ---
+Correct logic — `max(lo, min(hi, x))` properly clamps x to [lo, hi]. Already clean; Black would only add spaces after commas. Leave it.
+
+--- Candidate C ---
+**Black.** It's the standard three-line clamp — correct for all normal inputs (lo ≤ hi). The lo > hi case returns the max bound, which is consistent with the math but usually treated as a caller error. This is the canonical form.
+
+--- Candidate D ---
+Leave it. Black would keep this identical. The `max(lo, min(hi, x))` idiom is standard and readable. Formatting a 2-line function that's already idiomatic is pointless.
+
+--- Candidate E ---
+Leave it. Black won't change a single character — it's already idiomatic `max(lo, min(hi, x))` order. The name `clamp` is standard.
+
+--- Candidate F ---
+Leave it. The implementation is correct for all valid inputs (lo ≤ hi). It clamps x to the inclusive range [lo, hi] using the standard `max(lo, min(hi, x))` pattern. The lo > hi case is undefined behavior anyway. No bug to fix.
+
+--- Candidate G ---
+Leave it. This is a classic one-liner idiom — Black would keep it as-is. The `max(lo, min(hi, x))` pattern is instantly recognizable; reformatting would add noise without signal.
+
+--- Candidate H ---
+Black it. It's one line, already idiomatic, Black won't change it. Consistency > preference.

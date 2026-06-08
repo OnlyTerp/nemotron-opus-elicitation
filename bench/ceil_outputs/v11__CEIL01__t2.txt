@@ -1,0 +1,1 @@
+Add them. The function takes a sequence and an int, returns a list of floats. `def moving_average(xs: Sequence[float], k: int) -> list[float]:` costs nothing and prevents the classic bug where someone passes a string or numpy array.

@@ -1,0 +1,3 @@
+The code works correctly. In Python 3.7+, `dict` preserves insertion order, so iterating over `counts` yields characters in their first-appearance order. All test cases pass: empty string → `None`, single char → that char, repeated → `None`, and `'leetcode'` → `'l'`, `'loveleetcode'` → `'v'`.
+
+No bug to fix. Leave it.

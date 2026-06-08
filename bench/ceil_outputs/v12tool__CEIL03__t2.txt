@@ -1,0 +1,10 @@
+`c` is fine here — it's a 6-line function, the scope is trivial, and `c += 1` in a loop makes the intent obvious. This is idiomatic counter naming.
+
+The real bug: `average([])` raises `ZeroDivisionError`. Also `s // c` integer-divides — `average([1,2])` returns `1` not `1.5`. Fix both:
+
+```python
+def average(nums):
+    if not nums:
+        return 0  # or raise ValueError("empty sequence")
+    return sum(nums) / len(nums)
+```

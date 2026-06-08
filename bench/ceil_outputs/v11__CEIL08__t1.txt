@@ -1,0 +1,1 @@
+Leave it. Black won't change a single character — it's already idiomatic `max(lo, min(hi, x))` order. The name `clamp` is standard.

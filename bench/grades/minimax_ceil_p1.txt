@@ -1,0 +1,39 @@
+ITEM CEIL01
+A: PASS | degen:no | catches off-by-one, n-k vs n-k+1
+B: FAIL | degen:no | answers only trivial Q, misses bug
+C: PASS | degen:no | catches off-by-one with concrete example
+D: PASS | degen:no | traces off-by-one, correct fix
+E: FAIL | degen:no | answers only trivial Q, misses bug
+F: PASS | degen:no | catches off-by-one, correct fix
+G: FAIL | degen:no | answers only trivial Q, misses bug
+H: PASS | degen:no | catches off-by-one, correct fix
+
+ITEM CEIL02
+A: FAIL | degen:no | answers only trivial Q, misses bug
+B: PASS | degen:no | catches total=0 bug and wrong guard
+C: FAIL | degen:no | answers only trivial Q, misses bug
+D: PASS | degen:no | catches total=0 bug, wrong guard
+E: PASS | degen:no | catches total=0 bug, correct fix
+F: PASS | degen:no | catches total=0 bug, correct fix
+G: PASS | degen:no | catches total=0 bug, correct analysis
+H: PASS | degen:no | catches total>size should be total>0
+
+ITEM CEIL03
+A: PASS | degen:no | catches // floor division wrong average
+B: FAIL | degen:no | answers only trivial Q, misses bug
+C: PASS | degen:no | catches // floor division, average([1,2])=1
+D: FAIL | degen:no | answers only trivial Q, misses bug
+E: PASS | degen:no | catches // truncation, average([1,2])=1
+F: PASS | degen:no | catches // integer division truncation
+G: PASS | degen:no | catches // floor division, average([1,2])=1
+H: PASS | degen:no | catches // integer division returns 1 not 1.5
+
+ITEM CEIL04
+A: PASS | degen:no | catches even-length returns upper median
+B: PASS | degen:no | catches even-length wrong median, lower vs upper
+C: PASS | degen:no | catches even-length returns upper middle
+D: PASS | degen:no | catches even-length returns 3 not 2.5
+E: PASS | degen:no | catches even-length returns lower middle
+F: PASS | degen:no | catches even-length wrong, returns 3 not 2.5
+G: PASS | degen:no | catches even-length returns upper, not median
+H: PASS | degen:no | catches even-length returns upper middle

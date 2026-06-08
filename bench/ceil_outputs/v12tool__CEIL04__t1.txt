@@ -1,0 +1,20 @@
+The code is **wrong**, not just undocumented.
+
+**Bugs found:**
+1. **Empty list** → `IndexError` (no guard)
+2. **Even-length lists** → returns upper-middle element, not the median. `[1,2]` returns `2` (should be `1.5`); `[1,2,3,4]` returns `3` (should be `2.5`)
+
+```python
+def median(xs):
+    """Return the median of a sequence. Raises ValueError if empty."""
+    s = sorted(xs)
+    n = len(s)
+    if n == 0:
+        raise ValueError("median() arg is an empty sequence")
+    mid = n // 2
+    if n % 2 == 0:
+        return (s[mid - 1] + s[mid]) / 2
+    return s[mid]
+```
+
+A docstring is necessary *after* fixing the logic — the current behavior is silently wrong for half the inputs.

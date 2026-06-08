@@ -1,0 +1,39 @@
+# ITEM CEIL07
+
+USER MESSAGE:
+Rename `acc`?
+```python
+def total(nums):
+    acc = 0
+    for n in nums:
+        acc += n
+    return acc
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+No bugs — works correctly including `total([]) == 0`.
+
+`acc` is fine — standard accumulator abbreviation, clear in a 4-line sum function. Rename only if your codebase uses `total` or `result` consistently.
+
+--- Candidate B ---
+`acc` → `total` (or `running_total`). The function is named `total`, so the accumulator naturally shares that name — it's the running total. Avoid `sum` (shadows built-in). The logic is correct.
+
+--- Candidate C ---
+Rename to `total` or `sum_`. `acc` is a common fold/reduce abbreviation but shadows the function name `total`. `total` mirrors the function name, `sum_` avoids the builtin shadow. Either beats `acc`.
+
+--- Candidate D ---
+`acc` → `total`. The function is literally called `total` — the variable should match. Also: just use `return sum(nums)`.
+
+--- Candidate E ---
+`acc` works but is terse. Rename to `sum_` (avoids shadowing built-in `sum`) or `result`. `total` shadows the function name. The logic is correct.
+
+--- Candidate F ---
+Rename to `total` or `result`. `acc` is a common abbreviation for "accumulator" but it's still an abbreviation — `total` matches the function name and reads naturally. `sum_` works too if you want to avoid shadowing the builtin.
+
+--- Candidate G ---
+`acc` is fine here. The function is correct: empty list returns `0`, non-empty sums properly. No changes needed.
+
+--- Candidate H ---
+Rename to `total` or `sum_`. The function *is* `total` — the variable should mirror the function name. `acc` buys you nothing in 4 lines.

@@ -1,0 +1,1 @@
+Rename to `count`. Single-letter names are fine for loop indices, but `c` as an accumulator is ambiguous. `count` is self-documenting and costs nothing in a 6-liner.

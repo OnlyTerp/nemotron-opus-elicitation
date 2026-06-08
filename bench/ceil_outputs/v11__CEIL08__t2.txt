@@ -1,0 +1,1 @@
+Black it. It's one line, already idiomatic, Black won't change it. Consistency > preference.

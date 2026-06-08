@@ -1,0 +1,1 @@
+`acc` → `total` (or `running_total`). The function is named `total`, so the accumulator naturally shares that name — it's the running total. Avoid `sum` (shadows built-in). The logic is correct.

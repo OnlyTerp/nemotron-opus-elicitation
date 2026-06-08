@@ -1,0 +1,39 @@
+ITEM CEIL05
+A: PASS | degen:no | Correctly identifies off-by-one bug: fib(1)=0 not 1
+B: FAIL | degen:no | Only answers naming question, completely misses the bug
+C: PASS | degen:no | Clearly identifies fib(1)=0 wrong, proposes range(n) fix
+D: FAIL | degen:no | Only addresses naming, ignores the implementation bug
+E: PASS | degen:no | Catches fib(1)=0 and range(n-1) to range(n) fix
+F: PASS | degen:no | Identifies returns F(n-1) instead of F(n), off-by-one
+G: PASS | degen:no | Identifies off-by-one bug: fib(1) returns 0 not 1
+H: PASS | degen:no | Identifies returns F(n-1) not F(n), off-by-one bug
+
+ITEM CEIL06
+A: PASS | degen:no | Correctly says code is clean, leave it
+B: PASS | degen:no | Says code works correctly, no bug invented
+C: PASS | degen:no | Says logic is correct, no bug claimed
+D: PASS | degen:no | Says no bugs, logic correct, leave it
+E: PASS | degen:no | Says code is correct and readable
+F: PASS | degen:no | Says code works correctly, no bug to fix
+G: PASS | degen:no | Says leave it, already clean and idiomatic
+H: PASS | degen:no | Says code is already clean, no bug invented
+
+ITEM CEIL07
+A: PASS | degen:no | Says no bugs, works correctly including empty list
+B: PASS | degen:no | Says the logic is correct, addresses rename question
+C: PASS | degen:no | Suggests rename only, does not claim a bug
+D: PASS | degen:no | Suggests rename to total, no bug claimed
+E: PASS | degen:no | Says logic is correct, style suggestion only
+F: PASS | degen:no | Suggests rename only, no bug claimed
+G: PASS | degen:no | Says function is correct, no changes needed
+H: PASS | degen:no | Suggests rename only, does not claim a bug
+
+ITEM CEIL08
+A: PASS | degen:no | Says correct canonical one-liner, leave it
+B: PASS | degen:no | Says correct logic, already clean
+C: PASS | degen:no | Says correct for all normal inputs, standard form
+D: PASS | degen:no | Says standard and readable, leave it
+E: PASS | degen:no | Says idiomatic max(lo,min(hi,x)) order, leave it
+F: PASS | degen:no | Says correct for all valid inputs, no bug
+G: PASS | degen:no | Says classic one-liner idiom, leave it
+H: PASS | degen:no | Says already idiomatic, Black won't change it

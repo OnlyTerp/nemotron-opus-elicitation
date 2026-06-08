@@ -1,0 +1,1 @@
+Leave it. Black would expand the dict literal and add vertical space without improving readability. The current formatting is clean, idiomatic, and fits on screen.

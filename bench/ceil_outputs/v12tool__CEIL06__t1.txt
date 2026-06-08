@@ -1,0 +1,3 @@
+The code works correctly in Python 3.7+ (dict preserves insertion order). Your test expectation for `'abcabd'` was wrong — `'c'` (index 2) is the first unique character, not `'d'` (index 5). All other cases pass.
+
+One caveat: in Python < 3.7, dict iteration order is arbitrary, so the result would be non-deterministic. For modern Python, leave it — it's correct and clean.

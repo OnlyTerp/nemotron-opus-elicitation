@@ -1,0 +1,16 @@
+**No — it's wrong, not just undocumented.**
+
+The function crashes on empty lists and returns the upper middle element for even-length lists instead of averaging the two middle values. On `[1,2]` it returns `2` (should be `1.5`); on `[1,2,3,4]` it returns `3` (should be `2.5`). It only works by accident for odd-length inputs.
+
+```python
+def median(xs):
+    """Return the median of a non-empty sequence."""
+    s = sorted(xs)
+    n = len(s)
+    if n == 0:
+        raise ValueError("median of empty sequence")
+    mid = n // 2
+    if n % 2 == 1:
+        return s[mid]
+    return (s[mid - 1] + s[mid]) / 2
+```

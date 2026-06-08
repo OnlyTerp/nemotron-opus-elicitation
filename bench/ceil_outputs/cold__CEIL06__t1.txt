@@ -1,0 +1,1 @@
+Leave it — Black would change almost nothing. The logic is already clean: single-pass counting, then ordered iteration over `counts` (insertion-ordered since 3.7) to find the first unique. Save the CI cycle.

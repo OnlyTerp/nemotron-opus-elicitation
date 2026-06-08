@@ -1,0 +1,14 @@
+`from math import ceil` is slightly cleaner (avoids namespace pollution), but both work.
+
+Your code has a **bug at `total=0`**: returns `1` but should return `0` (zero items need zero chunks). The condition `total > size` treats `total == size` as the `else` branch, which works, but `total=0` falls through incorrectly.
+
+```python
+from math import ceil
+
+def chunk_count(total, size):
+    if total <= 0:
+        return 0
+    return ceil(total / size)
+```
+
+This handles all boundaries: `chunk_count(0, 5) → 0`, `chunk_count(5, 5) → 1`, `chunk_count(6, 5) → 2`.

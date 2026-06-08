@@ -1,0 +1,1 @@
+`from math import ceil` — slightly cleaner at the call site, and signals intent. For a single use it's a toss-up, but the import style scales better if you add more math calls later.

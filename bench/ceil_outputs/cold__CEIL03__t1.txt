@@ -1,0 +1,1 @@
+Rename to `count`. Single-letter `c` is only defensible in tight loops with obvious semantics. Here `c` accumulates a count — `count` is self-documenting and eliminates the mental pause. Zero downside.

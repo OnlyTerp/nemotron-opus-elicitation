@@ -1,0 +1,46 @@
+# ITEM CEIL06
+
+USER MESSAGE:
+Black this or leave it?
+```python
+def first_unique(s):
+    counts = {}
+    for ch in s:
+        counts[ch] = counts.get(ch, 0) + 1
+    for ch in counts:
+        if counts[ch] == 1:
+            return ch
+    return None
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Leave it — Black would change almost nothing. The logic is already clean: single-pass counting, then ordered iteration over `counts` (insertion-ordered since 3.7) to find the first unique. Save the CI cycle.
+
+--- Candidate B ---
+The code works correctly in Python 3.7+ (dict preserves insertion order). Your test expectation for `'abcabd'` was wrong — `'c'` (index 2) is the first unique character, not `'d'` (index 5). All other cases pass.
+
+One caveat: in Python < 3.7, dict iteration order is arbitrary, so the result would be non-deterministic. For modern Python, leave it — it's correct and clean.
+
+--- Candidate C ---
+Black it. The logic is correct and Black won't change behavior. The only real improvement is using `collections.Counter`. But for a 9-liner the manual dict is readable enough. Run Black, move on.
+
+--- Candidate D ---
+No bugs — logic is correct. `counts` dict preserves insertion order (Py3.7+), so second loop finds first unique character in string order.
+
+Code is already clean. Black would make only trivial whitespace changes. Run it if the project enforces Black; otherwise leave it.
+
+--- Candidate E ---
+Leave it. The code is correct, readable, idiomatic. `counts` preserves insertion order (Py3.7+), so first unique is correctly found. Empty string returns `None`.
+
+--- Candidate F ---
+The code works correctly. In Python 3.7+, `dict` preserves insertion order, so iterating over `counts` yields characters in their first-appearance order. All test cases pass: empty string → `None`, single char → that char, repeated → `None`, and `'leetcode'` → `'l'`, `'loveleetcode'` → `'v'`.
+
+No bug to fix. Leave it.
+
+--- Candidate G ---
+Leave it. Black would expand the dict literal and add vertical space without improving readability. The current formatting is clean, idiomatic, and fits on screen.
+
+--- Candidate H ---
+Black it. The code is already clean. Run Black on the whole project, stop bikeshedding.

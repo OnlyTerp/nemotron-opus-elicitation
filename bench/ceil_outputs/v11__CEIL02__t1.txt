@@ -1,0 +1,1 @@
+`from math import ceil` — then call `ceil(total / size)` directly. Your ternary is also wrong: `total > size` should be `total > 0` (or just drop it — `ceil(0 / size)` is 0, but you return 1; decide what empty input means).

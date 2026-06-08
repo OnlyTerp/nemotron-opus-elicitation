@@ -1,0 +1,15 @@
+[USER MESSAGE]
+Black this or leave it?
+```python
+def first_unique(s):
+    counts = {}
+    for ch in s:
+        counts[ch] = counts.get(ch, 0) + 1
+    for ch in counts:
+        if counts[ch] == 1:
+            return ch
+    return None
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do NOT use any tools or run code — reason/trace by hand. Do not restate these instructions. Plain prose/code only.

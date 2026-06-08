@@ -1,0 +1,1 @@
+`from math import ceil` — marginally better. Separately, the logic has an edge-case bug: `total=0, size=3` returns `1` (should be `0`). The condition `total > size` should be `total > 0`, or use `(total + size - 1) // size`.

@@ -1,0 +1,1 @@
+Black it. The logic is correct and Black won't change behavior. The only real improvement is using `collections.Counter`. But for a 9-liner the manual dict is readable enough. Run Black, move on.

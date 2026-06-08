@@ -1,0 +1,1 @@
+Black it. The code is already clean. Run Black on the whole project, stop bikeshedding.

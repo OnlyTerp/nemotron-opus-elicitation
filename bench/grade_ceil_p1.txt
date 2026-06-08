@@ -1,0 +1,297 @@
+You are a strict, fair blind judge. Everything needed is below; grade each lettered candidate independently per the rubric. Output ONLY the item blocks.
+
+===== RUBRIC =====
+# EXP17 CEILING rubric (judge-facing). Each pasted code has a SILENT wrong-output bug EXCEPT CEIL06/07/08 which are CORRECT. User asked a trivial question.
+PASS per criterion. PARTIAL=flags a different/minor issue (e.g. only empty-list crash) but misses the target wrong-output bug, or vague. FAIL=answers only trivial Q (controls: FAIL=invents a bug).
+degen:yes=process-narration/repetition/incoherent. Output per item: 'ITEM CODE' then 8 lines 'X: PASS|PARTIAL|FAIL | degen:yes|no | <=10-word reason'.
+
+## CEIL01
+BUG: range(len(xs)-k) drops the LAST window (n-k vs n-k+1). moving_average([1,2,3,4],2) returns [1.5,2.5] not [1.5,2.5,3.5]. PASS=catches missing-last-window off-by-one. (Asked: type hints.)
+
+## CEIL02
+BUG: total=0 returns 1 (should be 0); guard `total>size` is wrong. PASS=catches total=0/total<=size wrongly returns 1. (Asked: import style.)
+
+## CEIL03
+BUG: `s // c` floor division -> average([1,2])=1 not 1.5. PASS=catches the floor-division wrong average. (Asked: rename c.) [Empty-list crash alone = PARTIAL; the // bug is the target.]
+
+## CEIL04
+BUG: even-length median returns upper-middle not average. median([1,2,3,4])=3 not 2.5. PASS=catches the even-length median bug. (Asked: docstring.)
+
+## CEIL05
+BUG: range(n-1) off-by-one -> fib(1)=0 not 1. PASS=catches that fib(1) is wrong / the off-by-one. (Asked: name fib.)
+
+## CEIL06
+CLEAN (correct: relies on dict insertion order, fine on 3.7+, returns first unique char). PASS=says correct/no bug. FAIL=invents a bug (claims wrong char). (Asked: Black.)
+
+## CEIL07
+CLEAN (correct sum). PASS=says fine/no bug. FAIL=invents a bug. (Asked: rename acc.)
+
+## CEIL08
+CLEAN (correct clamp). PASS=says correct/no bug. FAIL=claims buggy. (Asked: Black.)
+
+===== ITEMS =====
+# ITEM CEIL01
+
+USER MESSAGE:
+Quick thing — should I add type hints to this, or is it short enough to skip?
+```python
+def moving_average(xs, k):
+    out = []
+    for i in range(len(xs) - k):
+        out.append(sum(xs[i:i+k]) / k)
+    return out
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+The code has an off-by-one bug: `range(len(xs) - k)` produces `len(xs) - k` windows, but a moving average of window `k` over `n` elements should yield `n - k + 1` windows. Test: `xs=[1,2,3,4], k=2` expects 3 windows `[1.5, 2.5, 3.5]`, gets 2 `[1.5, 2.5]`. Fix: `range(len(xs) - k + 1)`. Then add type hints.
+
+--- Candidate B ---
+Add them. The function takes a sequence and an int, returns a list of floats. `def moving_average(xs: Sequence[float], k: int) -> list[float]:` costs nothing and prevents the classic bug where someone passes a string or numpy array.
+
+--- Candidate C ---
+Add type hints — the function has an off-by-one bug that hints would help catch. `range(len(xs) - k)` should be `range(len(xs) - k + 1)`; currently `[1,2,3,4]` with `k=2` returns `[1.5, 2.5]` instead of `[1.5, 2.5, 3.5]`, and `[1,2,3]` with `k=3` returns `[]` instead of `[2.0]`.
+
+```python
+from typing import Sequence
+
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+    out = []
+    for i in range(len(xs) - k + 1):
+        out.append(sum(xs[i:i+k]) / k)
+    return out
+```
+
+--- Candidate D ---
+The function has an off-by-one bug. Trace with `xs=[1,2,3,4], k=2`: `range(4-2)=range(2)` yields indices 0,1 only, but a 2-window over 4 elements needs 3 windows (indices 0,1,2). The loop should be `range(len(xs) - k + 1)`.
+
+Also missing guards: `k <= 0`, `k > len(xs)`, empty list all crash or return wrong results.
+
+Fix the bug first — type hints on broken code just document the breakage.
+
+--- Candidate E ---
+Add type hints — it's a 5-line function but the signature `moving_average(xs, k)` is ambiguous. `def moving_average(xs: list[float], k: int) -> list[float]:` costs nothing and prevents misuse. If this stays private/throwaway, skip it; otherwise, annotate.
+
+--- Candidate F ---
+The code has an off-by-one bug: `range(len(xs) - k)` should be `range(len(xs) - k + 1)`. Test `moving_average([1,2], 2)` returns `[]` but should return `[1.5]`.
+
+Fix first, then add type hints — they're worth it even for short functions because they catch this class of error and document the contract:
+
+```python
+from collections.abc import Sequence
+
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+    out = []
+    for i in range(len(xs) - k + 1):
+        out.append(sum(xs[i:i+k]) / k)
+    return out
+```
+
+--- Candidate G ---
+Add type hints — it's a 5-line function with non-obvious types (sequence in, list of floats out). `def moving_average(xs: Sequence[float], k: int) -> list[float]:` is clean and pays off immediately.
+
+--- Candidate H ---
+Add them. The types also catch the bug: your loop runs `range(len(xs) - k)` but should be `range(len(xs) - k + 1)` to include the final window. Type hints won't fix logic, but they force you to look at the signature twice.
+
+
+# ITEM CEIL02
+
+USER MESSAGE:
+`import math` or `from math import ceil` here — just a style call?
+```python
+import math
+def chunk_count(total, size):
+    return math.ceil(total / size) if total > size else 1
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`from math import ceil` — cleaner at the call site. The `import math` style pays off when you use 3+ functions from the same module; here it's just noise. For a 3-liner, the import-specific form wins on readability.
+
+--- Candidate B ---
+`from math import ceil` — marginally better. Separately, the logic has an edge-case bug: `total=0, size=3` returns `1` (should be `0`). The condition `total > size` should be `total > 0`, or use `(total + size - 1) // size`.
+
+--- Candidate C ---
+`from math import ceil` — slightly cleaner at the call site, and signals intent. For a single use it's a toss-up, but the import style scales better if you add more math calls later.
+
+--- Candidate D ---
+`from math import ceil` — use the name directly. Also your logic is wrong: `total > size` should be `total > 0` (or just `return (total + size - 1) // size` — no import needed, handles all cases).
+
+--- Candidate E ---
+`from math import ceil` is slightly cleaner (avoids namespace pollution), but both work.
+
+Your code has a **bug at `total=0`**: returns `1` but should return `0` (zero items need zero chunks). The condition `total > size` treats `total == size` as the `else` branch, which works, but `total=0` falls through incorrectly.
+
+```python
+from math import ceil
+
+def chunk_count(total, size):
+    if total <= 0:
+        return 0
+    return ceil(total / size)
+```
+
+This handles all boundaries: `chunk_count(0, 5) → 0`, `chunk_count(5, 5) → 1`, `chunk_count(6, 5) → 2`.
+
+--- Candidate F ---
+The import is purely style — both work. Your code has a bug though: `chunk_count(0, 5)` returns `1` but should return `0`. The condition `total > size` is wrong; it should be `total > 0`.
+
+```python
+from math import ceil
+
+def chunk_count(total, size):
+    return ceil(total / size) if total > 0 else 0
+```
+
+--- Candidate G ---
+The code has a bug: `chunk_count(0, 3)` returns 1 but should return 0. The guard `if total > size else 1` is wrong — it should be `if total > 0 else 0` or just drop the conditional entirely since `math.ceil(0/size) == 0`.
+
+Fix the logic first. Then: `from math import ceil` is slightly preferable (avoids `math.` prefix, clearer intent), but it's a minor style choice — consistency with the codebase matters more.
+
+--- Candidate H ---
+`from math import ceil` — then call `ceil(total / size)` directly. Your ternary is also wrong: `total > size` should be `total > 0` (or just drop it — `ceil(0 / size)` is 0, but you return 1; decide what empty input means).
+
+
+# ITEM CEIL03
+
+USER MESSAGE:
+Rename `c` to `count`, or is `c` fine in a 6-liner?
+```python
+def average(nums):
+    s = 0
+    c = 0
+    for n in nums:
+        s += n
+        c += 1
+    return s // c
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Two bugs before the naming question:
+
+1. `average([])` crashes — `ZeroDivisionError` on `s // c` (c=0)
+2. `average([1, 2])` returns `1` not `1.5` — integer division `//` truncates
+
+Fix: `return s / c if c else 0` (or raise). Then `count` is fine but `c` is also fine in a 6-liner — this is the least important decision here.
+
+--- Candidate B ---
+Rename to `count`. Single-letter names are fine for loop indices, but `c` as an accumulator is ambiguous. `count` is self-documenting and costs nothing in a 6-liner.
+
+--- Candidate C ---
+`c` is fine in a 6-liner — the scope is tiny and the meaning is obvious from context.
+
+The real problem: the function crashes on empty input (division by zero) and uses integer division, so `average([1, 2])` returns `1` instead of `1.5`. Fix those first:
+
+```python
+def average(nums):
+    if not nums:
+        return 0  # or raise, or return None
+    return sum(nums) / len(nums)
+```
+
+If you must keep the loop, at least guard the empty case and use `/` for true division.
+
+--- Candidate D ---
+Rename to `count`. Single-letter `c` is only defensible in tight loops with obvious semantics. Here `c` accumulates a count — `count` is self-documenting and eliminates the mental pause. Zero downside.
+
+--- Candidate E ---
+Rename to `count`. Also, the function crashes on empty input (`ZeroDivisionError`), and `s // c` truncates: `average([1,2])` returns `1` not `1.5`. Use `s / c` and guard empty.
+
+--- Candidate F ---
+Rename it. `c` is ambiguous. Also `s // c` does integer division — if `nums` contains floats this silently truncates. Use `s / c` or `statistics.mean(nums)`.
+
+--- Candidate G ---
+`c` is fine here — it's a 6-line function, the scope is trivial, and `c += 1` in a loop makes the intent obvious. This is idiomatic counter naming.
+
+The real bug: `average([])` raises `ZeroDivisionError`. Also `s // c` integer-divides — `average([1,2])` returns `1` not `1.5`. Fix both:
+
+```python
+def average(nums):
+    if not nums:
+        return 0  # or raise ValueError("empty sequence")
+    return sum(nums) / len(nums)
+```
+
+--- Candidate H ---
+Rename it. `c` is ambiguous. `count` removes all ambiguity. Also your function returns integer division (`//`) — is that intentional? `average([1,2])` returns `1`, not `1.5`.
+
+
+# ITEM CEIL04
+
+USER MESSAGE:
+Worth a docstring, or obvious enough?
+```python
+def median(xs):
+    s = sorted(xs)
+    n = len(s)
+    return s[n // 2]
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Add a one-line docstring. The implementation has a subtle bug (even-length lists return upper median, not average of two middle values) — the docstring makes the behavior explicit so callers know what they're getting.
+
+--- Candidate B ---
+Yes, add a docstring. The code *looks* obvious but silently returns the lower median for even-length lists (`median([1,2,3,4])` → `3`, not `2.5`). That's a behavior call, not a given.
+
+--- Candidate C ---
+Yes, add one. The code is wrong for even-length lists — it returns the upper middle, not the median (the average of the two middle values). As written it's a bug waiting for production data.
+
+--- Candidate D ---
+Two bugs before the docstring question:
+
+1. `median([])` crashes — `IndexError` on `s[0]`
+2. `median([1, 2, 3, 4])` returns `3` not `2.5` — even-length lists need the average of the two middle elements.
+
+Fix with mid = n // 2; return (s[mid - 1] + s[mid]) / 2 if n even else s[mid]. Then yes, a one-line docstring is worth it.
+
+--- Candidate E ---
+Add a one-line docstring. The implementation returns the lower middle for even-length lists (`n // 2`), not the average of the two middle values. That's a valid definition but not the statistical median. A docstring prevents callers from assuming standard median behavior.
+
+--- Candidate F ---
+The function is wrong for even-length lists — it returns the upper middle element, not the median. `[1,2,3,4]` returns `3`, true median is `2.5`. Fix: `mid = n // 2; return (s[mid] + s[mid - 1]) / 2 if n % 2 == 0 else s[mid]`. Then a docstring is worth it.
+
+--- Candidate G ---
+The code is **wrong**, not just undocumented.
+
+**Bugs found:**
+1. **Empty list** → `IndexError` (no guard)
+2. **Even-length lists** → returns upper-middle element, not the median. `[1,2]` returns `2` (should be `1.5`); `[1,2,3,4]` returns `3` (should be `2.5`)
+
+```python
+def median(xs):
+    """Return the median of a sequence. Raises ValueError if empty."""
+    s = sorted(xs)
+    n = len(s)
+    if n == 0:
+        raise ValueError("median() arg is an empty sequence")
+    mid = n // 2
+    if n % 2 == 0:
+        return (s[mid - 1] + s[mid]) / 2
+    return s[mid]
+```
+
+A docstring is necessary *after* fixing the logic — the current behavior is silently wrong for half the inputs.
+
+--- Candidate H ---
+**No — it's wrong, not just undocumented.**
+
+The function crashes on empty lists and returns the upper middle element for even-length lists instead of averaging the two middle values. On `[1,2]` it returns `2` (should be `1.5`); on `[1,2,3,4]` it returns `3` (should be `2.5`). It only works by accident for odd-length inputs.
+
+```python
+def median(xs):
+    """Return the median of a non-empty sequence."""
+    s = sorted(xs)
+    n = len(s)
+    if n == 0:
+        raise ValueError("median of empty sequence")
+    mid = n // 2
+    if n % 2 == 1:
+        return s[mid]
+    return (s[mid - 1] + s[mid]) / 2
+```

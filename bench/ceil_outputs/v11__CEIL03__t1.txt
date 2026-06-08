@@ -1,0 +1,1 @@
+Rename it. `c` is ambiguous. `count` removes all ambiguity. Also your function returns integer division (`//`) — is that intentional? `average([1,2])` returns `1`, not `1.5`.

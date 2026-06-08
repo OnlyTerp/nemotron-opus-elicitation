@@ -1,0 +1,1 @@
+`acc` is fine here. The function is correct: empty list returns `0`, non-empty sums properly. No changes needed.

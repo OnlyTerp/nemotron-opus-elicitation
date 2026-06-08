@@ -1,0 +1,64 @@
+# ITEM CEIL03
+
+USER MESSAGE:
+Rename `c` to `count`, or is `c` fine in a 6-liner?
+```python
+def average(nums):
+    s = 0
+    c = 0
+    for n in nums:
+        s += n
+        c += 1
+    return s // c
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Two bugs before the naming question:
+
+1. `average([])` crashes — `ZeroDivisionError` on `s // c` (c=0)
+2. `average([1, 2])` returns `1` not `1.5` — integer division `//` truncates
+
+Fix: `return s / c if c else 0` (or raise). Then `count` is fine but `c` is also fine in a 6-liner — this is the least important decision here.
+
+--- Candidate B ---
+Rename to `count`. Single-letter names are fine for loop indices, but `c` as an accumulator is ambiguous. `count` is self-documenting and costs nothing in a 6-liner.
+
+--- Candidate C ---
+`c` is fine in a 6-liner — the scope is tiny and the meaning is obvious from context.
+
+The real problem: the function crashes on empty input (division by zero) and uses integer division, so `average([1, 2])` returns `1` instead of `1.5`. Fix those first:
+
+```python
+def average(nums):
+    if not nums:
+        return 0  # or raise, or return None
+    return sum(nums) / len(nums)
+```
+
+If you must keep the loop, at least guard the empty case and use `/` for true division.
+
+--- Candidate D ---
+Rename to `count`. Single-letter `c` is only defensible in tight loops with obvious semantics. Here `c` accumulates a count — `count` is self-documenting and eliminates the mental pause. Zero downside.
+
+--- Candidate E ---
+Rename to `count`. Also, the function crashes on empty input (`ZeroDivisionError`), and `s // c` truncates: `average([1,2])` returns `1` not `1.5`. Use `s / c` and guard empty.
+
+--- Candidate F ---
+Rename it. `c` is ambiguous. Also `s // c` does integer division — if `nums` contains floats this silently truncates. Use `s / c` or `statistics.mean(nums)`.
+
+--- Candidate G ---
+`c` is fine here — it's a 6-line function, the scope is trivial, and `c += 1` in a loop makes the intent obvious. This is idiomatic counter naming.
+
+The real bug: `average([])` raises `ZeroDivisionError`. Also `s // c` integer-divides — `average([1,2])` returns `1` not `1.5`. Fix both:
+
+```python
+def average(nums):
+    if not nums:
+        return 0  # or raise ValueError("empty sequence")
+    return sum(nums) / len(nums)
+```
+
+--- Candidate H ---
+Rename it. `c` is ambiguous. `count` removes all ambiguity. Also your function returns integer division (`//`) — is that intentional? `average([1,2])` returns `1`, not `1.5`.

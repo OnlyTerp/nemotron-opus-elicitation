@@ -1,0 +1,24 @@
+<<<BEGIN v11__CEIL01__t1>>>
+Add them. The types also catch the bug: your loop runs `range(len(xs) - k)` but should be `range(len(xs) - k + 1)` to include the final window. Type hints won't fix logic, but they force you to look at the signature twice.
+<<<END v11__CEIL01__t1>>>
+<<<BEGIN v11__CEIL02__t1>>>
+`from math import ceil` — then call `ceil(total / size)` directly. Your ternary is also wrong: `total > size` should be `total > 0` (or just drop it — `ceil(0 / size)` is 0, but you return 1; decide what empty input means).
+<<<END v11__CEIL02__t1>>>
+<<<BEGIN v11__CEIL03__t1>>>
+Rename it. `c` is ambiguous. `count` removes all ambiguity. Also your function returns integer division (`//`) — is that intentional? `average([1,2])` returns `1`, not `1.5`.
+<<<END v11__CEIL03__t1>>>
+<<<BEGIN v11__CEIL04__t1>>>
+Yes, add a docstring. The code *looks* obvious but silently returns the lower median for even-length lists (`median([1,2,3,4])` → `3`, not `2.5`). That's a behavior call, not a given.
+<<<END v11__CEIL04__t1>>>
+<<<BEGIN v11__CEIL05__t1>>>
+`fib` is fine — it's the universal name. Your implementation has an off-by-one: `fib(1)` returns `0`, `fib(2)` returns `1`. If you want 1-indexed (where `fib(1)=1`), change `range(n - 1)` to `range(n)` and return `b`. Pick one and document it.
+<<<END v11__CEIL05__t1>>>
+<<<BEGIN v11__CEIL06__t1>>>
+Black it. The logic is correct and Black won't change behavior. The only real improvement is using `collections.Counter`. But for a 9-liner the manual dict is readable enough. Run Black, move on.
+<<<END v11__CEIL06__t1>>>
+<<<BEGIN v11__CEIL07__t1>>>
+Rename to `total` or `sum_`. The function *is* `total` — the variable should mirror the function name. `acc` buys you nothing in 4 lines.
+<<<END v11__CEIL07__t1>>>
+<<<BEGIN v11__CEIL08__t1>>>
+Leave it. Black won't change a single character — it's already idiomatic `max(lo, min(hi, x))` order. The name `clamp` is standard.
+<<<END v11__CEIL08__t1>>>

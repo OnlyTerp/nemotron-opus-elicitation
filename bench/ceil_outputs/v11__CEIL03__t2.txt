@@ -1,0 +1,1 @@
+Rename it. `c` is ambiguous. Also `s // c` does integer division — if `nums` contains floats this silently truncates. Use `s / c` or `statistics.mean(nums)`.

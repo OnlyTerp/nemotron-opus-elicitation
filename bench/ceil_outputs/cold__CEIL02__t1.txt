@@ -1,0 +1,1 @@
+`from math import ceil` — cleaner at the call site. The `import math` style pays off when you use 3+ functions from the same module; here it's just noise. For a 3-liner, the import-specific form wins on readability.

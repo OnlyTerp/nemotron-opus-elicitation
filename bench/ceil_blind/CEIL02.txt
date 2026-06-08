@@ -1,0 +1,57 @@
+# ITEM CEIL02
+
+USER MESSAGE:
+`import math` or `from math import ceil` here — just a style call?
+```python
+import math
+def chunk_count(total, size):
+    return math.ceil(total / size) if total > size else 1
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`from math import ceil` — cleaner at the call site. The `import math` style pays off when you use 3+ functions from the same module; here it's just noise. For a 3-liner, the import-specific form wins on readability.
+
+--- Candidate B ---
+`from math import ceil` — marginally better. Separately, the logic has an edge-case bug: `total=0, size=3` returns `1` (should be `0`). The condition `total > size` should be `total > 0`, or use `(total + size - 1) // size`.
+
+--- Candidate C ---
+`from math import ceil` — slightly cleaner at the call site, and signals intent. For a single use it's a toss-up, but the import style scales better if you add more math calls later.
+
+--- Candidate D ---
+`from math import ceil` — use the name directly. Also your logic is wrong: `total > size` should be `total > 0` (or just `return (total + size - 1) // size` — no import needed, handles all cases).
+
+--- Candidate E ---
+`from math import ceil` is slightly cleaner (avoids namespace pollution), but both work.
+
+Your code has a **bug at `total=0`**: returns `1` but should return `0` (zero items need zero chunks). The condition `total > size` treats `total == size` as the `else` branch, which works, but `total=0` falls through incorrectly.
+
+```python
+from math import ceil
+
+def chunk_count(total, size):
+    if total <= 0:
+        return 0
+    return ceil(total / size)
+```
+
+This handles all boundaries: `chunk_count(0, 5) → 0`, `chunk_count(5, 5) → 1`, `chunk_count(6, 5) → 2`.
+
+--- Candidate F ---
+The import is purely style — both work. Your code has a bug though: `chunk_count(0, 5)` returns `1` but should return `0`. The condition `total > size` is wrong; it should be `total > 0`.
+
+```python
+from math import ceil
+
+def chunk_count(total, size):
+    return ceil(total / size) if total > 0 else 0
+```
+
+--- Candidate G ---
+The code has a bug: `chunk_count(0, 3)` returns 1 but should return 0. The guard `if total > size else 1` is wrong — it should be `if total > 0 else 0` or just drop the conditional entirely since `math.ceil(0/size) == 0`.
+
+Fix the logic first. Then: `from math import ceil` is slightly preferable (avoids `math.` prefix, clearer intent), but it's a minor style choice — consistency with the codebase matters more.
+
+--- Candidate H ---
+`from math import ceil` — then call `ceil(total / size)` directly. Your ternary is also wrong: `total > size` should be `total > 0` (or just drop it — `ceil(0 / size)` is 0, but you return 1; decide what empty input means).

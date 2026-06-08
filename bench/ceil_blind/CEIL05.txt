@@ -1,0 +1,59 @@
+# ITEM CEIL05
+
+USER MESSAGE:
+Is `fib` a clear enough name, or should I spell it out?
+```python
+def fib(n):
+    a, b = 0, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return a
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+`fib` is fine — it's the universal name. Your implementation has an off-by-one: `fib(1)` returns `0`, `fib(2)` returns `1`. If you want 1-indexed (where `fib(1)=1`), change `range(n - 1)` to `range(n)` and return `b`. Pick one and document it.
+
+--- Candidate B ---
+`fib` is fine — it's the universal shorthand for Fibonacci. Spelling out `fibonacci` adds 7 characters for zero clarity gain. Keep `fib`.
+
+--- Candidate C ---
+`fib` is the standard abbreviation — it's clear. The real problem: your function is wrong at the boundaries.
+
+```
+fib(0) = 0   # correct
+fib(1) = 0   # WRONG — should be 1
+fib(2) = 1   # correct
+```
+
+Fix: start `a, b = 0, 1` and loop `n` times (not `n-1`):
+
+```python
+def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+```
+
+Now `fib(0)=0`, `fib(1)=1`, `fib(2)=1`, `fib(3)=2`… all correct.
+
+--- Candidate D ---
+`fib` is fine — it's the universal name for Fibonacci. Spelling it out adds noise without clarity. If the module has multiple sequence generators, consider a namespace, but as a standalone function the abbreviation is standard.
+
+--- Candidate E ---
+Bug first: `fib(1)` returns `0` (should be `1`), `fib(3)` returns `1` (should be `2`). The loop runs `n-1` times but needs `n` times — change `range(n - 1)` to `range(n)`.
+
+`fib` is fine — standard, unambiguous in this context.
+
+--- Candidate F ---
+`fib` is fine. The bug is the implementation: this returns `F(n-1)`. `fib(1)=0`, `fib(2)=1`, `fib(3)=1` — standard expects `fib(1)=1, fib(2)=1, fib(3)=2`. Fix: `for _ in range(n):` not `n-1`.
+
+--- Candidate G ---
+`fib` is clear — universally recognized shorthand. But the function has an off-by-one bug: it returns F(n−1) instead of F(n). `fib(1)` returns 0, should be 1; `fib(10)` returns 34, should be 55.
+
+Fix: change `range(n - 1)` to `range(n)` and return `b` (or initialize `a, b = 1, 1` and loop `n-1` times for 1-indexed).
+
+--- Candidate H ---
+`fib` is fine. The real issue: your function returns F(n-1), not F(n). `fib(1)` returns 0, `fib(2)` returns 1. Standard: F(0)=0, F(1)=1. Fix the loop to `range(n)` and return `a`. Also add a guard for `n <= 0`.

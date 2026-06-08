@@ -1,0 +1,1 @@
+Leave it. This is a classic one-liner idiom — Black would keep it as-is. The `max(lo, min(hi, x))` pattern is instantly recognizable; reformatting would add noise without signal.

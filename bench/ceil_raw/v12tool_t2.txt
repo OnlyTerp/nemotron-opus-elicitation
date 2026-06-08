@@ -1,0 +1,85 @@
+<<<BEGIN v12tool__CEIL01__t2>>>
+Add type hints — the function has an off-by-one bug that hints would help catch. `range(len(xs) - k)` should be `range(len(xs) - k + 1)`; currently `[1,2,3,4]` with `k=2` returns `[1.5, 2.5]` instead of `[1.5, 2.5, 3.5]`, and `[1,2,3]` with `k=3` returns `[]` instead of `[2.0]`.
+
+```python
+from typing import Sequence
+
+def moving_average(xs: Sequence[float], k: int) -> list[float]:
+    out = []
+    for i in range(len(xs) - k + 1):
+        out.append(sum(xs[i:i+k]) / k)
+    return out
+```
+<<<END v12tool__CEIL01__t2>>>
+<<<BEGIN v12tool__CEIL02__t2>>>
+The import is purely style — both work. Your code has a bug though: `chunk_count(0, 5)` returns `1` but should return `0`. The condition `total > size` is wrong; it should be `total > 0`.
+
+```python
+from math import ceil
+
+def chunk_count(total, size):
+    return ceil(total / size) if total > 0 else 0
+```
+<<<END v12tool__CEIL02__t2>>>
+<<<BEGIN v12tool__CEIL03__t2>>>
+`c` is fine here — it's a 6-line function, the scope is trivial, and `c += 1` in a loop makes the intent obvious. This is idiomatic counter naming.
+
+The real bug: `average([])` raises `ZeroDivisionError`. Also `s // c` integer-divides — `average([1,2])` returns `1` not `1.5`. Fix both:
+
+```python
+def average(nums):
+    if not nums:
+        return 0  # or raise ValueError("empty sequence")
+    return sum(nums) / len(nums)
+```
+<<<END v12tool__CEIL03__t2>>>
+<<<BEGIN v12tool__CEIL04__t2>>>
+**No — it's wrong, not just undocumented.**
+
+The function crashes on empty lists and returns the upper middle element for even-length lists instead of averaging the two middle values. On `[1,2]` it returns `2` (should be `1.5`); on `[1,2,3,4]` it returns `3` (should be `2.5`). It only works by accident for odd-length inputs.
+
+```python
+def median(xs):
+    """Return the median of a non-empty sequence."""
+    s = sorted(xs)
+    n = len(s)
+    if n == 0:
+        raise ValueError("median of empty sequence")
+    mid = n // 2
+    if n % 2 == 1:
+        return s[mid]
+    return (s[mid - 1] + s[mid]) / 2
+```
+<<<END v12tool__CEIL04__t2>>>
+<<<BEGIN v12tool__CEIL05__t2>>>
+`fib` is the standard abbreviation — it's clear. The real problem: your function is wrong at the boundaries.
+
+```
+fib(0) = 0   # correct
+fib(1) = 0   # WRONG — should be 1
+fib(2) = 1   # correct
+```
+
+Fix: start `a, b = 0, 1` and loop `n` times (not `n-1`):
+
+```python
+def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+```
+
+Now `fib(0)=0`, `fib(1)=1`, `fib(2)=1`, `fib(3)=2`… all correct.
+<<<END v12tool__CEIL05__t2>>>
+<<<BEGIN v12tool__CEIL06__t2>>>
+The code works correctly. In Python 3.7+, `dict` preserves insertion order, so iterating over `counts` yields characters in their first-appearance order. All test cases pass: empty string → `None`, single char → that char, repeated → `None`, and `'leetcode'` → `'l'`, `'loveleetcode'` → `'v'`.
+
+No bug to fix. Leave it.
+<<<END v12tool__CEIL06__t2>>>
+<<<BEGIN v12tool__CEIL07__t2>>>
+`acc` works but is terse. Rename to `sum_` (avoids shadowing built-in `sum`) or `result`. `total` shadows the function name. The logic is correct.
+<<<END v12tool__CEIL07__t2>>>
+<<<BEGIN v12tool__CEIL08__t2>>>
+**Black.** It's the standard three-line clamp — correct for all normal inputs (lo ≤ hi). The lo > hi case returns the max bound, which is consistent with the math but usually treated as a caller error. This is the canonical form.
+<<<END v12tool__CEIL08__t2>>>

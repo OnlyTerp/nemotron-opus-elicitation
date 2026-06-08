@@ -1,0 +1,1 @@
+Add them. The types also catch the bug: your loop runs `range(len(xs) - k)` but should be `range(len(xs) - k + 1)` to include the final window. Type hints won't fix logic, but they force you to look at the signature twice.

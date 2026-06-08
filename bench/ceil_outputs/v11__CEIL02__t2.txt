@@ -1,0 +1,1 @@
+`from math import ceil` — use the name directly. Also your logic is wrong: `total > size` should be `total > 0` (or just `return (total + size - 1) // size` — no import needed, handles all cases).

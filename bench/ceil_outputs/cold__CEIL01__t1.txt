@@ -1,0 +1,1 @@
+Add type hints — it's a 5-line function but the signature `moving_average(xs, k)` is ambiguous. `def moving_average(xs: list[float], k: int) -> list[float]:` costs nothing and prevents misuse. If this stays private/throwaway, skip it; otherwise, annotate.

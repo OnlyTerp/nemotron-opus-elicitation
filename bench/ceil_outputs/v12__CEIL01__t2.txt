@@ -1,0 +1,1 @@
+The code has an off-by-one bug: `range(len(xs) - k)` produces `len(xs) - k` windows, but a moving average of window `k` over `n` elements should yield `n - k + 1` windows. Test: `xs=[1,2,3,4], k=2` expects 3 windows `[1.5, 2.5, 3.5]`, gets 2 `[1.5, 2.5]`. Fix: `range(len(xs) - k + 1)`. Then add type hints.

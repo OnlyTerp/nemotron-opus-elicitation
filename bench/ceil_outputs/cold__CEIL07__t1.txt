@@ -1,0 +1,1 @@
+Rename to `total` or `result`. `acc` is a common abbreviation for "accumulator" but it's still an abbreviation — `total` matches the function name and reads naturally. `sum_` works too if you want to avoid shadowing the builtin.

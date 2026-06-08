@@ -1,0 +1,19 @@
+`fib` is the standard abbreviation — it's clear. The real problem: your function is wrong at the boundaries.
+
+```
+fib(0) = 0   # correct
+fib(1) = 0   # WRONG — should be 1
+fib(2) = 1   # correct
+```
+
+Fix: start `a, b = 0, 1` and loop `n` times (not `n-1`):
+
+```python
+def fib(n):
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+```
+
+Now `fib(0)=0`, `fib(1)=1`, `fib(2)=1`, `fib(3)=2`… all correct.

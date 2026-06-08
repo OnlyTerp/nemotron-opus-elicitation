@@ -1,0 +1,24 @@
+<<<BEGIN v11__CEIL01__t2>>>
+Add them. The function takes a sequence and an int, returns a list of floats. `def moving_average(xs: Sequence[float], k: int) -> list[float]:` costs nothing and prevents the classic bug where someone passes a string or numpy array.
+<<<END v11__CEIL01__t2>>>
+<<<BEGIN v11__CEIL02__t2>>>
+`from math import ceil` — use the name directly. Also your logic is wrong: `total > size` should be `total > 0` (or just `return (total + size - 1) // size` — no import needed, handles all cases).
+<<<END v11__CEIL02__t2>>>
+<<<BEGIN v11__CEIL03__t2>>>
+Rename it. `c` is ambiguous. Also `s // c` does integer division — if `nums` contains floats this silently truncates. Use `s / c` or `statistics.mean(nums)`.
+<<<END v11__CEIL03__t2>>>
+<<<BEGIN v11__CEIL04__t2>>>
+Yes, add one. The code is wrong for even-length lists — it returns the upper middle, not the median (the average of the two middle values). As written it's a bug waiting for production data.
+<<<END v11__CEIL04__t2>>>
+<<<BEGIN v11__CEIL05__t2>>>
+`fib` is fine. The real issue: your function returns F(n-1), not F(n). `fib(1)` returns 0, `fib(2)` returns 1. Standard: F(0)=0, F(1)=1. Fix the loop to `range(n)` and return `a`. Also add a guard for `n <= 0`.
+<<<END v11__CEIL05__t2>>>
+<<<BEGIN v11__CEIL06__t2>>>
+Black it. The code is already clean. Run Black on the whole project, stop bikeshedding.
+<<<END v11__CEIL06__t2>>>
+<<<BEGIN v11__CEIL07__t2>>>
+`acc` → `total`. The function is literally called `total` — the variable should match. Also: just use `return sum(nums)`.
+<<<END v11__CEIL07__t2>>>
+<<<BEGIN v11__CEIL08__t2>>>
+Black it. It's one line, already idiomatic, Black won't change it. Consistency > preference.
+<<<END v11__CEIL08__t2>>>
