@@ -1,0 +1,84 @@
+<svg width="1280" height="440" viewBox="0 0 1280 440" fill="none" xmlns="http://www.w3.org/2000/svg" font-family="'Inter','Segoe UI',Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="440" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#141414"/>
+      <stop offset="0.55" stop-color="#16161d"/>
+      <stop offset="1" stop-color="#101018"/>
+    </linearGradient>
+    <radialGradient id="glow1" cx="0" cy="0" r="1" gradientTransform="translate(250 110) scale(520)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7A84FF" stop-opacity="0.32"/>
+      <stop offset="1" stop-color="#7A84FF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="0" cy="0" r="1" gradientTransform="translate(1120 380) scale(560)" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#35C89A" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#35C89A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="title" x1="64" y1="150" x2="760" y2="210" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#C7D2FE"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="64" y1="0" x2="64" y2="440" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7A84FF"/>
+      <stop offset="0.5" stop-color="#A78CFF"/>
+      <stop offset="1" stop-color="#35C89A"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="440" rx="20" fill="url(#bg)"/>
+  <rect width="1280" height="440" rx="20" fill="url(#glow1)"/>
+  <rect width="1280" height="440" rx="20" fill="url(#glow2)"/>
+  <rect x="0.5" y="0.5" width="1279" height="439" rx="19.5" fill="none" stroke="#2E2E2E"/>
+
+  <!-- faint grid -->
+  <g stroke="#2E2E2E" stroke-opacity="0.35">
+    <path d="M0 110 H1280"/><path d="M0 220 H1280"/><path d="M0 330 H1280"/>
+    <path d="M320 0 V440"/><path d="M640 0 V440"/><path d="M960 0 V440"/>
+  </g>
+
+  <!-- accent bar -->
+  <rect x="64" y="96" width="6" height="120" rx="3" fill="url(#accent)"/>
+
+  <!-- eyebrow -->
+  <text x="92" y="92" fill="#9CA3AF" font-size="17" letter-spacing="4" font-weight="600">PROMPT ELICITATION · NO FINE-TUNING</text>
+
+  <!-- title -->
+  <text x="90" y="172" fill="url(#title)" font-size="60" font-weight="800" letter-spacing="-1.5">nemotron-opus-elicitation</text>
+
+  <!-- tagline -->
+  <text x="92" y="216" fill="#D1D5DB" font-size="25" font-weight="500">Make Nemotron 3 Ultra warm, honest, and reliable — without fine-tuning.</text>
+
+  <!-- subtag -->
+  <text x="92" y="252" fill="#9CA3AF" font-size="18">A 353-word system prompt, earned over 25 controlled experiments with blind dual-judge grading.</text>
+
+  <!-- stat pills -->
+  <g transform="translate(92 296)">
+    <g>
+      <rect width="186" height="100" rx="14" fill="#1b1b24" stroke="#2E2E2E"/>
+      <text x="20" y="44" fill="#7A84FF" font-size="34" font-weight="800">353</text>
+      <text x="20" y="72" fill="#9CA3AF" font-size="14">words · zero tools</text>
+    </g>
+    <g transform="translate(206 0)">
+      <rect width="186" height="100" rx="14" fill="#1b1b24" stroke="#2E2E2E"/>
+      <text x="20" y="44" fill="#A78CFF" font-size="34" font-weight="800">25</text>
+      <text x="20" y="72" fill="#9CA3AF" font-size="14">experiments</text>
+    </g>
+    <g transform="translate(412 0)">
+      <rect width="226" height="100" rx="14" fill="#1b1b24" stroke="#2E2E2E"/>
+      <text x="20" y="45" fill="#35C89A" font-size="28" font-weight="800">2/10 → 10/10</text>
+      <text x="20" y="72" fill="#9CA3AF" font-size="14">silent code-bug recall</text>
+    </g>
+    <g transform="translate(658 0)">
+      <rect width="226" height="100" rx="14" fill="#1b1b24" stroke="#2E2E2E"/>
+      <text x="20" y="45" fill="#F29A45" font-size="28" font-weight="800">1/4 → 4/4</text>
+      <text x="20" y="72" fill="#9CA3AF" font-size="14">validate-first VOICE</text>
+    </g>
+  </g>
+
+  <!-- right side mono badge -->
+  <g transform="translate(992 300)" font-family="'JetBrains Mono','SFMono-Regular',Consolas,monospace">
+    <rect width="216" height="100" rx="14" fill="#12121a" stroke="#3a3a4a"/>
+    <circle cx="22" cy="26" r="5" fill="#F53B3A"/><circle cx="40" cy="26" r="5" fill="#F29A45"/><circle cx="58" cy="26" r="5" fill="#35C89A"/>
+    <text x="20" y="58" fill="#7A84FF" font-size="13">$ cp v16_*.md \</text>
+    <text x="20" y="78" fill="#C7D2FE" font-size="13">  agents/AGENT.md</text>
+  </g>
+</svg>

@@ -1,5 +1,17 @@
 # nemotron-opus-elicitation
 
+<p align="center">
+  <img src="assets/hero.svg" alt="nemotron-opus-elicitation — make Nemotron 3 Ultra warm, honest, and reliable without fine-tuning. A 353-word system prompt earned over 25 controlled experiments." width="100%">
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/license-MIT-7A84FF?style=flat-square" alt="MIT License">
+  <img src="https://img.shields.io/badge/prompt-353%20words-A78CFF?style=flat-square" alt="353-word prompt">
+  <img src="https://img.shields.io/badge/experiments-25-35C89A?style=flat-square" alt="25 experiments">
+  <img src="https://img.shields.io/badge/grading-blind%20dual--judge-F29A45?style=flat-square" alt="blind dual-judge grading">
+  <img src="https://img.shields.io/badge/fine--tuning-none-3EB8ED?style=flat-square" alt="no fine-tuning">
+</p>
+
 **Make Nemotron 3 Ultra warm, honest, and reliable — without fine-tuning.**
 
 Nemotron 3 Ultra is a powerful model with a personality problem. By default it:
@@ -18,6 +30,10 @@ That's it. 353 words. No tools, no scaffolding, no fine-tuning.
 
 ## What it actually does
 
+<p align="center">
+  <img src="assets/before-after.svg" alt="Four default Nemotron behaviors and how v16 fixes each, with blind dual-judge evidence." width="100%">
+</p>
+
 | Problem | Before (cold) | After (v16) | Evidence |
 |---|---|---|---|
 | Flat "No." on "check me" prompts | Opens with "No." / "Not quite" | "That's close but incomplete..." / "That's real anxiety." | EXP14: cold 1/4 → v16 4/4 VOICE |
@@ -26,7 +42,15 @@ That's it. 353 words. No tools, no scaffolding, no fine-tuning.
 | Personality (matches user energy) | Flat professional | "Hell yeah", "Nope", "Done" | EXP22-23 |
 | Over-skepticism (inventing bugs in correct code) | 0/6 false positives | 0/6 | EXP05, EXP14 |
 
+<p align="center">
+  <img src="assets/evidence.png" alt="Bar chart: bare Nemotron vs v16 pass-rate by axis (VOICE 25 to 100, silent code-bug recall 20 to 100, clean-code precision 100 to 100, mixed battery 75 to 100, process-narration 85 to 100)." width="100%">
+</p>
+
 ## How it works
+
+<p align="center">
+  <img src="assets/levers.svg" alt="The audit-then-supply method and the four dispositions v16 installs: validate-first, premise-first, execute-verify, register match." width="100%">
+</p>
 
 The prompt installs three dispositions Nemotron already *has* but doesn't reliably *use*:
 
@@ -39,6 +63,10 @@ The prompt installs three dispositions Nemotron already *has* but doesn't reliab
 All three are dispositions the model already performs — the prompt just makes them fire reliably.
 
 ## Template lineage
+
+<p align="center">
+  <img src="assets/lineage.svg" alt="Template lineage timeline from v7/v8 through v16 (recommended), with the defect each version fixed." width="100%">
+</p>
 
 | Version | What changed | Key result |
 |---|---|---|
@@ -58,7 +86,7 @@ Yes. The effect is a **Nemotron-specific disposition repair**, not a universal p
 
 - **Make Nemotron smarter.** It doesn't lift the capability ceiling. The hardest logic bugs defeat every prompt variant equally.
 - **Guarantee every response.** It raises the floor and makes failures rarer, but prompting has a ceiling. For the hardest code-correctness cases, a real code execution sandbox beats even the best prompt.
-- **Replace fine-tuning.** The Opus-candid dataset (7K conversations) is included in `opus-datasets/` for anyone who wants to fine-tune. Prompting installs the dispositions; fine-tuning would install them more reliably.
+- **Replace fine-tuning.** Prompting installs the dispositions; fine-tuning would install them more reliably. The Opus-candid dataset (6,771 conversations) used to extract the voice moves in R15 is published separately on Hugging Face by its original author — [Verdugie/opus-candid-training-data](https://huggingface.co/Verdugie/opus-candid-training-data) — and is **not** bundled in this repo (see [Acknowledgments](#acknowledgments)).
 
 ## Repo structure
 
@@ -68,24 +96,27 @@ Yes. The effect is a **Nemotron-specific disposition repair**, not a universal p
 | `USAGE.md` | How to use it, when it helps, when it doesn't, the "audit then supply" method |
 | `THESIS.md` | The full research arc (15 refinements, 25 experiments) for the curious |
 | `experiments/` | Each experiment: design, results, honest caveats |
-| `bench/` | Test banks, generation harness, blind grading infrastructure |
-| `opus-datasets/` | Opus-candid personality data (7K conversations) for fine-tuning |
+| `bench/` | Test banks, grading rubrics, and scoring scripts |
 | `findings/` | Early external reviews, dataset provenance |
 
-## Running the experiments
+## Reproducing the experiments
 
-Everything is reproducible. The bench harness uses Nemotron via Devin's `run_subagent` (profile `nemotron-ultra`), file-based generation with a topic-validator to prevent cross-wiring, and blind grading by two non-Nemotron judges (MiMo v2.5 Pro + MiniMax-M3).
+What's committed is the **source of truth** for every experiment: the prompt templates (`templates/`), the frozen test banks (`bench/testbank_*.md`), the grading rubrics (`bench/*_rubric.md`), the scoring / auto-grading scripts (`bench/score.py`, `bench/grade_*.py`), and a design + results + honest-caveats writeup per experiment (`experiments/`).
 
+Generation dispatches each test bank to the model under test — Nemotron 3 Ultra via Devin's `run_subagent` (profile `nemotron-ultra`) — with a topic-validator that prevents cross-wiring, then blind-grades every output with two non-Nemotron judges (MiMo v2.5 Pro + MiniMax-M3). The per-run intermediates (prompts, raw outputs, judge transcripts) are regenerable and intentionally git-ignored — see [`.gitignore`](.gitignore).
+
+```bash
+cd bench
+
+# Score the held-out confirmatory battery (EXP09) from judge grades
+python3 score.py        # reads keymap.json + grades/, writes results.md
+
+# Auto-grade the fabrication / reasoning banks
+python3 grade_fab.py    # EXP21 (fabrication)
+python3 grade_reason.py # EXP20 (reasoning)
 ```
-# Generate (cold arm, mixed battery)
-cd bench && python3 build_mixed.py
 
-# Grade blind
-# (dispatches to judges via run_subagent, writes to grades/)
-
-# Score
-python3 score_mixed.py
-```
+Each `experiments/EXPxx_*.md` documents exactly how that run was produced and judged.
 
 ## License
 
