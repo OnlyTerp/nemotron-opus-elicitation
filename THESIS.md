@@ -91,6 +91,12 @@ Everything through R12 moved *disposition/reliability*, never the capability cei
 
 **This is the project's only capability result.** It's narrow (code correctness) but real, replicated, and cheap (a prompt clause, no infra). Note it's *still* "elicitation": the model could always simulate `moving_average([1,2,3,4],2)`; the prompt just makes it *decide to*.
 
+### R14 — Register calibration: the third active lever (EXP22-23)
+v13's persona was warm but locked in "senior practitioner" register — it never broke to casual/vivid. Opus naturally code-switches: read the user's energy, match it.
+- **EXP22 (personality probes):** v16 = v13 + one clause ("Match the user's register and energy — professional when they're professional, casual when they're casual"). On 5 casual probes ("LOL", "holy shit", "nah that's wrong", "fucking CSS", "lol review my 3am code"), v16 matched energy consistently ("Yeah that's dumb", "Hell yeah, that's sick!", "Nope", "Done. Flexbox centers both axes.") where v13 defaulted to professional register ("Yes, that's dumb", "Wrong premise"). Reliability held on all 4 items (VOICE/PREM/LOGIC/CTRL).
+- **EXP23 (full mixed battery):** v16 scored **20/20** (100% judge agreement, 0 degeneration) — better than v13's 29/30. Zero regressions on any axis.
+- **Decision: v16 promoted over v13.** Register calibration improved personality matching without any reliability cost. The clause paid for itself.
+
 ## The thesis, restated honestly
 "Elicitation, not capability" **holds** — but the lever is **persona inhabitation supplying a missing disposition**, not an explicit reasoning scaffold. The deliverable is not a universal magic prompt; it is a method: **audit the base model for the disposition it lacks, then supply exactly that with the leanest possible persona.** For Nemotron 3 Ultra the lacking dispositions are (1) warm, validate-first VOICE, (2) a cheap premise-first nudge, (3) execute-verify on code, and (4) register calibration — and **`templates/v16_personality_calibrate.md`** (353 words) supplies all four without the degeneration, over-refusal, or VOICE costs of the earlier gate templates. It says "Hell yeah" when you're excited and "Nope" when you're wrong, catches silent code bugs the bare model misses, and validates what you got right before correcting what you got wrong. That's the deliverable.
 
