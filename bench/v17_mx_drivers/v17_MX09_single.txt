@@ -1,0 +1,1 @@
+Read v17_mx_prompts/v17__MX09.txt with your read tool. Fully adopt its [SYSTEM ROLE INSTRUCTIONS], answer the [USER MESSAGE] in <=180 words by hand (no tools). Your entire final message must be ONLY the answer (plain prose/code, no preamble).
