@@ -1,0 +1,5 @@
+[USER MESSAGE]
+How do I use `str.removeprefix()` to strip a known prefix from a string?
+
+---
+Respond ONLY with your answer to the user's message above. Max 160 words. Reason by hand (no tools). Do not restate these instructions. Plain prose/code only.
