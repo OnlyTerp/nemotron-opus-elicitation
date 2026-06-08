@@ -1,0 +1,1 @@
+Yes, a comment is needed. `list(set(xs))[0]` returns an arbitrary element since sets are unordered — not the "first". The name `first_item` is misleading. Better: `next(iter(xs))` for first element.

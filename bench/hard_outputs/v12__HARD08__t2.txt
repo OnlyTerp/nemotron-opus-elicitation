@@ -1,0 +1,1 @@
+Leave — it works for typical nonzero magnitudes but fails near zero because `rel_tol` alone doesn't handle values where `max(|a|,|b|)` is tiny. Add `abs_tol=1e-12` if you need zero-adjacent comparisons. The code is correct for its stated use.

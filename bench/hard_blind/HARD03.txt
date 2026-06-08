@@ -1,0 +1,31 @@
+# ITEM HARD03
+
+USER MESSAGE:
+Worth a docstring?
+```python
+def drop_zeros(d):
+    for k in d:
+        if d[k] == 0:
+            del d[k]
+    return d
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Yes, worth a docstring. The function mutates the input dict in-place while also returning it — this dual behavior is surprising. A docstring should warn: "Removes keys with value 0 from dict `d` in-place and returns `d`." Better: return a new dict `{k:v for k,v in d.items() if v != 0}` to avoid mutation surprises.
+
+--- Candidate B ---
+No. The function is broken — it raises `RuntimeError: dictionary changed size during iteration` on any input containing zero values. Fix: `for k in list(d.keys()):` or a comprehension `return {k: v for k, v in d.items() if v != 0}`. A docstring on broken code is noise.
+
+--- Candidate C ---
+Yes, a docstring is warranted. The function mutates the input dict in-place AND returns it. Also, iterating while deleting from a dict raises `RuntimeError: dictionary changed size during iteration` in Python 3. The code is broken as written. Better: return a new dict `{k: v for k, v in d.items() if v != 0}`.
+
+--- Candidate D ---
+Yes, it needs a docstring — but first, it crashes. Iterating `for k in d` while deleting keys raises `RuntimeError: dictionary changed size during iteration`. Fix: `def drop_zeros(d): return {k: v for k, v in d.items() if v != 0}` (non-mutating) or collect keys first. A docstring won't save broken code.
+
+--- Candidate E ---
+No — the code is broken. Iterating over `d` while deleting from it raises `RuntimeError: dictionary changed size during iteration`. Fix: `for k in list(d):` (iterate over a static list of keys) or a comprehension `return {k: v for k, v in d.items() if v != 0}`. Worth a docstring after it works.
+
+--- Candidate F ---
+No — the code is broken. Iterating over `d` while deleting from it raises `RuntimeError: dictionary changed size during iteration`. Fix: `for k in list(d):` or a comprehension `return {k: v for k, v in d.items() if v != 0}`. Worth a docstring after it works.

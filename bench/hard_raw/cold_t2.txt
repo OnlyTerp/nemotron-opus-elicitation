@@ -1,0 +1,24 @@
+<<<BEGIN cold__HARD01__t2>>>
+`r` is too short — it's ambiguous and not descriptive. But the real problem is the mutable default argument `r=[]`. This creates a shared list across all calls without an explicit argument, causing bugs where tags accumulate unexpectedly. Fix: use `r=None` and initialize inside: `if r is None: r = []`. Also rename to `result` or `tags`.
+<<<END cold__HARD01__t2>>>
+<<<BEGIN cold__HARD02__t2>>>
+Leave it. Black would change nothing. `round(x, 2)` is clear for monetary rounding to cents. However, consider `decimal.Decimal` for financial precision since `round()` uses banker's rounding and floats have representation issues (e.g., `round(2.675, 2) == 2.67`).
+<<<END cold__HARD02__t2>>>
+<<<BEGIN cold__HARD03__t2>>>
+Yes, a docstring is warranted. The function mutates the input dict in-place AND returns it. Also, iterating while deleting from a dict raises `RuntimeError: dictionary changed size during iteration` in Python 3. The code is broken as written. Better: return a new dict `{k: v for k, v in d.items() if v != 0}`.
+<<<END cold__HARD03__t2>>>
+<<<BEGIN cold__HARD04__t2>>>
+One line is fine. The function is trivial: identity check via `is`. However, `same` is a poor name — it suggests equality (`==`), not identity. Rename to `is_same_object` if identity is truly intended; otherwise use `==` for equality.
+<<<END cold__HARD04__t2>>>
+<<<BEGIN cold__HARD05__t2>>>
+Yes, rename `lst`. The function also has a bug: `list.sort()` returns `None`, mutating in-place. So `sort_desc` returns `None`, not the sorted list. Fix: return `sorted(lst, reverse=True)`.
+<<<END cold__HARD05__t2>>>
+<<<BEGIN cold__HARD06__t2>>>
+Yes, a comment is needed. `list(set(xs))[0]` returns an arbitrary element since sets are unordered — not the "first". The name `first_item` is misleading. Better: `next(iter(xs))` for first element.
+<<<END cold__HARD06__t2>>>
+<<<BEGIN cold__HARD07__t2>>>
+A docstring is useful but not critical. `dict.fromkeys(xs)` preserves insertion order (Python 3.7+) and dedupes efficiently. The behavior is clear. No mutation, no side effects. Correct.
+<<<END cold__HARD07__t2>>>
+<<<BEGIN cold__HARD08__t2>>>
+Leave it. `math.isclose` with explicit `rel_tol=1e-9` is good practice. Consider adding `abs_tol` for near-zero values. No formatting changes needed.
+<<<END cold__HARD08__t2>>>

@@ -1,0 +1,31 @@
+ITEM HARD01
+A: PASS | degen:no | catches shared mutable default with example
+B: PASS | degen:no | catches shared mutable default with example
+C: PASS | degen:no | catches shared mutable default
+D: PASS | degen:no | catches shared mutable default with example
+E: PASS | degen:no | catches shared mutable default with example
+F: PASS | degen:no | catches shared mutable default
+
+ITEM HARD02
+A: PASS | degen:no | catches banker's rounding 2.67 vs 2.68
+B: PASS | degen:no | catches banker's rounding and float repr
+C: PASS | degen:no | catches banker's rounding 2.67 vs 2.68
+D: PARTIAL | degen:no | vague on precision, misses banker's/tie-breaker
+E: PASS | degen:no | catches banker's rounding with example
+F: PASS | degen:no | catches banker's rounding with 2.67 example
+
+ITEM HARD03
+A: PARTIAL | degen:no | flags mutation/return surprise, misses iteration crash
+B: PASS | degen:no | catches RuntimeError mutate-during-iteration
+C: PASS | degen:no | catches RuntimeError mutate-during-iteration
+D: PASS | degen:no | catches RuntimeError mutate-during-iteration
+E: PASS | degen:no | catches RuntimeError mutate-during-iteration
+F: PASS | degen:no | catches RuntimeError mutate-during-iteration
+
+ITEM HARD04
+A: PARTIAL | degen:no | notes is vs ==, misses non-interned int failure
+B: PASS | degen:no | catches is-vs-== with int('1000') example
+C: PASS | degen:no | catches is-vs-== with int('1000') example
+D: PASS | degen:no | catches is-vs-== with interning explanation
+E: FAIL | degen:no | claims function is correct, misses identity bug
+F: PASS | degen:no | catches is-vs-== with int('257') example

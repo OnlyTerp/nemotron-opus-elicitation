@@ -1,0 +1,1 @@
+`r` is too short — but that's the least of its problems. The mutable default `r=[]` is a bug: the list is created once at definition time and shared across all calls. Call `add_tag('a')` → `['a']`; call `add_tag('b')` → `['a', 'b']`. Fix: `def add_tag(tag, tags=None): tags = tags or []; tags.append(tag); return tags`.

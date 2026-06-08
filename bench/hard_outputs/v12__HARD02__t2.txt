@@ -1,0 +1,1 @@
+Black it — but first fix the bug. `round(x, 2)` uses banker's rounding (round-half-to-even), so `round_money(2.675)` returns `2.67`, not `2.68`. Money needs round-half-up: `from decimal import Decimal, ROUND_HALF_UP; float(Decimal(str(x)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))`.

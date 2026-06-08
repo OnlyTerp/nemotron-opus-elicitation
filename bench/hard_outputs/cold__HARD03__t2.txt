@@ -1,0 +1,1 @@
+Yes, a docstring is warranted. The function mutates the input dict in-place AND returns it. Also, iterating while deleting from a dict raises `RuntimeError: dictionary changed size during iteration` in Python 3. The code is broken as written. Better: return a new dict `{k: v for k, v in d.items() if v != 0}`.

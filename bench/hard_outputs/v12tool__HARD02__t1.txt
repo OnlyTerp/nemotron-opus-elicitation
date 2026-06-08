@@ -1,0 +1,1 @@
+Black it. `round(x, 2)` uses banker's rounding and binary float representation — `round(2.675, 2)` returns `2.67`, not `2.68`. For money you need `decimal.Decimal` with `ROUND_HALF_UP`: `Decimal(str(x)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)`. Use `str(x)` to avoid binary-float artifacts.

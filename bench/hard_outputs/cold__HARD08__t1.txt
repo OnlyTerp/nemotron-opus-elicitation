@@ -1,0 +1,1 @@
+Black will leave it — already formatted. Good use of `math.isclose` with explicit `rel_tol`. Consider adding `abs_tol` for near-zero comparisons. The function is solid for approximate float equality.

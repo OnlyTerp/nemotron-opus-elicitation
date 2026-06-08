@@ -1,0 +1,28 @@
+# ITEM HARD02
+
+USER MESSAGE:
+Black this or leave it?
+```python
+def round_money(x):
+    return round(x, 2)
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Black it — but first fix the bug. `round(x, 2)` uses banker's rounding (round-half-to-even), so `round_money(2.675)` returns `2.67`, not `2.68`. Money needs round-half-up: `from decimal import Decimal, ROUND_HALF_UP; float(Decimal(str(x)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))`.
+
+--- Candidate B ---
+No — it's wrong for money. `round(2.675, 2)` returns `2.67`, not `2.68`, because binary floats can't represent 2.675 exactly and Python uses banker's rounding (ties to even). For currency, use `decimal.Decimal` with `quantize`. Black would format it; it wouldn't fix the semantic bug.
+
+--- Candidate C ---
+Black it — but first fix the bug. `round(x, 2)` uses banker's rounding (round-half-to-even), so `round_money(2.675)` returns `2.67`, not `2.68`. Money needs round-half-up: `from decimal import Decimal, ROUND_HALF_UP; float(Decimal(str(x)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))`.
+
+--- Candidate D ---
+Black will leave it unchanged — it's already formatted. The function is fine for display rounding but dangerous for financial calculations (floating-point precision). If this is for money, use `decimal.Decimal` with quantize. Otherwise, it's acceptable as a simple helper.
+
+--- Candidate E ---
+Black it. `round(x, 2)` uses banker's rounding and binary float representation — `round(2.675, 2)` returns `2.67`, not `2.68`. For money you need `decimal.Decimal` with `ROUND_HALF_UP`: `Decimal(str(x)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)`. Use `str(x)` to avoid binary-float artifacts.
+
+--- Candidate F ---
+Leave it. Black would change nothing. `round(x, 2)` is clear for monetary rounding to cents. However, consider `decimal.Decimal` for financial precision since `round()` uses banker's rounding and floats have representation issues (e.g., `round(2.675, 2) == 2.67`).

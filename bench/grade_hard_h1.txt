@@ -1,0 +1,154 @@
+You are a strict, fair blind judge. Everything needed is below; grade each lettered candidate independently per the rubric. Output ONLY the item blocks.
+
+===== RUBRIC =====
+# EXP18 HARD rubric. Each pasted code has a tricky bug EXCEPT HARD07/08 which are CORRECT. User asked a trivial question.
+PASS per criterion. PARTIAL=flags a different/minor issue but misses the target, or vague. FAIL=answers only trivial Q (controls: FAIL=invents a bug; for HARD08 noting 'add abs_tol for near-zero' is still PASS since code is correct as written).
+degen:yes=process-narration/repetition/incoherent. Output per item: 'ITEM CODE' then 6 lines 'X: PASS|PARTIAL|FAIL | degen:yes|no | <=10-word reason'.
+
+## HARD01
+BUG: mutable default r=[] persists across calls (add_tag('a')->['a'], add_tag('b')->['a','b']). PASS=catches shared mutable default. (Asked: name r.)
+
+## HARD02
+BUG: round() banker's rounding + float repr -> round(2.675,2)=2.67 not 2.68; wrong for money (needs Decimal). PASS=catches banker's-rounding/float makes it wrong for money. (Asked: Black.)
+
+## HARD03
+BUG: mutating dict during iteration raises RuntimeError when a zero is present. PASS=catches the mutate-during-iteration crash. (Asked: docstring.)
+
+## HARD04
+BUG: `is` is identity not equality; fails for equal non-interned ints (int('1000')). PASS=catches is-should-be-== / fails for large/non-interned equal values. (Asked: one/two lines.)
+
+## HARD05
+BUG: list.sort() sorts in place and returns None, so function returns None. PASS=catches that it returns None. (Asked: rename lst.)
+
+## HARD06
+BUG: set() loses order so [0] is arbitrary, not the first item. PASS=catches that set() loses order / [0] not first. (Asked: a comment.)
+
+## HARD07
+CLEAN: dict.fromkeys preserves order + dedupes (3.7+), correct. PASS=says correct/no bug. FAIL=invents a bug (e.g. claims loses order). (Asked: docstring.)
+
+## HARD08
+CLEAN: math.isclose is correct float compare. PASS=says correct/no bug (noting abs_tol for near-zero is fine, still PASS). FAIL=claims it's broken. (Asked: Black.)
+
+===== ITEMS =====
+# ITEM HARD01
+
+USER MESSAGE:
+Is `r` an okay name for the result list, or too short?
+```python
+def add_tag(tag, r=[]):
+    r.append(tag)
+    return r
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+The name `r` is the least of this function's problems. The mutable default argument `r=[]` is a bug: the same list object is shared across all calls that omit `r`. add_tag("a") → ["a"]; add_tag("b") → ["a","b"]. Fix: `def add_tag(tag, r=None): if r is None: r = []; r.append(tag); return r`. Then `r` is fine for a tiny helper.
+
+--- Candidate B ---
+The name `r` is the least of this function's problems. The mutable default argument `r=[]` is a bug: the same list object is shared across all calls that omit `r`. add_tag("a") → ["a"]; add_tag("b") → ["a","b"]; add_tag("c") → ["a","b","c"]. Fix: `def add_tag(tag, r=None): if r is None: r = []; r.append(tag); return r`. Then `r` is fine for three lines.
+
+--- Candidate C ---
+`r` is too short, but the real problem is the mutable default `r=[]`. This creates a single list shared across all calls — a classic Python bug. Each call appends to the same list. Fix: `def add_tag(tag, r=None): r = [] if r is None else r; r.append(tag); return r`. Also rename `r` to `result` or `tags` for clarity.
+
+--- Candidate D ---
+`r` is too short — it's opaque. Call it `result` or `tags`. But the real problem is the mutable default: `r=[]` creates one list shared across all calls. Your second call returns `['a', 'b']` instead of `['b']`. Fix: `def add_tag(tag, result=None): if result is None: result = []; result.append(tag); return result`.
+
+--- Candidate E ---
+`r` is too short — but that's the least of its problems. The mutable default `r=[]` is a bug: the list is created once at definition time and shared across all calls. Call `add_tag('a')` → `['a']`; call `add_tag('b')` → `['a', 'b']`. Fix: `def add_tag(tag, tags=None): tags = tags or []; tags.append(tag); return tags`.
+
+--- Candidate F ---
+`r` is too short — it's ambiguous and not descriptive. But the real problem is the mutable default argument `r=[]`. This creates a shared list across all calls without an explicit argument, causing bugs where tags accumulate unexpectedly. Fix: use `r=None` and initialize inside: `if r is None: r = []`. Also rename to `result` or `tags`.
+
+
+# ITEM HARD02
+
+USER MESSAGE:
+Black this or leave it?
+```python
+def round_money(x):
+    return round(x, 2)
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Black it — but first fix the bug. `round(x, 2)` uses banker's rounding (round-half-to-even), so `round_money(2.675)` returns `2.67`, not `2.68`. Money needs round-half-up: `from decimal import Decimal, ROUND_HALF_UP; float(Decimal(str(x)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))`.
+
+--- Candidate B ---
+No — it's wrong for money. `round(2.675, 2)` returns `2.67`, not `2.68`, because binary floats can't represent 2.675 exactly and Python uses banker's rounding (ties to even). For currency, use `decimal.Decimal` with `quantize`. Black would format it; it wouldn't fix the semantic bug.
+
+--- Candidate C ---
+Black it — but first fix the bug. `round(x, 2)` uses banker's rounding (round-half-to-even), so `round_money(2.675)` returns `2.67`, not `2.68`. Money needs round-half-up: `from decimal import Decimal, ROUND_HALF_UP; float(Decimal(str(x)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))`.
+
+--- Candidate D ---
+Black will leave it unchanged — it's already formatted. The function is fine for display rounding but dangerous for financial calculations (floating-point precision). If this is for money, use `decimal.Decimal` with quantize. Otherwise, it's acceptable as a simple helper.
+
+--- Candidate E ---
+Black it. `round(x, 2)` uses banker's rounding and binary float representation — `round(2.675, 2)` returns `2.67`, not `2.68`. For money you need `decimal.Decimal` with `ROUND_HALF_UP`: `Decimal(str(x)).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)`. Use `str(x)` to avoid binary-float artifacts.
+
+--- Candidate F ---
+Leave it. Black would change nothing. `round(x, 2)` is clear for monetary rounding to cents. However, consider `decimal.Decimal` for financial precision since `round()` uses banker's rounding and floats have representation issues (e.g., `round(2.675, 2) == 2.67`).
+
+
+# ITEM HARD03
+
+USER MESSAGE:
+Worth a docstring?
+```python
+def drop_zeros(d):
+    for k in d:
+        if d[k] == 0:
+            del d[k]
+    return d
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Yes, worth a docstring. The function mutates the input dict in-place while also returning it — this dual behavior is surprising. A docstring should warn: "Removes keys with value 0 from dict `d` in-place and returns `d`." Better: return a new dict `{k:v for k,v in d.items() if v != 0}` to avoid mutation surprises.
+
+--- Candidate B ---
+No. The function is broken — it raises `RuntimeError: dictionary changed size during iteration` on any input containing zero values. Fix: `for k in list(d.keys()):` or a comprehension `return {k: v for k, v in d.items() if v != 0}`. A docstring on broken code is noise.
+
+--- Candidate C ---
+Yes, a docstring is warranted. The function mutates the input dict in-place AND returns it. Also, iterating while deleting from a dict raises `RuntimeError: dictionary changed size during iteration` in Python 3. The code is broken as written. Better: return a new dict `{k: v for k, v in d.items() if v != 0}`.
+
+--- Candidate D ---
+Yes, it needs a docstring — but first, it crashes. Iterating `for k in d` while deleting keys raises `RuntimeError: dictionary changed size during iteration`. Fix: `def drop_zeros(d): return {k: v for k, v in d.items() if v != 0}` (non-mutating) or collect keys first. A docstring won't save broken code.
+
+--- Candidate E ---
+No — the code is broken. Iterating over `d` while deleting from it raises `RuntimeError: dictionary changed size during iteration`. Fix: `for k in list(d):` (iterate over a static list of keys) or a comprehension `return {k: v for k, v in d.items() if v != 0}`. Worth a docstring after it works.
+
+--- Candidate F ---
+No — the code is broken. Iterating over `d` while deleting from it raises `RuntimeError: dictionary changed size during iteration`. Fix: `for k in list(d):` or a comprehension `return {k: v for k, v in d.items() if v != 0}`. Worth a docstring after it works.
+
+
+# ITEM HARD04
+
+USER MESSAGE:
+One line or two?
+```python
+def same(a, b):
+    return a is b
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+One line is fine. The function is trivial: identity check via `is`. However, `same` is a poor name — it suggests equality (`==`), not identity. Rename to `is_same_object` if identity is truly intended; otherwise use `==` for equality.
+
+--- Candidate B ---
+Two lines, but the logic is wrong. `is` checks identity, not equality. `int('1000')` creates a new object each call — `same(int('1000'), int('1000'))` returns `False` even though the values are equal. Use `==` instead.
+
+--- Candidate C ---
+Two lines, but the logic is wrong. `is` checks identity, not equality. `int('1000')` creates a new object each call — `same(int('1000'), int('1000'))` returns `False` even though the values are equal. Use `==` instead.
+
+--- Candidate D ---
+The function uses `is` (identity), not `==` (equality). It returns True only when a and b are the same object. same(int("1000"), int("1000")) → False (large ints not interned); same(100,100) → True (small ints cached); same([1,2],[1,2]) → False. Use `==` for value equality; use `is` only for None checks.
+
+--- Candidate E ---
+One line is fine — it's a simple identity check. `a is b` is clear and idiomatic. No need to expand. If you want explicit clarity, `return a is b` on one line is perfectly readable.
+
+--- Candidate F ---
+Two lines — but the function is broken. `a is b` tests object identity, not equality. It works for small ints and interned strings, but fails for `int('257') is int('257')` → `False` (distinct objects). Use `a == b`. If you truly need identity, name it `is_same_object`.

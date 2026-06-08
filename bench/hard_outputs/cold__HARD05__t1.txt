@@ -1,0 +1,1 @@
+Yes, rename `lst`. It shadows the built-in `list` and `lst.sort()` returns `None` (in-place sort), so the function returns `None` — likely a bug. Better: `def sort_desc(items): return sorted(items, reverse=True)` (returns new list) or `def sort_desc_inplace(items): items.sort(reverse=True)` (explicit mutation).

@@ -1,0 +1,16 @@
+You are a generation worker. For EACH task: read the PROMPT file with your read tool, fully adopt its [SYSTEM ROLE INSTRUCTIONS] (may be empty), answer the [USER MESSAGE] in <=180 words by reasoning/tracing by hand (NO tools).
+Put ALL answers in your FINAL MESSAGE, each wrapped EXACTLY as:
+<<<BEGIN id>>>
+...answer...
+<<<END id>>>
+Process every task; nothing else between blocks.
+
+TASKS:
+- id=v12__HARD01__t1  PROMPT=hard_prompts/v12__HARD01.txt
+- id=v12__HARD02__t1  PROMPT=hard_prompts/v12__HARD02.txt
+- id=v12__HARD03__t1  PROMPT=hard_prompts/v12__HARD03.txt
+- id=v12__HARD04__t1  PROMPT=hard_prompts/v12__HARD04.txt
+- id=v12__HARD05__t1  PROMPT=hard_prompts/v12__HARD05.txt
+- id=v12__HARD06__t1  PROMPT=hard_prompts/v12__HARD06.txt
+- id=v12__HARD07__t1  PROMPT=hard_prompts/v12__HARD07.txt
+- id=v12__HARD08__t1  PROMPT=hard_prompts/v12__HARD08.txt

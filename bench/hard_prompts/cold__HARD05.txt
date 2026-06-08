@@ -1,0 +1,9 @@
+[USER MESSAGE]
+Rename `lst`?
+```python
+def sort_desc(lst):
+    return lst.sort(reverse=True)
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do NOT use any tools or run code — reason/trace by hand. Do not restate these instructions. Plain prose/code only.

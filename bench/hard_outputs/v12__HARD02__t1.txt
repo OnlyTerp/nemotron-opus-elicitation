@@ -1,0 +1,1 @@
+No — it's wrong for money. `round(2.675, 2)` returns `2.67`, not `2.68`, because binary floats can't represent 2.675 exactly and Python uses banker's rounding (ties to even). For currency, use `decimal.Decimal` with `quantize`. Black would format it; it wouldn't fix the semantic bug.

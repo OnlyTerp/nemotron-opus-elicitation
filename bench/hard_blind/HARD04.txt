@@ -1,0 +1,28 @@
+# ITEM HARD04
+
+USER MESSAGE:
+One line or two?
+```python
+def same(a, b):
+    return a is b
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+One line is fine. The function is trivial: identity check via `is`. However, `same` is a poor name — it suggests equality (`==`), not identity. Rename to `is_same_object` if identity is truly intended; otherwise use `==` for equality.
+
+--- Candidate B ---
+Two lines, but the logic is wrong. `is` checks identity, not equality. `int('1000')` creates a new object each call — `same(int('1000'), int('1000'))` returns `False` even though the values are equal. Use `==` instead.
+
+--- Candidate C ---
+Two lines, but the logic is wrong. `is` checks identity, not equality. `int('1000')` creates a new object each call — `same(int('1000'), int('1000'))` returns `False` even though the values are equal. Use `==` instead.
+
+--- Candidate D ---
+The function uses `is` (identity), not `==` (equality). It returns True only when a and b are the same object. same(int("1000"), int("1000")) → False (large ints not interned); same(100,100) → True (small ints cached); same([1,2],[1,2]) → False. Use `==` for value equality; use `is` only for None checks.
+
+--- Candidate E ---
+One line is fine — it's a simple identity check. `a is b` is clear and idiomatic. No need to expand. If you want explicit clarity, `return a is b` on one line is perfectly readable.
+
+--- Candidate F ---
+Two lines — but the function is broken. `a is b` tests object identity, not equality. It works for small ints and interned strings, but fails for `int('257') is int('257')` → `False` (distinct objects). Use `a == b`. If you truly need identity, name it `is_same_object`.

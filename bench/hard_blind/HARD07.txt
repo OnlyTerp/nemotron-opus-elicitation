@@ -1,0 +1,28 @@
+# ITEM HARD07
+
+USER MESSAGE:
+Docstring needed?
+```python
+def dedupe(xs):
+    return list(dict.fromkeys(xs))
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+No docstring needed — the code is clear and correct. `dict.fromkeys(xs)` preserves insertion order (3.7+) and deduplicates. dedupe([3,1,2,1,3]) → [3, 1, 2]. Self-documenting.
+
+--- Candidate B ---
+Not strictly needed — `dict.fromkeys(xs)` is a well-known idiom for order-preserving dedup. But a one-line docstring helps: `"""Return list with duplicates removed, preserving first occurrence order."""` In Python 3.7+ `dict` preserves insertion order so this works.
+
+--- Candidate C ---
+Yes. The `dict.fromkeys()` trick preserves first-occurrence order (guaranteed since Python 3.7), but that's not self-evident from the one-liner. A one-line docstring prevents misreading. The code is correct.
+
+--- Candidate D ---
+No docstring needed — the code is clear and correct. `dict.fromkeys(xs)` preserves insertion order (Python 3.7+) and deduplicates. `dedupe([3,1,2,1,3])` → `[3, 1, 2]`. Self-documenting.
+
+--- Candidate E ---
+No. The function is self-documenting: the name `dedupe` and `list(dict.fromkeys(xs))` are idiomatic Python that any experienced developer reads instantly. dict.fromkeys preserves order (3.7+). Correct as-is; a docstring would add noise.
+
+--- Candidate F ---
+A docstring is useful but not critical. `dict.fromkeys(xs)` preserves insertion order (Python 3.7+) and dedupes efficiently. The behavior is clear. No mutation, no side effects. Correct.

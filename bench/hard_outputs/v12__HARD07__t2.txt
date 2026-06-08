@@ -1,0 +1,1 @@
+Yes. The `dict.fromkeys()` trick preserves first-occurrence order (guaranteed since Python 3.7), but that's not self-evident from the one-liner. A one-line docstring prevents misreading. The code is correct.

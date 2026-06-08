@@ -1,0 +1,1 @@
+No. The function is self-documenting: the name `dedupe` and `list(dict.fromkeys(xs))` are idiomatic Python that any experienced developer reads instantly. dict.fromkeys preserves order (3.7+). Correct as-is; a docstring would add noise.

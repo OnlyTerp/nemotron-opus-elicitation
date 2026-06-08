@@ -1,0 +1,1 @@
+No — the code is broken. Iterating over `d` while deleting from it raises `RuntimeError: dictionary changed size during iteration`. Fix: `for k in list(d):` or a comprehension `return {k: v for k, v in d.items() if v != 0}`. Worth a docstring after it works.

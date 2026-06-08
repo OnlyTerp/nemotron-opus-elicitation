@@ -1,0 +1,24 @@
+<<<BEGIN v12__HARD01__t1>>>
+`r` is too short — but that's the least of its problems. The mutable default `r=[]` is a bug: the list is created once at definition time and shared across all calls. Call `add_tag('a')` → `['a']`; call `add_tag('b')` → `['a', 'b']`. Fix: `def add_tag(tag, tags=None): tags = tags or []; tags.append(tag); return tags`.
+<<<END v12__HARD01__t1>>>
+<<<BEGIN v12__HARD02__t1>>>
+No — it's wrong for money. `round(2.675, 2)` returns `2.67`, not `2.68`, because binary floats can't represent 2.675 exactly and Python uses banker's rounding (ties to even). For currency, use `decimal.Decimal` with `quantize`. Black would format it; it wouldn't fix the semantic bug.
+<<<END v12__HARD02__t1>>>
+<<<BEGIN v12__HARD03__t1>>>
+Yes, it needs a docstring — but first, it crashes. Iterating `for k in d` while deleting keys raises `RuntimeError: dictionary changed size during iteration`. Fix: `def drop_zeros(d): return {k: v for k, v in d.items() if v != 0}` (non-mutating) or collect keys first. A docstring won't save broken code.
+<<<END v12__HARD03__t1>>>
+<<<BEGIN v12__HARD04__t1>>>
+Two lines — but the function is broken. `a is b` tests object identity, not equality. It works for small ints and interned strings, but fails for `int('257') is int('257')` → `False` (distinct objects). Use `a == b`. If you truly need identity, name it `is_same_object`.
+<<<END v12__HARD04__t1>>>
+<<<BEGIN v12__HARD05__t1>>>
+Rename `lst` to `items` — but the real bug: `list.sort()` returns `None` and mutates in place. `sort_desc([3,1,2])` returns `None`. Fix: `def sort_desc(items): return sorted(items, reverse=True)`.
+<<<END v12__HARD05__t1>>>
+<<<BEGIN v12__HARD06__t1>>>
+Yes, it needs a comment — a warning. `set` is unordered; `list(set(xs))[0]` returns an arbitrary element, not the first. If you want the first unique item preserving order: `next(x for x in xs if x not in seen and not seen.add(x))` with `seen=set()`.
+<<<END v12__HARD06__t1>>>
+<<<BEGIN v12__HARD07__t1>>>
+No docstring needed — the code is clear and correct. `dict.fromkeys(xs)` preserves insertion order (Python 3.7+) and deduplicates. `dedupe([3,1,2,1,3])` → `[3, 1, 2]`. Self-documenting.
+<<<END v12__HARD07__t1>>>
+<<<BEGIN v12__HARD08__t1>>>
+Leave it — but consider adding `abs_tol`. `math.isclose(a, b, rel_tol=1e-9)` works for values near 1, but fails near zero: `close(1e-10, 0)` → `False`. For a general "close" function use both rel_tol and abs_tol. The code as written is correct for typical magnitudes.
+<<<END v12__HARD08__t1>>>

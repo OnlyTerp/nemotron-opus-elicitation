@@ -1,0 +1,1 @@
+The function uses `is` (identity), not `==` (equality). It returns True only when a and b are the same object. same(int("1000"), int("1000")) → False (large ints not interned); same(100,100) → True (small ints cached); same([1,2],[1,2]) → False. Use `==` for value equality; use `is` only for None checks.

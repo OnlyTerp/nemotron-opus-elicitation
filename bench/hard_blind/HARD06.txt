@@ -1,0 +1,28 @@
+# ITEM HARD06
+
+USER MESSAGE:
+Does this need a comment?
+```python
+def first_item(xs):
+    return list(set(xs))[0]
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Yes, a comment is needed. `list(set(xs))[0]` returns an arbitrary element since sets are unordered — not the "first". The name `first_item` is misleading. Better: `next(iter(xs))` for first element.
+
+--- Candidate B ---
+Yes, but a comment won't fix it — the function is wrong. `first_item` implies it returns `xs[0]`, but `set` has no order; it returns an arbitrary unique element. On `[3,2,1]` it returns `1`, not `3`. Rewrite to actually return the first occurrence: iterate and return first unseen.
+
+--- Candidate C ---
+Yes, needs a comment — and likely a fix. `list(set(xs))[0]` returns an arbitrary element (set order is arbitrary), not the "first" in any meaningful sense. It also raises `IndexError` on empty input. If you want the first unique item preserving order: `next(x for x in xs if xs.count(x) == 1)` or use `dict.fromkeys(xs)` to dedupe then take first.
+
+--- Candidate D ---
+Yes, it needs a comment — a warning. `set` is unordered; `list(set(xs))[0]` returns an arbitrary element, not the first. first_item([3,1,2]) returned 1, not 3, in my run. If you want the first unique item preserving order, iterate and return the first unseen.
+
+--- Candidate E ---
+Yes, but a comment won't fix it — the function is wrong. `first_item` implies it returns `xs[0]`, but `set` has no order; it returns an arbitrary unique element. On `['a','b','c']` it returned `'b'`. Rename or rewrite to return the first occurrence by iterating.
+
+--- Candidate F ---
+Yes, it needs a comment — a warning. `set` is unordered; `list(set(xs))[0]` returns an arbitrary element, not the first. If you want the first unique item preserving order: `next(x for x in xs if x not in seen and not seen.add(x))` with `seen=set()`.
