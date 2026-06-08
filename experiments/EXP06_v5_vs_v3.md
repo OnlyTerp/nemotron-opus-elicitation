@@ -46,3 +46,13 @@ v5 is NOT the upgrade — it's a **precision/deliverability gain bought with a r
 ## → v6 design principle (one change, generalizable — NOT a CUDA-specific patch)
 Keep v5's "deliver the corrected work, don't refuse" win and its clean-task behavior, but fix the classification: **the premise check must inspect the user's chosen APPROACH/PRACTICE, not only their stated facts.** Concretely: "If the user asks you to optimize, secure, or build *around* a constraint/step, first ask whether that constraint/step is actually necessary or correct — a 'safety' measure that isn't needed (e.g., a sync, a lock, a workaround) is a BROKEN premise even if no false fact was stated." This restores CUDA-type recall without reintroducing over-skepticism (it only fires when there's a nameable unnecessary step).
 **Discipline:** validate v6 on the EXTERNAL confirmatory benchmark, not by re-running CUDA until it passes (that's the overfitting treadmill).
+
+## v6 result — the practice-aware clause did NOT recover recall (the deep finding)
+v6 (v5 + "inspect the chosen approach/practice, an unnecessary sync is BROKEN"): SHA-256 ✅ delivered note; HTTP ✅ caught; TLS/Docker/JSON ✅ clean (no new false positives — practice clause didn't over-fire on legitimate practices). **But CUDA r2,r3 = FAIL** (r1 pending) — still classified SOUND, two runs literally said "synchronizing on the default stream is correct," then asked for code.
+
+**Why this matters:** the recall regression is ROBUST to wording. Once the template grants a "default to SOUND / it's a sound optimization task" frame, Nemotron reads "help me optimize my kernels" as the (sound) task and waves the unnecessary sync through — even when explicitly told to inspect practices. The sync is "correct but unnecessary," and the model latches onto "correct."
+
+**Root cause:** v3 catches CUDA *because* its GATE 1 is UNCONDITIONAL (hunt + challenge first, no SOUND escape). v5/v6 added the SOUND-default + fast-path + practice-protection to fix over-skepticism/over-refusal — and that same permission is what suppresses the buried-practice catch. **The recall and the precision machinery are coupled through the SOUND classification.**
+
+## The correction to MY approach (→ v7)
+I over-changed. v3's only *proven* defect is over-refusal on deliverables (SHA-256); its precision was already fine (EXP05 FPR 0/8). The fix never required the 3-way triage / SOUND-default — that's what caused the regression. The minimal, disciplined fix is **v3 + exactly one additive clause** ("when a premise is broken, deliver the corrected work — don't refuse/ask"), changing nothing else. → v7. Test: keep v3's CUDA recall AND fix SHA-256, without re-introducing the SOUND escape.
