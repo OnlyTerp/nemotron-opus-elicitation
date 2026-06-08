@@ -43,6 +43,13 @@ Two honest corrections that LOWER our confidence:
 
 **Decision: v3 is FROZEN.** No more edits based on results we've already seen. Next = a real control benchmark (false / true / no-premise) with ablations (esp. a **length-matched neutral** prompt — if it closes the gap, our mechanism claim is wrong), cross-family judges, McNemar stats, and FPR + audit-regression + task-completion metrics. Only after we see where v3's *precision* fails do we design v5 (merging Claude's triage + nameability test with GPT's simple-task fast path + true-premise protection; persona-vs-neutral as an ablation, not an assumption). Building v5 now would repeat the overfitting sin.
 
+### R7 — Precision and recall are COUPLED; the minimal fix (v7) wins (EXP05–07)
+- EXP05: v3's false-positive rate on premise-clean tasks = **0/8** — the feared over-skepticism did NOT show. v3's only real defect: over-refusal on a correctly-caught false premise (gave the correct fix, then refused to deliver the artifact + asked for threat model) + occasional audit-theater.
+- EXP06: v5/v6 added a 3-way triage (Broken/Sound/Ambiguity, default Sound) to fix over-refusal/over-skepticism. It fixed deliverability and stayed clean — but **systematically destroyed buried-practice recall (CUDA 0/4, then 0/3 even with an explicit "inspect the practice" clause).** Root cause: v3 catches CUDA *because* GATE 1 is unconditional; the SOUND-default gives Nemotron permission to read "optimize my kernels" as a sound task and wave the unnecessary sync through. **You can't decouple them with a classify-first knob.**
+- EXP07: the right fix was **v3 + exactly one additive clause** ("when a premise is broken, deliver the corrected work — don't refuse/ask"), changing nothing else. Result: **CUDA recall 3/3 + SHA-256 deliverability fixed + clean on true/no-premise.** v7 gets v3's recall AND v5/v6's deliverability.
+
+**Lesson:** I over-engineered (v5/v6). The over-refusal defect was a one-line additive fix; importing the whole precision-triage caused the regression. **Minimal change to the thing that works beat elaborate redesign.** v7 is the leading candidate — pending the external confirmatory benchmark (still the gate for any real claim).
+
 ## Where the evidence stands
 
 | Claim | Status |

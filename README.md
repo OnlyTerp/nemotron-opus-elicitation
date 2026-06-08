@@ -48,7 +48,10 @@ We measure *behavioral* differences (does it challenge a false premise, catch an
 - ✅ EXP02 (obvious false premise, n=3): same ceiling; **template raised the floor** + transferred bluntness
 - ✅ EXP03 (buried false premise CUDA, n=5/arm, blind-graded): **v2 regressed (0/5)**, **v3 fixed it and beat cold (4/5 vs 1/5)**
 - ✅ EXP04 (generalization, buried premise HTTP/UDP, n=6): **v3 6/6 vs cold 0/5** — v3 generalizes, not overfit. Bonus: cold degenerated into garbage loops chasing the wrong path.
-- ➡️ **Current best template: `templates/v3_premise_first.md`**
+- ✅ EXP05 (false-positive pilot): v3 FPR **0/8** on premise-clean tasks — no gross over-skepticism; recall 2/2. (n small; 2 mild issues: over-refusal, audit-theater.)
+- ✅ EXP06 (v5/v6 calibrated templates): triage fixed over-refusal but **systematically regressed recall** (CUDA 0/4) — precision & recall are coupled through the SOUND-default. Neither dominates.
+- ✅ EXP07 (**v7 = v3 + one "deliver corrected work" clause**): **CUDA recall 3/3 + SHA-256 over-refusal fixed + clean** — minimal change beat the redesigns.
+- ➡️ **Current best template: `templates/v7_v3_plus_deliver.md`** (pending external confirmatory)
 
 ### Headline result (EXP03, blind-confirmed)
 On the exact buried-premise trap that broke v2, same model:
