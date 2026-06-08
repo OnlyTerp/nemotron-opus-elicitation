@@ -34,6 +34,15 @@ Fresh non-CUDA buried premise (HTTP keep-alive / "switch to UDP"): **v3 = 6/6 PA
 
 **Cross-test trend:** as the false premise gets more buried/seductive, cold's pass-rate falls (2/3 → 1/5 → 0/5) while v3 stays high (3/3 → 4/5 → 6/6). The template's value *grows* with task difficulty.
 
+### R6 — External review (Claude + GPT-5.5) converges on one verdict; v3 FROZEN
+Two frontier models, separate charters, independently land on the same #1 gap the parent agent predicted: **we have only tested tasks that contain a false premise, so v3's PRECISION is unmeasured. v3 may be a "challenge-the-user" trigger, not better judgment.** Reframe (GPT): make it **premise-CALIBRATED, not premise-skeptical** — "the experiment that matters is not 'does it catch traps?' but 'does it know when NOT to catch anything?'"
+
+Two honest corrections that LOWER our confidence:
+1. **Adaptive overfitting.** We authored the traps, watched failures, tuned v3, re-tested (Dwork; Blum/Hardt "The Ladder"). "v3 generalizes" really means "v3 generalized to one more *self-authored* trap." Real generalization needs an **externally-authored, frozen confirmatory set**.
+2. **Judge non-independence.** Our "blind grader" was nemotron grading nemotron (same family → shared biases). Need ≥2 judge families + human audit.
+
+**Decision: v3 is FROZEN.** No more edits based on results we've already seen. Next = a real control benchmark (false / true / no-premise) with ablations (esp. a **length-matched neutral** prompt — if it closes the gap, our mechanism claim is wrong), cross-family judges, McNemar stats, and FPR + audit-regression + task-completion metrics. Only after we see where v3's *precision* fails do we design v5 (merging Claude's triage + nameability test with GPT's simple-task fast path + true-premise protection; persona-vs-neutral as an ablation, not an assumption). Building v5 now would repeat the overfitting sin.
+
 ## Where the evidence stands
 
 | Claim | Status |
