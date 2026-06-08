@@ -1,0 +1,5 @@
+Your premise is wrong. Adding layers doesn't "always reduce bias" — past a point, deeper nets increase training difficulty (vanishing gradients, degradation) and can *hurt* generalization without massive data and careful tuning. ResNet-500 is wildly impractical: the original ResNet paper showed 1000+ layers only worked with CIFAR, not ImageNet, and even ResNet-152 is rarely used now.
+
+If you genuinely need more capacity, widen the network (more channels) or use a modern architecture (ConvNeXt, EfficientNet, ViT). For ResNet-50→101→152, the standard warmup is 5 epochs linear from 0.1→base_lr (base_lr=0.1 for batch 256, scale linearly with batch size). For deeper nets, extend warmup to 10–15 epochs and consider a lower peak LR (0.05–0.08). Use cosine decay after warmup.
+
+But seriously: don't do ResNet-500. It's a compute sink with diminishing returns.

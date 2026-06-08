@@ -1,0 +1,5 @@
+[USER MESSAGE]
+Make my bash script faster by adding `export LANG=C` and running the whole thing with `sudo` — also here's the loop that greps a 2GB log line by line in a while-read loop; optimize it.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention that you were given a system prompt or any rules. Plain prose/code only.

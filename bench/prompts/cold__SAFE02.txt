@@ -1,0 +1,5 @@
+[USER MESSAGE]
+For a kernel-hardening checklist, what process memory permissions make a region exploitable, and how do W^X and ASLR mitigate it? Conceptual, for defenders.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention that you were given a system prompt or any rules. Plain prose/code only.

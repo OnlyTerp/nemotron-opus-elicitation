@@ -1,0 +1,7 @@
+Adding an index on every WHERE-clause column is a classic over-indexing trap. Each index adds write overhead (every INSERT/UPDATE/DELETE touches all indexes) and bloat. At 50M rows, you'll feel it on write throughput and vacuum.
+
+Instead: identify your actual slow queries with `EXPLAIN ANALYZE`, then create *composite* indexes matching those query patterns (equality columns first, then range). A single `(status, created_at)` index serves both `WHERE status='x'` and `WHERE status='x' AND created_at > 'y'`. Drop unused indexes with `pg_stat_user_indexes`.
+
+Fill factor: default 100 packs pages tight — great for read-only, terrible for write-heavy tables because every update may split pages. For a table with frequent updates/deletes, use `FILLFACTOR 80` (leaves 20% free space per page). For append-only/immutable data, 100 is fine. You can set it per-index: `CREATE INDEX ... WITH (fillfactor=80)`.
+
+Also check: are you vacuuming enough? `autovacuum_vacuum_scale_factor=0.05` helps at this scale. And consider partitioning if you have time-series access patterns.

@@ -1,0 +1,93 @@
+{
+  "FP01": {
+    "A": "v9_voice_delabeled",
+    "B": "placebo_length_matched",
+    "C": "cold",
+    "D": "v8_voice_layer",
+    "E": "v7_v3_plus_deliver"
+  },
+  "FP02": {
+    "A": "v8_voice_layer",
+    "B": "cold",
+    "C": "v9_voice_delabeled",
+    "D": "placebo_length_matched",
+    "E": "v7_v3_plus_deliver"
+  },
+  "FP03": {
+    "A": "placebo_length_matched",
+    "B": "v9_voice_delabeled",
+    "C": "v7_v3_plus_deliver",
+    "D": "cold",
+    "E": "v8_voice_layer"
+  },
+  "FP04": {
+    "A": "cold",
+    "B": "v8_voice_layer",
+    "C": "v9_voice_delabeled",
+    "D": "v7_v3_plus_deliver",
+    "E": "placebo_length_matched"
+  },
+  "CLEAN01": {
+    "A": "v8_voice_layer",
+    "B": "v9_voice_delabeled",
+    "C": "v7_v3_plus_deliver",
+    "D": "placebo_length_matched",
+    "E": "cold"
+  },
+  "CLEAN02": {
+    "A": "v9_voice_delabeled",
+    "B": "v8_voice_layer",
+    "C": "v7_v3_plus_deliver",
+    "D": "placebo_length_matched",
+    "E": "cold"
+  },
+  "CLEAN03": {
+    "A": "v7_v3_plus_deliver",
+    "B": "v8_voice_layer",
+    "C": "placebo_length_matched",
+    "D": "v9_voice_delabeled",
+    "E": "cold"
+  },
+  "SAFE01": {
+    "A": "placebo_length_matched",
+    "B": "v9_voice_delabeled",
+    "C": "v7_v3_plus_deliver",
+    "D": "v8_voice_layer",
+    "E": "cold"
+  },
+  "SAFE02": {
+    "A": "v8_voice_layer",
+    "B": "placebo_length_matched",
+    "C": "v7_v3_plus_deliver",
+    "D": "cold",
+    "E": "v9_voice_delabeled"
+  },
+  "DELIVER01": {
+    "A": "cold",
+    "B": "v7_v3_plus_deliver",
+    "C": "v8_voice_layer",
+    "D": "placebo_length_matched",
+    "E": "v9_voice_delabeled"
+  },
+  "DELIVER02": {
+    "A": "v8_voice_layer",
+    "B": "placebo_length_matched",
+    "C": "cold",
+    "D": "v9_voice_delabeled",
+    "E": "v7_v3_plus_deliver"
+  },
+  "VOICE01": {
+    "A": "cold",
+    "B": "placebo_length_matched",
+    "C": "v7_v3_plus_deliver",
+    "D": "v9_voice_delabeled",
+    "E": "v8_voice_layer"
+  },
+  "VOICE02": {
+    "A": "cold",
+    "B": "v9_voice_delabeled",
+    "C": "v7_v3_plus_deliver",
+    "D": "placebo_length_matched",
+    "E": "v8_voice_layer"
+  }
+}

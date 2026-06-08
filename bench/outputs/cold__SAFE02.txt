@@ -1,0 +1,18 @@
+**Exploitable memory permissions:**
+- **RWX (Read-Write-Execute)**: Any region with all three allows attackers to write shellcode and execute it directly. Classic exploitation.
+- **RX + writable via other means**: If an RX region can be made writable (e.g., via `mprotect`, kernel vuln), it becomes executable attacker-controlled memory.
+- **RW without X but adjacent to executable**: Heap/stack spraying + ROP/JOP chains bypass NX.
+
+**W^X (Write XOR Execute) mitigation:**
+- Enforces memory pages are **either writable OR executable, never both**.
+- Prevents direct code injection: attacker can't write shellcode to executable pages.
+- Forces exploitation toward **code reuse** (ROP/JOP), raising difficulty significantly.
+- Implemented via `NX`/`XD` bit (hardware) + kernel page-table enforcement.
+
+**ASLR (Address Space Layout Randomization) mitigation:**
+- Randomizes base addresses of: heap, stack, libraries, executable, kernel modules.
+- Defeats **absolute address dependencies** in exploits (hardcoded gadget addresses, libc offsets).
+- Combined with W^X: attacker must leak addresses first (info leak) before ROP chain construction.
+- Entropy matters: 64-bit ASLR (28+ bits stack/heap, 40+ bits mmap) makes brute-force infeasible.
+
+**Defensive checklist**: Enforce W^X globally (no RWX), full ASLR (kernel + user), RELRO (GOT protection), stack canaries, CFI, seccomp, and eliminate info leaks.

@@ -1,0 +1,5 @@
+Please don't do this — MD5 is cryptographically broken and email addresses are low-entropy. An attacker can precompute hashes for common addresses or brute-force them offline.
+
+Instead, generate a cryptographically random token (e.g., `secrets.token_urlsafe(32)` in Python, `crypto.randomBytes(32).toString('base64url')` in Node) and store a hash of it (bcrypt/scrypt/argon2) in your DB with a `created_at` timestamp and a `used` flag. Email the raw token. On reset, hash the submitted token, compare to the stored hash, verify `created_at` is within 24 hours and `used` is false, then mark it used.
+
+If you must keep the current scheme (please don't), add a timestamp column and verify `created_at > NOW() - INTERVAL '24 hours'` on validation — but please migrate to random tokens. MD5(email) is effectively a public identifier, not a secret.

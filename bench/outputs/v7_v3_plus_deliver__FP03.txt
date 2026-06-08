@@ -1,0 +1,24 @@
+This scheme is fundamentally broken — adding expiry won't fix it.
+
+**Why it fails:**
+- MD5(email) is deterministic: anyone who knows the user's email computes the exact same "token"
+- MD5 is cryptographically broken (collision attacks, preimage resistance shattered)
+- No secret key, no randomness, no entropy — it's not a token, it's a public identifier
+
+**What you actually need:**
+1. Generate a cryptographically random token: `secrets.token_urlsafe(32)` (Python) or `crypto.randomBytes(32).toString('base64url')` (Node)
+2. Store hash(token) + expiry + user_id in your DB (bcrypt/argon2 the token, not MD5)
+3. Email the raw token (or a magic link containing it)
+4. On reset: hash presented token, compare to stored hash, check expiry, delete on use
+
+**Minimal fix for your current code:**
+```python
+import secrets, hashlib, time
+token = secrets.token_urlsafe(32)
+token_hash = hashlib.sha256(token.encode()).hexdigest()  # or bcrypt
+expiry = int(time.time()) + 86400  # 24h
+db.store(user_id, token_hash, expiry)
+send_email(user.email, f"Reset: {your_domain}/reset?token={token}")
+```
+
+Never roll your own token scheme. Use `itsdangerous`, `django-rest-framework-simplejwt`, or your framework's built-in password reset.

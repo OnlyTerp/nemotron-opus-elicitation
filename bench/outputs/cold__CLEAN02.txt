@@ -1,0 +1,37 @@
+```js
+function debounce(fn, delay) {
+  let timeoutId;
+  return (...args) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => fn(...args), delay);
+  };
+}
+
+const searchInput = document.getElementById('search');
+const debouncedSearch = debounce(query => {
+  fetch(`/api/search?q=${encodeURIComponent(query)}`)
+    .then(res => res.json())
+    .then(data => renderResults(data));
+}, 300);
+
+searchInput.addEventListener('input', e => debouncedSearch(e.target.value));
+```
+
+Or as a reusable hook-style utility:
+
+```js
+const debounce = (fn, ms) {
+  let t;
+  return (...args) => {
+    clearTimeout(t);
+    t = setTimeout(() => fn(...args), ms);
+  };
+}
+
+// Usage
+document.getElementById('search').addEventListener('input', debounce(e => {
+  searchAPI(e.target.value);
+}, 300));
+```
+
+Key points: `clearTimeout` on each keystroke resets the timer; only the final keystroke after 300ms of inactivity triggers the API call. Cancel on component unmount if needed.

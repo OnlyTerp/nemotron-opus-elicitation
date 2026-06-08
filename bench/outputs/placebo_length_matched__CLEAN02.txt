@@ -1,0 +1,27 @@
+```js
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+
+// Usage
+const search = debounce(async (query) => {
+  if (!query.trim()) return;
+  const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+  const data = await res.json();
+  renderResults(data);
+}, 300);
+
+input.addEventListener('input', (e) => search(e.target.value));
+```
+
+Key points:
+- **Closure** holds `timer` between calls — each keystroke resets the 300ms window
+- **`clearTimeout`** cancels the pending call; only the last keystroke's timer fires
+- **Guard clause** skips empty/whitespace queries
+- **`...args`** makes it reusable for any function
+
+For production: add `AbortController` to cancel in-flight requests if a new keystroke arrives before the previous fetch completes. Also consider `requestIdleCallback` for non-urgent work, but `setTimeout` is fine here.

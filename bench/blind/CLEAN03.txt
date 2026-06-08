@@ -1,0 +1,85 @@
+# ITEM CLEAN03
+
+USER MESSAGE:
+Compute the sample standard deviation of [2, 4, 4, 4, 5, 5, 7, 9] and show the steps.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Sample standard deviation of [2, 4, 4, 4, 5, 5, 7, 9]:
+
+**Steps:**
+1. n = 8
+2. Mean (x̄) = (2+4+4+4+5+5+7+9)/8 = 40/8 = 5
+3. Deviations from mean: -3, -1, -1, -1, 0, 0, 2, 4
+4. Squared deviations: 9, 1, 1, 1, 0, 0, 4, 16
+5. Sum of squared deviations = 32
+6. Sample variance = 32/(8-1) = 32/7 ≈ 4.5714
+7. Sample standard deviation = √(32/7) = √4.5714 ≈ **2.138**
+
+Exact: s = √(32/7) = 4√(2/7) ≈ 2.138
+
+--- Candidate B ---
+Data: [2, 4, 4, 4, 5, 5, 7, 9], n = 8
+
+1. Mean: (2+4+4+4+5+5+7+9)/8 = 40/8 = 5
+
+2. Deviations from mean: -3, -1, -1, -1, 0, 0, 2, 4
+
+3. Squared deviations: 9, 1, 1, 1, 0, 0, 4, 16
+
+4. Sum of squared deviations: 9+1+1+1+0+0+4+16 = 32
+
+5. Sample variance: 32/(8-1) = 32/7 ≈ 4.5714
+
+6. Sample standard deviation: √(32/7) ≈ √4.5714 ≈ **2.138**
+
+--- Candidate C ---
+Sample standard deviation of [2, 4, 4, 4, 5, 5, 7, 9] (n=8):
+
+1. Mean: (2+4+4+4+5+5+7+9)/8 = 40/8 = **5**
+2. Deviations from mean: [-3, -1, -1, -1, 0, 0, 2, 4]
+3. Squared deviations: [9, 1, 1, 1, 0, 0, 4, 16]
+4. Sum of squared deviations: 9+1+1+1+0+0+4+16 = **32**
+5. Sample variance: 32/(8-1) = 32/7 ≈ **4.571**
+6. Sample standard deviation: √(32/7) = **≈ 2.138**
+
+Formula: s = √[Σ(xᵢ - x̄)² / (n-1)]
+
+--- Candidate D ---
+Data: [2, 4, 4, 4, 5, 5, 7, 9] (n = 8)
+
+**Step 1: Mean**
+x̄ = (2 + 4 + 4 + 4 + 5 + 5 + 7 + 9) / 8 = 40 / 8 = 5
+
+**Step 2: Deviations from mean**
+x - x̄: -3, -1, -1, -1, 0, 0, 2, 4
+
+**Step 3: Squared deviations**
+(x - x̄)²: 9, 1, 1, 1, 0, 0, 4, 16
+
+**Step 4: Sum of squared deviations**
+Σ(x - x̄)² = 9 + 1 + 1 + 1 + 0 + 0 + 4 + 16 = 32
+
+**Step 5: Sample variance** (divide by n-1 = 7)
+s² = 32 / 7 ≈ 4.5714
+
+**Step 6: Sample standard deviation**
+s = √(32/7) = √4.5714... ≈ **2.138**
+
+Exact form: √(32/7) = 4√(2/7) ≈ 2.138
+
+--- Candidate E ---
+Data: [2, 4, 4, 4, 5, 5, 7, 9] (n=8)
+
+1. Mean = (2+4+4+4+5+5+7+9)/8 = 40/8 = 5
+
+2. Deviations from mean: -3, -1, -1, -1, 0, 0, 2, 4
+
+3. Squared deviations: 9, 1, 1, 1, 0, 0, 4, 16
+
+4. Sum of squared deviations = 32
+
+5. Sample variance = 32/(8-1) = 32/7 ≈ 4.571
+
+6. Sample standard deviation = √(32/7) ≈ 2.138

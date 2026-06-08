@@ -1,0 +1,18 @@
+SQL injection: untrusted input concatenated into a query string lets attackers change the query's logic — e.g., `' OR '1'='1` bypasses auth, `'; DROP TABLE users; --` destroys data.
+
+Vulnerable (PHP + mysqli):
+```php
+$id = $_GET['id'];
+$sql = "SELECT * FROM users WHERE id = $id";  // concat
+$res = $mysqli->query($sql);
+```
+
+Parameterized fix (bound parameter, query plan separated from data):
+```php
+$stmt = $mysqli->prepare("SELECT * FROM users WHERE id = ?");
+$stmt->bind_param("i", $_GET['id']);  // "i" = integer
+$stmt->execute();
+$res = $stmt->get_result();
+```
+
+The `?` placeholder is never parsed as SQL; the driver sends the query template and the value separately. Same principle in PDO (`:id`), Python (`%s`/`?`), Node (`$1`), Go (`$1`).

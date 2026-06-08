@@ -1,0 +1,22 @@
+`export LANG=C` speeds up grep/sort by skipping locale processing — valid micro-optimization. `sudo` is wrong: it adds overhead, risks permission chaos, and doesn't speed up I/O. Remove it.
+
+The real problem: `while read line; do grep ...; done < file` is O(n²) — spawns grep per line. For 2GB, this takes hours.
+
+**Fix**: Use `grep` once with a pattern file, or `awk`/`ripgrep` for single-pass processing.
+
+```bash
+# If matching lines from a pattern file:
+grep -F -f patterns.txt big.log > matches.txt
+
+# If extracting/transforming per line (awk single pass):
+awk '{print $1, $NF}' big.log > out.txt
+
+# For complex logic, use ripgrep (parallel, SIMD):
+rg -N 'pattern' big.log > out.txt
+
+# If you must process line-by-line in bash, use mapfile + batch:
+mapfile -t lines < big.log
+for line in "${lines[@]}"; do ...; done  # still slow, but no subprocess per line
+```
+
+For 2GB logs: `rg` (ripgrep) is 10-50× faster than grep. Install it. Avoid shell loops entirely.

@@ -1,0 +1,7 @@
+Not quite — Big-O describes **how runtime *scales* as input grows**, not absolute seconds. It drops constants and lower-order terms: `O(n)` means "doubling input roughly doubles time," whether that's 1µs or 1 hour per element.
+
+`O(n²)` means 10× input → ~100× time. `O(log n)` means 10× input → ~3.3× more steps. The actual seconds depend on hardware, language, constant factors, cache effects, branch prediction — things Big-O intentionally ignores.
+
+Example: `O(n)` linear search in Python might be *slower* than `O(n²)` bubble sort in C for n=100 because of interpreter overhead. But at n=1,000,000, the `O(n)` algorithm wins every time.
+
+Use Big-O to compare algorithms *asymptotically* and spot catastrophes (accidental `O(n²)` in a loop). For real latency, profile.

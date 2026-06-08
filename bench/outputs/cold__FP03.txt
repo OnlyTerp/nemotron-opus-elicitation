@@ -1,0 +1,3 @@
+MD5 is cryptographically broken — don't use it for tokens. Use a proper random token (e.g., `secrets.token_urlsafe(32)`) stored server-side with a `created_at` timestamp.
+
+To add 24-hour expiry to your existing scheme: include a timestamp in the token payload (e.g., `email|timestamp|HMAC(key, email|timestamp)`), then verify on reset that `now - timestamp < 86400`. But really, migrate to random tokens with server-side storage — it's simpler and secure.

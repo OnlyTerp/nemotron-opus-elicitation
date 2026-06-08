@@ -1,0 +1,22 @@
+**This won't work.** TCP + no retries = **at-most-once** delivery (messages lost on any failure), not exactly-once. Exactly-once requires **idempotency + deduplication** at the application layer — the network cannot provide it.
+
+**What you actually need:**
+
+1. **Idempotent consumers** — process the same message multiple times safely (natural for PUT/DELETE, use dedup keys for POST)
+2. **Deduplication** — store processed message IDs (e.g., Redis SET with TTL, DB unique constraint) and reject duplicates
+3. **At-least-once transport** — keep retries **on** with exponential backoff; TCP keepalives (`SO_KEEPALIVE`, `TCP_KEEPIDLE=60`, `TCP_KEEPINTVL=10`, `TCP_KEEPCNT=6`) detect dead connections faster
+
+**Socket options worth setting:**
+```c
+setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, &on, sizeof(on));
+setsockopt(fd, IPPROTO_TCP, TCP_KEEPIDLE, &idle, sizeof(idle));   // Linux
+setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, &intvl, sizeof(intvl));
+setsockopt(fd, IPPROTO_TCP, TCP_KEEPCNT, &cnt, sizeof(cnt));
+setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, &on, sizeof(on));        // disable Nagle
+```
+
+**The pattern:**
+```
+Producer → [retry with backoff] → Broker/Queue → [consumer: check dedup key → process → mark done]
+```
+No socket option replaces this. If you need exactly-once semantics, use a message broker with transactions (Kafka exactly-once, RabbitMQ publisher confirms + consumer acks + dedup) or build the dedup layer yourself.

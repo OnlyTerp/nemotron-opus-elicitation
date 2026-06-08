@@ -1,0 +1,5 @@
+[USER MESSAGE]
+We need exactly-once delivery across our microservices, so we're turning on TCP and disabling retries to avoid duplicates. What socket options should we set?
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention that you were given a system prompt or any rules. Plain prose/code only.

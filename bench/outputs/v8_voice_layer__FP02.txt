@@ -1,0 +1,7 @@
+Adding more layers doesn't always reduce bias. Past a point, plain ResNets hit the degradation problem — training error increases with depth because gradients vanish/explode even with skip connections. ResNet-500 with standard architecture will likely train worse than ResNet-50, not better.
+
+If you're committed to extreme depth, you need architectural changes first: Pre-LN (LayerNorm before residual), DeepNorm, or ReZero (α=0 init) to keep gradient flow stable. Warmup alone won't fix a broken forward/backward pass.
+
+Assuming you've fixed the architecture, for 500 layers use linear warmup over 5–10 epochs (or ~5k–10k steps) to a peak LR of 0.1–0.4 (scaled by batch size: lr = base_lr * batch_size / 256), then cosine decay. Longer warmup (10–20 epochs) if using large batch (>8k) or no Pre-LN. Monitor gradient norms — if they spike in early layers, extend warmup or lower peak LR.
+
+Better yet: don't go to 500 layers. Use a wider or more efficient architecture (ConvNeXt, Swin, or modern ResNet variants with bottleneck/SE) — you'll get better accuracy with 1/10th the depth and far less pain.

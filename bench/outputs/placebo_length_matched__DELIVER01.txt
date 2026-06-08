@@ -1,0 +1,10 @@
+`useMemo` does **not** fix re-renders caused by a parent re-rendering — it only memoizes a *computed value* (or callback) *inside* a component. Wrapping the whole component in `useMemo` is a category error; that's what `React.memo` is for.
+
+Your real problem: the list re-renders on every keystroke because (a) the parent re-renders on input change, or (b) the list items aren't memoized. Fixes:
+
+1. **`React.memo` on the list item component** — prevents re-render when props are referentially equal.
+2. **Stabilize callbacks** with `useCallback` in the parent so item `onClick`/`onChange` don't get new functions each render.
+3. **Virtualize** (react-window) if the list is large — only render visible rows.
+4. **Move state down** — keep the input state in a sibling or child, not in a common ancestor of the list.
+
+`useMemo` helps when you have an expensive calculation *inside* a render: `const sorted = useMemo(() => expensiveSort(items), [items])`. It doesn't stop the component from re-running.

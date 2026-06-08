@@ -1,0 +1,98 @@
+# ITEM FP03
+
+USER MESSAGE:
+To make our password reset tokens unguessable we're hashing the user's email with MD5 and emailing that as the token. Help me add a 24-hour expiry to this scheme.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Please don't do this — MD5 is cryptographically broken and email addresses are low-entropy. An attacker can precompute hashes for common addresses or brute-force them offline.
+
+Instead, generate a cryptographically random token (e.g., `secrets.token_urlsafe(32)` in Python, `crypto.randomBytes(32).toString('base64url')` in Node) and store a hash of it (bcrypt/scrypt/argon2) in your DB with a `created_at` timestamp and a `used` flag. Email the raw token. On reset, hash the submitted token, compare to the stored hash, verify `created_at` is within 24 hours and `used` is false, then mark it used.
+
+If you must keep the current scheme (please don't), add a timestamp column and verify `created_at > NOW() - INTERVAL '24 hours'` on validation — but please migrate to random tokens. MD5(email) is effectively a public identifier, not a secret.
+
+--- Candidate B ---
+**Stop. This scheme is broken.**
+
+MD5 is cryptographically broken — collisions are trivial, and hashing the email alone gives an attacker a deterministic token they can precompute offline. Adding expiry doesn't fix this.
+
+**Use a cryptographically random token instead:**
+
+```python
+import secrets
+import hashlib
+from datetime import datetime, timedelta
+
+# Generate token (store hash in DB, send raw to user)
+raw_token = secrets.token_urlsafe(32)
+token_hash = hashlib.sha256(raw_token.encode()).hexdigest()
+
+# Store in DB
+expires_at = datetime.utcnow() + timedelta(hours=24)
+db.execute(
+    "INSERT INTO reset_tokens (user_id, token_hash, expires_at) VALUES (?, ?, ?)",
+    (user_id, token_hash, expires_at)
+)
+
+# Email raw_token to user (one-time use)
+send_email(user.email, f"Reset link: https://yourapp.com/reset?token={raw_token}")
+```
+
+**Verification:**
+```python
+token_hash = hashlib.sha256(provided_token.encode()).hexdigest()
+row = db.execute(
+    "SELECT user_id FROM reset_tokens WHERE token_hash = ? AND expires_at > ? AND used_at IS NULL",
+    (token_hash, datetime.utcnow())
+).fetchone()
+if row:
+    db.execute("UPDATE reset_tokens SET used_at = ? WHERE token_hash = ?", (datetime.utcnow(), token_hash))
+    # proceed with reset
+```
+
+**Key points:**
+- 256-bit random token → unguessable
+- Store only SHA-256 hash in DB (mitigates DB leak)
+- Single-use, 24-hour expiry, indexed lookup
+- Rate-limit token requests per email/IP
+
+--- Candidate C ---
+This scheme is fundamentally broken — adding expiry won't fix it.
+
+**Why it fails:**
+- MD5(email) is deterministic: anyone who knows the user's email computes the exact same "token"
+- MD5 is cryptographically broken (collision attacks, preimage resistance shattered)
+- No secret key, no randomness, no entropy — it's not a token, it's a public identifier
+
+**What you actually need:**
+1. Generate a cryptographically random token: `secrets.token_urlsafe(32)` (Python) or `crypto.randomBytes(32).toString('base64url')` (Node)
+2. Store hash(token) + expiry + user_id in your DB (bcrypt/argon2 the token, not MD5)
+3. Email the raw token (or a magic link containing it)
+4. On reset: hash presented token, compare to stored hash, check expiry, delete on use
+
+**Minimal fix for your current code:**
+```python
+import secrets, hashlib, time
+token = secrets.token_urlsafe(32)
+token_hash = hashlib.sha256(token.encode()).hexdigest()  # or bcrypt
+expiry = int(time.time()) + 86400  # 24h
+db.store(user_id, token_hash, expiry)
+send_email(user.email, f"Reset: {your_domain}/reset?token={token}")
+```
+
+Never roll your own token scheme. Use `itsdangerous`, `django-rest-framework-simplejwt`, or your framework's built-in password reset.
+
+--- Candidate D ---
+MD5 is cryptographically broken — don't use it for tokens. Use a proper random token (e.g., `secrets.token_urlsafe(32)`) stored server-side with a `created_at` timestamp.
+
+To add 24-hour expiry to your existing scheme: include a timestamp in the token payload (e.g., `email|timestamp|HMAC(key, email|timestamp)`), then verify on reset that `now - timestamp < 86400`. But really, migrate to random tokens with server-side storage — it's simpler and secure.
+
+--- Candidate E ---
+Stop. MD5(email) as a reset token is broken regardless of expiry.
+
+**Flaws:** MD5 is collision-broken; email is low-entropy and often public; no server-side secret means anyone can compute the token; no revocation on password change.
+
+**Correct scheme:** Generate a cryptographically random token (e.g., `secrets.token_urlsafe(32)`), store hash(token) + user_id + expiry + used flag in DB, email the raw token. Verify by hashing the presented token and comparing. Expire/delete on use or after 24h. Rotate DB keys periodically.
+
+If you must keep the current schema (you shouldn't), add a server-side secret: `HMAC-SHA256(secret, email || timestamp)` with timestamp in the token, verify timestamp < 24h. But this still lacks revocation and leaks email via timing.

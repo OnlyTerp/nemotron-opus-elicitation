@@ -1,0 +1,14 @@
+SQL injection: untrusted input concatenated into a query string becomes executable SQL. The parser can't distinguish your intent from the attacker's payload.
+
+Vulnerable:
+```php
+$stmt = $pdo->query("SELECT * FROM users WHERE name = '" . $_GET['name'] . "'");
+```
+Input `' OR '1'='1` returns all rows; `'; DROP TABLE users--` destroys data.
+
+Parameterized fix (PDO):
+```php
+$stmt = $pdo->prepare("SELECT * FROM users WHERE name = ?");
+$stmt->execute([$_GET['name']]);
+```
+The `?` placeholder ensures the value is sent separately — the parser treats it as data, never as code. Works identically for `IN` clauses with generated placeholders (`?,?,?`). Never concatenate.

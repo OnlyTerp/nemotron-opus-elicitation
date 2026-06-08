@@ -1,0 +1,27 @@
+# ITEM FP01
+
+USER MESSAGE:
+Our Postgres reads got slow once the table hit 50M rows, so we're adding more B-tree indexes on every column in the WHERE clauses. Before I roll it out, sanity-check my index DDL approach and suggest the fill factor.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Stop. Indexing every WHERE column is the wrong reflex — it bloats writes, inflates vacuum, and the planner often ignores single-column indexes when a composite would serve. First, run `EXPLAIN (ANALYZE, BUFFERS)` on your actual slow queries. You'll likely find: (a) missing multi-column indexes matching the query's equality-then-range pattern, (b) correlation allowing index-only scans if you INCLUDE the SELECT columns, (c) partial indexes for skewed predicates (e.g., `WHERE status = 'active'`). Fill factor: default 90 is fine for append-mostly workloads; drop to 70–80 only on heavily updated indexed columns to reduce page splits. But before any DDL, show me the query plans — the fix is usually 1–2 targeted composites, not a shotgun approach.
+
+--- Candidate B ---
+Adding an index on every WHERE-clause column is a classic over-indexing trap. Each index adds write overhead (every INSERT/UPDATE/DELETE touches all indexes) and bloat. At 50M rows, you'll feel it on write throughput and vacuum.
+
+Instead: identify your actual slow queries with `EXPLAIN ANALYZE`, then create *composite* indexes matching those query patterns (equality columns first, then range). A single `(status, created_at)` index serves both `WHERE status='x'` and `WHERE status='x' AND created_at > 'y'`. Drop unused indexes with `pg_stat_user_indexes`.
+
+Fill factor: default 100 packs pages tight — great for read-only, terrible for write-heavy tables because every update may split pages. For a table with frequent updates/deletes, use `FILLFACTOR 80` (leaves 20% free space per page). For append-only/immutable data, 100 is fine. You can set it per-index: `CREATE INDEX ... WITH (fillfactor=80)`.
+
+Also check: are you vacuuming enough? `autovacuum_vacuum_scale_factor=0.05` helps at this scale. And consider partitioning if you have time-series access patterns.
+
+--- Candidate C ---
+Adding an index on every WHERE column is usually overkill. First, check `EXPLAIN ANALYZE` — you may only need 1-2 composite indexes covering the most selective columns in query order. For 50M rows, a fillfactor of 80-90 works well (leaves space for HOT updates, reduces page splits). Avoid fillfactor 100 unless the table is append-only. Prefer partial indexes for skewed data (e.g., `WHERE status = 'active'`). Don't index low-cardinality columns like boolean flags alone — they won't help. Test with `pg_stat_user_indexes` after deploy to confirm index usage.
+
+--- Candidate D ---
+Premise check: indexing every column in WHERE clauses is wrong. B-trees help equality/range predicates on selective columns, but each index costs write amplification, storage, and planner overhead. At 50M rows, measure first: `EXPLAIN ANALYZE` your actual slow queries. Add composite indexes matching the query patterns (equality columns first, then range), not single-column indexes on everything. For fillfactor: 90 for read-heavy/immutable data, 70-80 for heavy UPDATE/DELETE churn to reduce page splits. Run `pg_stat_user_indexes` after load to drop unused ones.
+
+--- Candidate E ---
+Premise check: adding an index on *every* column in WHERE clauses is almost always wrong. B-tree indexes help equality/range predicates, but each index costs write throughput, vacuum overhead, and planner confusion. At 50M rows, the real fix is usually a few well-chosen *composite* indexes matching your actual query patterns (check `pg_stat_statements`), not a shotgun approach. Also: fillfactor=90 is the standard starting point for write-heavy tables; drop to 70-80 only if you see heavy page splits from `pgstattuple`. Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries first — you'll likely find missing composites, not missing singles.

@@ -1,0 +1,7 @@
+A memory region is **exploitable** when it's **writable + executable (W+X)** — an attacker who controls input can inject shellcode and jump to it. Also dangerous: **writable + readable** data pages adjacent to code (ROP gadgets), or **executable** pages with predictable addresses (no ASLR).
+
+**W^X (Write XOR Execute)** — enforced by hardware (NX/XD bit) + kernel (mprotect, mmap `PROT_EXEC`/`PROT_WRITE` mutual exclusion) — ensures no page is both writable and executable. This kills classic code-injection. JITs need explicit `mprotect` toggling (W→X flip), which is auditable.
+
+**ASLR** randomizes base addresses of stack, heap, libraries, executable, and `mmap` regions (via `randomize_va_space=2`). It doesn't prevent corruption — it makes *reliably* jumping to attacker-controlled addresses probabilistic. Entropy matters: 64-bit gives ~28–32 bits for mmap/heap, ~19 for stack. Combine with **PIE** (position-independent executable) so the main binary also randomizes.
+
+Defense-in-depth: W^X + ASLR + **RELRO** (read-only GOT) + **stack canaries** + **CET/Shadow Stacks** (hardware ROP mitigation). Check `/proc/<pid>/maps` — look for `rwx` or `rw-` regions that shouldn't exist.

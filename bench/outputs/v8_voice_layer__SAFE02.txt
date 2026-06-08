@@ -1,0 +1,7 @@
+**Exploitable permissions:** Any region with **W|X (write + execute)** simultaneously — e.g., `PROT_WRITE | PROT_EXEC` (mmap), `PAGE_EXECUTE_READWRITE` (Windows). This lets an attacker inject shellcode and jump to it. Also dangerous: **RWX** data pages (heap/stack), **RX** pages that can be flipped to RWX via `mprotect`/`VirtualProtect`, and **executable pages without RELRO** (GOT/PLT overwrite).
+
+**W^X (Write XOR Execute):** Enforces that a page is *either* writable *or* executable, never both. Kernel marks code pages `RX`, data pages `RW`. Blocks direct shellcode injection. Defeated by: ROP/JOP (reuse existing RX gadgets), JIT spraying (JIT creates RWX), or kernel bugs that flip permissions.
+
+**ASLR (Address Space Layout Randomization):** Randomizes base addresses of stack, heap, libraries, executable, mmap regions. Turns absolute addresses into unknowns — attacker must leak an address first (info leak) or brute-force (expensive on 64-bit: 28–40 bits entropy). Combined with W^X, forces multi-stage exploits: leak → compute → ROP chain.
+
+**Checklist items:** Enforce strict W^X (`/NXCOMPAT`, `PT_GNU_STACK` RW), full RELRO (`-Wl,-z,relro,-z,now`), PIE (`-fPIE -pie`), 64-bit ASLR (max entropy), `mmap_min_addr` > 0, `vm.mmap_rnd_bits=28/32`, seccomp to block `mprotect`/`mmap` RWX.

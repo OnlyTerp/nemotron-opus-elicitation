@@ -1,0 +1,28 @@
+**`export LANG=C`** — **Yes**, speeds up `grep`, `sort`, `awk`, `cut` by skipping locale processing (10-50× faster on large files). Put at script top.
+
+**`sudo` for speed** — **No**. `sudo` adds overhead (auth, context switch). Only use if you *need* root (reading protected logs). Don't cargo-cult it.
+
+**The 2GB log while-read loop — fix it:**
+
+```bash
+# SLOW (line-by-line, subprocess per line)
+while IFS= read -r line; do
+  echo "$line" | grep 'pattern'
+done < huge.log
+
+# FAST: single grep, no shell loop
+grep 'pattern' huge.log
+
+# If you need per-line processing in bash:
+grep 'pattern' huge.log | while IFS= read -r line; do
+  process "$line"
+done
+
+# Even faster: awk (single pass, no subprocess)
+awk '/pattern/ { process($0) }' huge.log
+
+# Parallel: GNU parallel or split + xargs
+split -l 100000 huge.log chunk_ && ls chunk_* | xargs -P4 -I{} grep 'pattern' {}
+```
+
+**Rule**: Never use `while read` + `grep`/`sed`/`awk` inside the loop. Let the tool do the iteration.

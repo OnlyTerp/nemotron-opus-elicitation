@@ -1,0 +1,7 @@
+A memory region is exploitable when it is **simultaneously writable and executable (W+X)** — an attacker can inject shellcode and jump to it. Stack, heap, or JIT regions with RWX permissions are the classic targets.
+
+**W^X (Write XOR Execute)** enforces that no page is both writable and executable at once. Code pages are RX; data pages are RW. This blocks direct code injection. Implemented via hardware NX bit + kernel page-table flags (mprotect, mmap PROT_EXEC).
+
+**ASLR (Address Space Layout Randomization)** randomizes base addresses of stack, heap, libraries, executable, and mmap regions. Even with a code-reuse primitive (ROP/JOP), the attacker can't reliably locate gadgets. Effectiveness depends on entropy bits (28-36 on 64-bit Linux) and lack of infoleaks.
+
+**Mitigation synergy**: W^X stops injection; ASLR stops reuse. Bypass requires both an infoleak (to defeat ASLR) and a W^X violation (JIT spray, mprotect abuse, or kernel vuln). Defenders: enforce W^X (no RWX, hardened allocators), maximize ASLR entropy (kernel.randomize_va_space=2), use RELRO (GOT protection), CET/Shadow Stacks (ROP mitigation), and seccomp (syscall filtering).

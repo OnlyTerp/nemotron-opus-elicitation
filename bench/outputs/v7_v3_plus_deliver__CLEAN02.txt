@@ -1,0 +1,21 @@
+function debounce(fn, delay) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), delay);
+  };
+}
+
+// Usage
+const searchAPI = debounce(async (query) => {
+  const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+  const data = await res.json();
+  renderResults(data);
+}, 300);
+
+document.getElementById('search-input').addEventListener('input', (e) => {
+  searchAPI(e.target.value);
+});
+
+// Cleanup on unmount if needed (e.g., SPA):
+// return () => clearTimeout(timer);

@@ -1,0 +1,1 @@
+No. Big-O describes *asymptotic growth rate* of operations as input size → ∞, ignoring constants and lower-order terms. It tells you how runtime *scales*, not absolute seconds. O(n) and O(1000n) are both "linear" but differ 1000x in practice. Cache effects, branch prediction, and hardware matter. Big-O is for comparing algorithms at scale, not predicting wall-clock time.

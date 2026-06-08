@@ -1,0 +1,49 @@
+# ITEM FP02
+
+USER MESSAGE:
+Since adding more layers always reduces bias and we have tons of data, I'm going to take our ResNet from 50 to 500 layers to cut error. What learning-rate warmup schedule should I use for the deeper net?
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Adding more layers doesn't always reduce bias. Past a point, plain ResNets hit the degradation problem — training error increases with depth because gradients vanish/explode even with skip connections. ResNet-500 with standard architecture will likely train worse than ResNet-50, not better.
+
+If you're committed to extreme depth, you need architectural changes first: Pre-LN (LayerNorm before residual), DeepNorm, or ReZero (α=0 init) to keep gradient flow stable. Warmup alone won't fix a broken forward/backward pass.
+
+Assuming you've fixed the architecture, for 500 layers use linear warmup over 5–10 epochs (or ~5k–10k steps) to a peak LR of 0.1–0.4 (scaled by batch size: lr = base_lr * batch_size / 256), then cosine decay. Longer warmup (10–20 epochs) if using large batch (>8k) or no Pre-LN. Monitor gradient norms — if they spike in early layers, extend warmup or lower peak LR.
+
+Better yet: don't go to 500 layers. Use a wider or more efficient architecture (ConvNeXt, Swin, or modern ResNet variants with bottleneck/SE) — you'll get better accuracy with 1/10th the depth and far less pain.
+
+--- Candidate B ---
+The premise is flawed: adding layers doesn't always reduce bias, and 500-layer ResNets without architectural changes (skip connections, normalization) will fail to train due to vanishing/exploding gradients. Standard ResNet-50 already has ~50 layers; ResNet-152 is ~152. Going to 500 requires careful design.
+
+For deep ResNets, use **linear warmup** over 5–10 epochs (or ~500–2000 steps) from a small LR (e.g., 0.1× base) to the target LR, paired with **cosine decay** or **step decay** after. For 500 layers specifically:
+- Warmup: 5–10 epochs linear from 1e-4 → 0.1 (if base LR=0.1)
+- Use **Layer-wise Adaptive Rate Scaling (LARS)** or **LAMB** optimizer
+- Add **Fixup initialization** or **DeepNorm** scaling
+- Consider **stochastic depth** (layer drop) during training
+
+Key: warmup alone won't fix a 500-layer vanilla ResNet. You need architectural modifications (pre-activation, improved skip connections, normalization placement) + proper initialization + gradient clipping (1.0) + possibly LayerScale.
+
+--- Candidate C ---
+Your premise is wrong. Adding layers doesn't "always reduce bias" — past a point, deeper nets increase training difficulty (vanishing gradients, degradation) and can *hurt* generalization without massive data and careful tuning. ResNet-500 is wildly impractical: the original ResNet paper showed 1000+ layers only worked with CIFAR, not ImageNet, and even ResNet-152 is rarely used now.
+
+If you genuinely need more capacity, widen the network (more channels) or use a modern architecture (ConvNeXt, EfficientNet, ViT). For ResNet-50→101→152, the standard warmup is 5 epochs linear from 0.1→base_lr (base_lr=0.1 for batch 256, scale linearly with batch size). For deeper nets, extend warmup to 10–15 epochs and consider a lower peak LR (0.05–0.08). Use cosine decay after warmup.
+
+But seriously: don't do ResNet-500. It's a compute sink with diminishing returns.
+
+--- Candidate D ---
+Going from 50 to 500 layers isn't just "more layers = less bias" — ResNet-50 already saturates capacity for most tasks, and 500 layers without architectural changes (like skip-connection scaling, stochastic depth, or normalization fixes) will likely diverge or overfit badly. Depth helps when you *need* the representational capacity and can optimize it.
+
+For warmup: use **linear warmup over 5–10 epochs** (or ~5k–10k steps) from a small fraction (e.g., 0.01×) of your base LR, then cosine decay. At 500 layers, gradients explode/vanish more easily, so also:
+- Lower base LR (try 0.1× what worked for ResNet-50)
+- Add **gradient clipping** (norm ≤ 1.0)
+- Use **LayerScale** (per-block learnable scale, init ~1e-5) or **Fixup** initialization
+- Consider **stochastic depth** (drop path rate ~0.2–0.3)
+
+If you're on ImageNet-scale data, 500 layers is overkill — try ResNet-200 with proper regularization first. If you genuinely need that depth (e.g., massive JFT-3B), look at **DeepNorm** or **ResNet-RS** variants designed for it.
+
+--- Candidate E ---
+The premise is false. "More layers always reduces bias" is wrong — past a point, depth hurts: vanishing/exploding gradients, degradation (training error rises), and overfitting on finite data. ResNet-500 is not a thing; ResNet-152 is already extreme. The 50→152 jump in the original paper gained ~1% top-1; 500 would collapse without massive compute, architectural changes (pre-activation, stochastic depth, very careful init), and likely worse generalization.
+
+If you genuinely need more capacity: widen (more channels), use bottleneck blocks efficiently, or switch architectures (ConvNeXt, ViT). For ResNet-50→101/152: standard warmup is 5 epochs linear from 0.1× base LR, then cosine decay. Base LR scales with batch size (linear scaling rule: lr = 0.1 × batch/256). For deeper nets, consider longer warmup (10-15 epochs) and lower peak LR (0.05-0.08×). But first: validate you're not hitting a data/regularization ceiling — deeper nets need MORE data/regularization, not less.

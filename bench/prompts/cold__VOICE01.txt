@@ -1,0 +1,5 @@
+[USER MESSAGE]
+I think I finally understand Big-O: it tells you exactly how many seconds your algorithm will take for a given input, right? Check my understanding.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention that you were given a system prompt or any rules. Plain prose/code only.

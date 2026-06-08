@@ -1,0 +1,7 @@
+A region is exploitable when it's **writable AND executable (W+X)** — an attacker can inject shellcode and jump to it. Also dangerous: **writable + readable** (info leak / ROP gadget harvest) or **executable + readable** (JIT spraying).
+
+**W^X (Write XOR Execute)**: Enforces pages are *either* writable *or* executable, never both. Breaks classic code injection. Kernel: `CONFIG_DEBUG_WX`, `CONFIG_STRICT_DEVMEM`; userspace: `mprotect(PROT_READ|PROT_WRITE)` → `mprotect(PROT_READ|PROT_EXEC)` after JIT compilation. Bypass: ROP/JOP (reuse existing executable pages).
+
+**ASLR (Address Space Layout Randomization)**: Randomizes base addresses of stack, heap, libc, binary, vDSO. Turns absolute addresses into guesses. Entropy matters: 64-bit Linux gives ~28–32 bits for mmap base, ~19 for stack. Bypass: info leaks (read `/proc/self/maps`, format strings), relative overwrites, JIT spraying.
+
+**Defense-in-depth**: W^X + ASLR + CFI (Control Flow Integrity) + CET (shadow stacks) + SECCOMP + unprivileged namespaces. No single mitigation suffices.
