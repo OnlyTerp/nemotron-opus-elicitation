@@ -3,7 +3,8 @@
 This project's deliverable is **not** a magic prompt. It's a method plus one concrete artifact that applies it to Nemotron 3 Ultra.
 
 ## TL;DR
-- **Recommended prompt:** `templates/v16_personality_calibrate.md` (353 words, system-prompt block between the BEGIN/END markers).
+- **Verified prompt:** `templates/v16_personality_calibrate.md` (353 words, system-prompt block between the BEGIN/END markers).
+- **Extended prompt:** `templates/v18_full_intelligence.md` — v16 + generalized verification, fabrication guard, XY-problem catch, adversarial design check. The additions are reasoning-derived and untested in the blind harness; the v16 core inside is verbatim.
 - **What it reliably buys you on Nemotron 3 Ultra:** (1) a warm, *validate-first* voice (acknowledges what's right before correcting) — with **zero** degeneration / over-refusal / process-narration; (2) **execute-verify on code** — checks a function's actual output on a boundary input, catching silent bugs (recall **2/10 → 10/10**, no false alarms); (3) **register calibration** — matches your energy naturally ("Hell yeah", "Nope", "Done") instead of staying locked in professional mode. All three are dispositions the model already has; the prompt just makes them fire reliably.
 - **What it does NOT buy you:** general raw intelligence. Outside code-correctness, it does not beat a plain warm-expert prompt on premise/bug catching — those are baseline capability already present. The execute-verify gain is specific to "is this code actually correct" tasks.
 

@@ -22,11 +22,16 @@ Nemotron 3 Ultra is a powerful model with a personality problem. By default it:
 
 This repo contains **v16** — a 353-word system prompt that fixes all four, proven across 25 controlled experiments with blind dual-judge grading. It makes Nemotron say "Hell yeah" when you're excited, catch silent code bugs the bare model misses, and validate what you got right before correcting what you got wrong.
 
+There is also **v18** — v16 plus four reasoning-derived extensions (generalized verification beyond code, a never-invent-specifics fabrication guard, answer-the-problem-not-the-sentence, and an adversarial "what breaks this?" pass on its own designs). The v16 core inside it carries the full experimental backing; the v18 additions target the campaign's known residual gaps but have **not** been through the blind harness.
+
 ## Quick start
 
-Copy the system prompt from [`templates/v16_personality_calibrate.md`](templates/v16_personality_calibrate.md) — the text between `=== BEGIN` and `=== END` — and paste it into your Devin CLI's `~/.config/devin/agents/nemotron-ultra/AGENT.md` (or wherever your Nemotron agent's system prompt lives).
+- Want only experimentally-verified clauses → [`templates/v16_personality_calibrate.md`](templates/v16_personality_calibrate.md)
+- Want the most capable version, accepting four untested (but gap-targeted) clauses → [`templates/v18_full_intelligence.md`](templates/v18_full_intelligence.md)
 
-That's it. 353 words. No tools, no scaffolding, no fine-tuning.
+Copy the text between `=== BEGIN` and `=== END` and paste it into your Devin CLI's `~/.config/devin/agents/nemotron-ultra/AGENT.md` (or wherever your Nemotron agent's system prompt lives).
+
+That's it. No tools, no scaffolding, no fine-tuning.
 
 ## What it actually does
 
@@ -77,6 +82,7 @@ All three are dispositions the model already performs — the prompt just makes 
 | v13 | Added execute-verify on code | Lifted silent-bug recall from 2/10 to 10/10 |
 | v16 | Added register calibration | 20/20 on mixed battery, personality matches energy |
 | v17 | Added data-driven Opus voice moves | 9/10 (1 VOICE regression), not adopted |
+| v18 | Generalized verification, fabrication guard, XY-problem, adversarial design check | Reasoning-derived; additions untested in the blind harness |
 
 ## Is this model-specific?
 
@@ -92,7 +98,8 @@ Yes. The effect is a **Nemotron-specific disposition repair**, not a universal p
 
 | Path | What |
 |---|---|
-| `templates/v16_personality_calibrate.md` | **The prompt.** 353 words. Copy the text between BEGIN/END. |
+| `templates/v16_personality_calibrate.md` | **The verified prompt.** 353 words. Copy the text between BEGIN/END. |
+| `templates/v18_full_intelligence.md` | v16 + four gap-targeted extensions (untested additions, verified core) |
 | `USAGE.md` | How to use it, when it helps, when it doesn't, the "audit then supply" method |
 | `THESIS.md` | The full research arc (15 refinements, 25 experiments) for the curious |
 | `experiments/` | Each experiment: design, results, honest caveats |
