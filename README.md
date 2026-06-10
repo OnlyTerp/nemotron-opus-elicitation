@@ -22,12 +22,13 @@ Nemotron 3 Ultra is a powerful model with a personality problem. By default it:
 
 This repo contains **v16** — a 353-word system prompt that fixes all four, proven across 25 controlled experiments with blind dual-judge grading. It makes Nemotron say "Hell yeah" when you're excited, catch silent code bugs the bare model misses, and validate what you got right before correcting what you got wrong.
 
-There is also **v18** — v16 plus four reasoning-derived extensions (generalized verification beyond code, a never-invent-specifics fabrication guard, answer-the-problem-not-the-sentence, and an adversarial "what breaks this?" pass on its own designs). The v16 core inside it carries the full experimental backing; the v18 additions target the campaign's known residual gaps but have **not** been through the blind harness.
+There is also **v18** — v16 plus four reasoning-derived extensions (generalized verification beyond code, a never-invent-specifics fabrication guard, answer-the-problem-not-the-sentence, and an adversarial "what breaks this?" pass on its own designs). And **v19** — the maximal template: v18 plus the full expert problem-attack loop (understand-before-solving, crux-first, enumerate candidates before committing, change the attack when stuck, derive-don't-pattern-match, magnitude sanity-checks, downstream-cost checks, and a skeptical-reviewer read-back). The rationale: Nemotron is big, fast (~500 tps), and cheap — so the template can afford to demand the entire reasoning loop on every substantive request. The v16 core inside both carries the full experimental backing; the v18/v19 additions target the campaign's known residual gaps but have **not** been through the blind harness.
 
 ## Quick start
 
 - Want only experimentally-verified clauses → [`templates/v16_personality_calibrate.md`](templates/v16_personality_calibrate.md)
-- Want the most capable version, accepting four untested (but gap-targeted) clauses → [`templates/v18_full_intelligence.md`](templates/v18_full_intelligence.md)
+- Want verified core + epistemic guards → [`templates/v18_full_intelligence.md`](templates/v18_full_intelligence.md)
+- Want the maximal forced-reasoning version → [`templates/v19_full_reasoning.md`](templates/v19_full_reasoning.md)
 
 Copy the text between `=== BEGIN` and `=== END` and paste it into your Devin CLI's `~/.config/devin/agents/nemotron-ultra/AGENT.md` (or wherever your Nemotron agent's system prompt lives).
 
@@ -83,6 +84,7 @@ All three are dispositions the model already performs — the prompt just makes 
 | v16 | Added register calibration | 20/20 on mixed battery, personality matches energy |
 | v17 | Added data-driven Opus voice moves | 9/10 (1 VOICE regression), not adopted |
 | v18 | Generalized verification, fabrication guard, XY-problem, adversarial design check | Reasoning-derived; additions untested in the blind harness |
+| v19 | Full problem-attack loop: crux-first, enumerate candidates, derive don't pattern-match, magnitude checks, read-back | Reasoning-derived; the maximal template, untested in the blind harness |
 
 ## Is this model-specific?
 
@@ -100,6 +102,7 @@ Yes. The effect is a **Nemotron-specific disposition repair**, not a universal p
 |---|---|
 | `templates/v16_personality_calibrate.md` | **The verified prompt.** 353 words. Copy the text between BEGIN/END. |
 | `templates/v18_full_intelligence.md` | v16 + four gap-targeted extensions (untested additions, verified core) |
+| `templates/v19_full_reasoning.md` | The maximal template: v18 + forced expert problem-attack loop (untested additions, verified core) |
 | `USAGE.md` | How to use it, when it helps, when it doesn't, the "audit then supply" method |
 | `THESIS.md` | The full research arc (15 refinements, 25 experiments) for the curious |
 | `experiments/` | Each experiment: design, results, honest caveats |
