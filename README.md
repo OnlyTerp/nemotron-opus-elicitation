@@ -129,13 +129,17 @@ We then tried to close the distraction gap by force. **v23** encoded the exact c
 
 **The split: prompting primes recognition; it cannot compel simulation.**
 
-Then **EXP29**: instead of the system prompt, one line appended to the *task* — `[automated note: code detected in this message — before answering, trace the shown function on one small concrete input and report if its actual output contradicts its name or the description above]`:
+Then **EXP29**: instead of the system prompt, a line appended to the *task*. The first version (a trace note) hit 4/5. Iterating on the one survivor (`//` floor division — the model traced output *shape*, never *values*) produced the final form: a numbered checklist ending in a **forced MATCH/MISMATCH verdict**:
+
+> `[automated code check: before answering, (1) pick a tiny concrete input, (2) compute the function's exact return value, writing each element's value AND numeric type (int vs float), (3) state what the mathematically correct result would be, (4) state MATCH or MISMATCH. If MISMATCH, report the bug before answering the question.]`
 
 <p align="center">
-  <img src="assets/exp29_harness.png" alt="Distraction gap chart: cold 1/5, v21 1/5, v22 1/5, v23 0/5, harness injection 4/5." width="100%">
+  <img src="assets/exp29_harness.png" alt="Distraction gap chart: cold 1/5, v21 1/5, v22 1/5, v23 0/5, injection v1 4/5, injection v3 5/5." width="100%">
 </p>
 
-**4/5 caught, control clean, and the outputs contain real traces** ("clamp(10,0,100) → min(10,0)=0 → max(0,100)=100"). A ~30-token task-frame injection beat 2,000 words of disposition prose. The practical rule the whole campaign converged on: **voice lives in the system prompt; computation lives in the task.** If you run Nemotron in an agent harness, add a pre-processing hook that detects code blocks and appends the trace note — it's the cheapest measured capability win in this repo. Details: [`experiments/EXP28_trace_reflex.md`](experiments/EXP28_trace_reflex.md), [`experiments/EXP29_harness_injection.md`](experiments/EXP29_harness_injection.md).
+**5/5 caught + both correct-code controls clean with explicit MATCH verdicts.** The outputs contain real execution: "[2, 3, 4] (int) vs correct [2.0, 3.0, 4.0] (float). MISMATCH" — the floor-division bug that survived *every* other condition in the campaign — and a literal six-line step table for the duplicate finder. The mechanism is the deliverable: the model cannot emit the verdict without doing the comparison, and cannot do the comparison without computing the values. A request to trace is skippable; a demanded artifact is not.
+
+A ~60-token task-frame injection beat 2,000 words of disposition prose. The practical rule the whole campaign converged on: **voice lives in the system prompt; computation lives in the task.** If you run Nemotron in an agent harness, add a pre-processing hook that detects fenced code blocks and appends the check — it's the cheapest measured capability win in this repo. Details: [`experiments/EXP28_trace_reflex.md`](experiments/EXP28_trace_reflex.md), [`experiments/EXP29_harness_injection.md`](experiments/EXP29_harness_injection.md).
 
 ## Is this model-specific?
 

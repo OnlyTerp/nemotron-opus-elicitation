@@ -48,9 +48,54 @@ in user messages and appends the one-line trace note. This is the cheapest measu
 capability win of the campaign: ~30 tokens per code-bearing request, 2-3x bug-catch rate
 in distraction framing.
 
+## EXP29b/29c — iterating the injection to 5/5
+
+**v2** ("execute... element by element, including numeric types"): 4/5, with a regression —
+BF03 silently fixed but unflagged, and BF02's `//` STILL survived (the model traced output
+length, not values). Prose-framed injections are treated as optional context.
+
+**v3** — a numbered checklist with a FORCED VERDICT:
+
+> [automated code check: before answering, (1) pick a tiny concrete input, (2) compute the
+> function's exact return value, writing each element's value AND numeric type (int vs
+> float), (3) state what the mathematically correct result would be, (4) state MATCH or
+> MISMATCH. If MISMATCH, report the bug before answering the question.]
+
+| Bug | best prompt arm | inj-v1 | inj-v3 |
+|---|---|---|---|
+| BF01 clamp args swapped | 1-2 arms | CAUGHT | **CAUGHT** — "returns 100, should return 10. MISMATCH" |
+| BF02 moving-avg floor div | **0 arms, ever** | MISSED | **CAUGHT** — "[2,3,4] (int) vs correct [2.0,3.0,4.0] (float). MISMATCH" |
+| BF03 first-char sort | 0 strict | CAUGHT | **CAUGHT** — both bugs (x[0] AND codepoint-vs-locale), DIN 5007 cited |
+| BF05 cart first qty | cold only | CAUGHT | **CAUGHT** — "returns 25, correct 35. MISMATCH" |
+| BF06 dupe self-compare | 0 arms | CAUGHT | **CAUGHT** — literal step table: "i=0,j=0: 1==1 → add 1 ..." |
+| Controls (CF01, CF02) | clean | clean | **clean — explicit MATCH verdicts** |
+
+**5/5 + 2/2 controls.** The mechanism is the forced MATCH/MISMATCH verdict: the model
+cannot emit the verdict without doing the comparison, and cannot do the comparison without
+computing the values. v1 requested a trace (skippable); v3 demands a deliverable.
+BF06's output contains a six-line execution table — the exact simulation no system-prompt
+clause could compel.
+
+## The final injection (production form)
+For Devin-CLI-style harnesses, append to any user message containing a fenced code block:
+
+```
+[automated code check: before answering, (1) pick a tiny concrete input, (2) compute the
+function's exact return value, writing each element's value AND numeric type (int vs float),
+(3) state what the mathematically correct result would be, (4) state MATCH or MISMATCH.
+If MISMATCH, report the bug before answering the question.]
+```
+
+~60 tokens. Takes the distraction-framed bug-catch rate from 0-2/5 (any system prompt) to 5/5.
+
 ## Caveats
-- n=1 per item; 5+1 items; same bank as EXP27c (in-distribution for the items, though the
-  injection text never names the bugs).
+- n=1 per item; 5 bugs + 2 controls; same bank as EXP27c (in-distribution for the items,
+  though the injection text never names the bugs).
 - The injection is simulated by appending to the prompt — a real wrapper would be
   identical from the model's perspective.
-- BF04 not rerun (saturated). Transfer of the injection to fresh banks not yet measured.
+- The v3 checklist is visible in output (the model reports the check) — unlike the silent
+  dispositions, this changes the response shape. For distraction-framed requests that's
+  arguably a feature (the user SEES the verdict); for pure style questions it adds ~40
+  words of preamble.
+- Transfer to fresh banks/languages not yet measured; v3 wording is list/numeric-leaning
+  ("element by element") — generalization to stateful/string/async code unknown.
