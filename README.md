@@ -22,13 +22,18 @@ Nemotron 3 Ultra is a powerful model with a personality problem. By default it:
 
 This repo contains **v16** — a 353-word system prompt that fixes all four, proven across 25 controlled experiments with blind dual-judge grading. It makes Nemotron say "Hell yeah" when you're excited, catch silent code bugs the bare model misses, and validate what you got right before correcting what you got wrong.
 
-There is also **v18** — v16 plus four reasoning-derived extensions (generalized verification beyond code, a never-invent-specifics fabrication guard, answer-the-problem-not-the-sentence, and an adversarial "what breaks this?" pass on its own designs). And **v19** — the maximal template: v18 plus the full expert problem-attack loop (understand-before-solving, crux-first, enumerate candidates before committing, change the attack when stuck, derive-don't-pattern-match, magnitude sanity-checks, downstream-cost checks, and a skeptical-reviewer read-back). The rationale: Nemotron is big, fast (~500 tps), and cheap — so the template can afford to demand the entire reasoning loop on every substantive request. The v16 core inside both carries the full experimental backing; the v18/v19 additions target the campaign's known residual gaps but have **not** been through the blind harness.
+There is also **v18** — v16 plus four reasoning-derived extensions (generalized verification beyond code, a never-invent-specifics fabrication guard, answer-the-problem-not-the-sentence, and an adversarial "what breaks this?" pass on its own designs). And **v19** — v18 plus the full expert problem-attack loop (understand-before-solving, crux-first, enumerate candidates before committing, change the attack when stuck, derive-don't-pattern-match, magnitude sanity-checks, downstream-cost checks, and a skeptical-reviewer read-back). The rationale: Nemotron is big, fast (~500 tps), and cheap — so the template can afford to demand the entire reasoning loop on every substantive request.
+
+The top of the ladder is **v20** — v19 plus **confidence-gated tool grounding**, for agent harnesses where the model can search/fetch/execute (e.g. Devin CLI). It installs the derive-vs-recall partition: derivable claims get derived (v19); recall-dependent specifics (API names, signatures, flags, version-gated behavior) that the model is inferring rather than remembering get *verified* — a quick web search, doc fetch, or actually running the snippet — before being asserted. This targets an observed failure: in a live v19 stress test the model produced a flawless 15-step lock-free-stack ABA interleaving proof, then fabricated a nonexistent API (`folly::EpochBasedReclamation`) in the fix. The reasoning held; the recall lied. Grounding, not more reasoning, is the fix.
+
+The v16 core inside all three carries the full experimental backing; the v18/v19/v20 additions target the campaign's known residual gaps but have **not** been through the blind harness.
 
 ## Quick start
 
 - Want only experimentally-verified clauses → [`templates/v16_personality_calibrate.md`](templates/v16_personality_calibrate.md)
 - Want verified core + epistemic guards → [`templates/v18_full_intelligence.md`](templates/v18_full_intelligence.md)
 - Want the maximal forced-reasoning version → [`templates/v19_full_reasoning.md`](templates/v19_full_reasoning.md)
+- Running in an agent harness with tools → [`templates/v20_grounded_reasoning.md`](templates/v20_grounded_reasoning.md)
 
 Copy the text between `=== BEGIN` and `=== END` and paste it into your Devin CLI's `~/.config/devin/agents/nemotron-ultra/AGENT.md` (or wherever your Nemotron agent's system prompt lives).
 
@@ -84,7 +89,8 @@ All three are dispositions the model already performs — the prompt just makes 
 | v16 | Added register calibration | 20/20 on mixed battery, personality matches energy |
 | v17 | Added data-driven Opus voice moves | 9/10 (1 VOICE regression), not adopted |
 | v18 | Generalized verification, fabrication guard, XY-problem, adversarial design check | Reasoning-derived; additions untested in the blind harness |
-| v19 | Full problem-attack loop: crux-first, enumerate candidates, derive don't pattern-match, magnitude checks, read-back | Reasoning-derived; the maximal template, untested in the blind harness |
+| v19 | Full problem-attack loop: crux-first, enumerate candidates, derive don't pattern-match, magnitude checks, read-back | Reasoning-derived; untested in the blind harness |
+| v20 | Confidence-gated tool grounding: verify recall-dependent specifics via search/fetch/exec before asserting | Targets an observed v19 fabrication; requires a tool-bearing harness; untested in the blind harness |
 
 ## Is this model-specific?
 
@@ -102,7 +108,8 @@ Yes. The effect is a **Nemotron-specific disposition repair**, not a universal p
 |---|---|
 | `templates/v16_personality_calibrate.md` | **The verified prompt.** 353 words. Copy the text between BEGIN/END. |
 | `templates/v18_full_intelligence.md` | v16 + four gap-targeted extensions (untested additions, verified core) |
-| `templates/v19_full_reasoning.md` | The maximal template: v18 + forced expert problem-attack loop (untested additions, verified core) |
+| `templates/v19_full_reasoning.md` | v18 + forced expert problem-attack loop (untested additions, verified core) |
+| `templates/v20_grounded_reasoning.md` | The maximal grounded template: v19 + confidence-gated tool grounding for agent harnesses |
 | `USAGE.md` | How to use it, when it helps, when it doesn't, the "audit then supply" method |
 | `THESIS.md` | The full research arc (15 refinements, 25 experiments) for the curious |
 | `experiments/` | Each experiment: design, results, honest caveats |
