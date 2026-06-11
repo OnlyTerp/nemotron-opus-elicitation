@@ -26,7 +26,9 @@ There is also **v18** — v16 plus four reasoning-derived extensions (generalize
 
 The top of the ladder is **v20** — v19 plus **confidence-gated tool grounding**, for agent harnesses where the model can search/fetch/execute (e.g. Devin CLI). It installs the derive-vs-recall partition: derivable claims get derived (v19); recall-dependent specifics (API names, signatures, flags, version-gated behavior) that the model is inferring rather than remembering get *verified* — a quick web search, doc fetch, or actually running the snippet — before being asserted. This targets an observed failure: in a live v19 stress test the model produced a flawless 15-step lock-free-stack ABA interleaving proof, then fabricated a nonexistent API (`folly::EpochBasedReclamation`) in the fix. The reasoning held; the recall lied. Grounding, not more reasoning, is the fix.
 
-The v16 core inside all three carries the full experimental backing; the v18/v19/v20 additions target the campaign's known residual gaps but have **not** been through the blind harness.
+At the top sits **v21** — the complete cognitive architecture (~1900 words, built for long-context models where prompt length is free). It inverts the patch-by-patch approach: instead of asking "what failed last?", it encodes the full expert repertoire — problem-type classification (lookup/derivation/design/debug/review demand different cognition), constraint extraction, kill-tests for candidate approaches, representation changes when stuck (relaxation, decomposition, analogy), invariant + dimensional verification, differential-diagnosis debugging, design judgment with operational reality, evidence reasoning (base rates, selection effects, Fermi-first), calibration under pushback (re-derive, don't defend or fold), multi-step error control, and long-context hygiene (quote, don't paraphrase from memory).
+
+The v16 core inside all of them carries the full experimental backing; the v18/v19/v20/v21 additions target the campaign's known residual gaps but have **not** been through the blind harness.
 
 ## Quick start
 
@@ -34,6 +36,7 @@ The v16 core inside all three carries the full experimental backing; the v18/v19
 - Want verified core + epistemic guards → [`templates/v18_full_intelligence.md`](templates/v18_full_intelligence.md)
 - Want the maximal forced-reasoning version → [`templates/v19_full_reasoning.md`](templates/v19_full_reasoning.md)
 - Running in an agent harness with tools → [`templates/v20_grounded_reasoning.md`](templates/v20_grounded_reasoning.md)
+- Long-context model, want the complete architecture → [`templates/v21_cognitive_architecture.md`](templates/v21_cognitive_architecture.md)
 
 Copy the text between `=== BEGIN` and `=== END` and paste it into your Devin CLI's `~/.config/devin/agents/nemotron-ultra/AGENT.md` (or wherever your Nemotron agent's system prompt lives).
 
@@ -91,6 +94,7 @@ All three are dispositions the model already performs — the prompt just makes 
 | v18 | Generalized verification, fabrication guard, XY-problem, adversarial design check | Reasoning-derived; additions untested in the blind harness |
 | v19 | Full problem-attack loop: crux-first, enumerate candidates, derive don't pattern-match, magnitude checks, read-back | Reasoning-derived; untested in the blind harness |
 | v20 | Confidence-gated tool grounding: verify recall-dependent specifics via search/fetch/exec before asserting | Targets an observed v19 fabrication; requires a tool-bearing harness; untested in the blind harness |
+| v21 | Complete cognitive architecture: problem classification, kill-tests, invariants, differential diagnosis, pushback calibration, long-context hygiene | Reasoning-derived; ~1900 words for long-context models; untested in the blind harness |
 
 ## Is this model-specific?
 
@@ -109,7 +113,8 @@ Yes. The effect is a **Nemotron-specific disposition repair**, not a universal p
 | `templates/v16_personality_calibrate.md` | **The verified prompt.** 353 words. Copy the text between BEGIN/END. |
 | `templates/v18_full_intelligence.md` | v16 + four gap-targeted extensions (untested additions, verified core) |
 | `templates/v19_full_reasoning.md` | v18 + forced expert problem-attack loop (untested additions, verified core) |
-| `templates/v20_grounded_reasoning.md` | The maximal grounded template: v19 + confidence-gated tool grounding for agent harnesses |
+| `templates/v20_grounded_reasoning.md` | v19 + confidence-gated tool grounding for agent harnesses |
+| `templates/v21_cognitive_architecture.md` | The complete cognitive architecture (~1900 words) for long-context models |
 | `USAGE.md` | How to use it, when it helps, when it doesn't, the "audit then supply" method |
 | `THESIS.md` | The full research arc (15 refinements, 25 experiments) for the curious |
 | `experiments/` | Each experiment: design, results, honest caveats |
