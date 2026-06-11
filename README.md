@@ -123,6 +123,20 @@ Three headline findings, including the ones that don't flatter the template:
 
 Full design, outputs, and grades: [`experiments/EXP27_fresh_headtohead.md`](experiments/EXP27_fresh_headtohead.md) and `bench/exp27/`.
 
+## EXP28/29: what finally closed the gap (and what it teaches about prompting)
+
+We then tried to close the distraction gap by force. **v23** encoded the exact cognitive move that catches these bugs (trace the shown code on a two-element input; compare against what the function's name promises) — and named the six bug classes verbatim in the system prompt. Result: the model read "a clamp that returns its bound for an in-range input" *while looking at exactly that clamp* and still answered the side question. In-distribution 1/6. The clause fired only on famous single-line idioms (transfer set: mutate-while-iterate, `counts[w] = 1`), never on bugs requiring actual simulation.
+
+**The split: prompting primes recognition; it cannot compel simulation.**
+
+Then **EXP29**: instead of the system prompt, one line appended to the *task* — `[automated note: code detected in this message — before answering, trace the shown function on one small concrete input and report if its actual output contradicts its name or the description above]`:
+
+<p align="center">
+  <img src="assets/exp29_harness.png" alt="Distraction gap chart: cold 1/5, v21 1/5, v22 1/5, v23 0/5, harness injection 4/5." width="100%">
+</p>
+
+**4/5 caught, control clean, and the outputs contain real traces** ("clamp(10,0,100) → min(10,0)=0 → max(0,100)=100"). A ~30-token task-frame injection beat 2,000 words of disposition prose. The practical rule the whole campaign converged on: **voice lives in the system prompt; computation lives in the task.** If you run Nemotron in an agent harness, add a pre-processing hook that detects code blocks and appends the trace note — it's the cheapest measured capability win in this repo. Details: [`experiments/EXP28_trace_reflex.md`](experiments/EXP28_trace_reflex.md), [`experiments/EXP29_harness_injection.md`](experiments/EXP29_harness_injection.md).
+
 ## Is this model-specific?
 
 Yes. The effect is a **Nemotron-specific disposition repair**, not a universal prompt trick. On Qwen 3.6 35B (already warm/validate-first by default), v16 was a measured no-op — because there's no deficit to fix. The method — audit the base model for what it lacks, supply exactly that — is general. The specific prompt is tuned to Nemotron's gaps.
