@@ -1,0 +1,1 @@
+I think HTTP/2 multiplexes requests over one TCP connection, which is why it kills head-of-line blocking completely — check me? Under 130 words.

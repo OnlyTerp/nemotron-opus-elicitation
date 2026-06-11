@@ -1,0 +1,14 @@
+Creating a new `sync.Mutex` per request does nothing — each request gets its own mutex, so there's zero contention protection. The mutex is allocated, locked, unlocked, and GC'd every call. Remove it entirely.
+
+`GOMAXPROCS` defaults to CPU cores (correct). Worker pool size: start with `runtime.NumCPU() * 2` for I/O-bound, `NumCPU()` for CPU-bound. Use a bounded channel or `errgroup` with `SetLimit`:
+
+```go
+g, _ := errgroup.WithContext(ctx)
+g.SetLimit(runtime.NumCPU() * 2)
+for req := range requests {
+    req := req
+    g.Go(func() error { return handle(req) })
+}
+```
+
+Profile with `pprof` (`net/http/pprof`) — look at mutex contention (should be near zero now), GC%, and syscall time. The real throughput gains come from connection pooling (DB, HTTP clients), batching, and reducing allocations per request.

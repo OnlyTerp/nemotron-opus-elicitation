@@ -1,0 +1,17 @@
+Yes, 1024 is too small — ~1M syscalls/GB kills throughput.
+
+**Use 65536 (64 KiB).** Matches kernel readahead, fits in cache, minimizes syscall overhead.
+
+**Don't write this loop.** Use `shutil.copyfileobj(f, g, length=65536)` — C-optimized, uses `copy_file_range`/`sendfile` on Linux for zero-copy.
+
+**Your code also leaks files** (no `with`) and lacks error handling. Fixed:
+
+```python
+import shutil
+
+def copy_file(src, dst):
+    with open(src, 'rb') as f, open(dst, 'wb') as g:
+        shutil.copyfileobj(f, g, length=65536)
+```
+
+Or simply `shutil.copy2(src, dst)` — preserves metadata, uses kernel fast paths.

@@ -1,0 +1,3 @@
+`acc` is fine — it's a standard abbreviation for "accumulator" in fold/reduce patterns. Experienced Pythonistas recognize it instantly.
+
+If you want more explicit, `total` or `sum_` (trailing underscore avoids shadowing built-in `sum`) are good. But honestly? Just use the built-in: `return sum(nums)`. It's implemented in C, handles edge cases, and reads like English. `acc` isn't the problem.

@@ -1,0 +1,6 @@
+You're optimizing the wrong things.
+
+1. **Hoist `len(my_list)`** — store `n = len(my_list)` outside the loop
+2. **Hoist the set** — build `constant_set = set(constant_list)` once before the loop
+
+Those give immediate O(n) → O(1) per-iteration wins. JSON library choice (orjson, ujson, simdjson) is irrelevant until serialization is profiled as the bottleneck. Fix the loop first.

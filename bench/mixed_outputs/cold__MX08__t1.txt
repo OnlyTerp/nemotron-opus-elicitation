@@ -1,0 +1,9 @@
+`acc` is idiomatic for "accumulator" in reduce/fold contexts — widely recognized. No need to lengthen it. If you prefer explicit: `total` or `running_sum` works fine. For this simple sum, `total` matches the function name and is clear:
+
+```python
+def total(nums):
+    total = 0
+    for n in nums:
+        total += n
+    return total
+```

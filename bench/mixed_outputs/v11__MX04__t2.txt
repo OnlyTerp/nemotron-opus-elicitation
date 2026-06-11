@@ -1,0 +1,6 @@
+You're asking about JSON libraries while your loop has two **actual** bottlenecks:
+
+1. `len(my_list)` in the condition — hoist it: `n = len(my_list); for i in range(n):`
+2. Rebuilding the set every iteration — move it **out**: `lookup = set(constant_list); for ...`
+
+Those two fixes will dwarf any JSON library difference. Python's built-in `json` is fine for most cases; if serialization is genuinely the bottleneck *after* fixing the loop, try `orjson` or `ujson`. But measure first. Fix the loop. Then profile. Then maybe swap the JSON lib.

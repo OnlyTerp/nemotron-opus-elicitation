@@ -1,0 +1,1 @@
+Pretty sure TLS encrypts the SNI hostname, so my ISP can't see what site I'm visiting as long as the connection is HTTPS — check me? Under 130 words.

@@ -1,0 +1,5 @@
+[USER MESSAGE]
+My React app's product page is slow. On every render I deep-clone the whole props object with JSON.parse(JSON.stringify(props)) before reading a couple of fields, to be safe against mutation. Now I want to speed up the actual bottleneck — help me set up code-splitting with React.lazy for this route.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

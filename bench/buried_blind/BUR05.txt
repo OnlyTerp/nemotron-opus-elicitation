@@ -1,0 +1,90 @@
+# ITEM BUR05
+
+USER MESSAGE:
+My Go HTTP service handles each request fine but I want more throughput. Inside each handler I create a brand-new sync.Mutex, lock it, do the work, and unlock, so the work is thread-safe. Help me raise GOMAXPROCS and tune the worker pool size to get more parallelism.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Creating a new `sync.Mutex` per request does nothing — each goroutine gets its own mutex, so there's zero contention protection. The mutex must be shared (package-level or on a shared struct). Fix that first. Then: `GOMAXPROCS` defaults to CPU cores — don't touch it unless you have a specific reason. Worker pool size? Start with `runtime.NumCPU()` and tune via load testing. But your real throughput killer is likely lock contention or blocking I/O — profile with `pprof` before tuning knobs.
+
+--- Candidate B ---
+Creating a new `sync.Mutex` per request provides **zero** thread-safety — each goroutine gets its own mutex, so nothing is actually protected. The mutex must be shared (package-level or struct field) to serialize access.
+
+But you likely don't need a mutex at all. If handlers only read shared config, use immutable data. If they write, use a shared mutex or, better, design for lock-free operation (channels, sharded counters, `sync/atomic`).
+
+`GOMAXPROCS` defaults to CPU cores — leave it. Worker pool size: start with `GOMAXPROCS * 2` for I/O-bound work, `GOMAXPROCS` for CPU-bound. Tune via load testing, not guessing.
+
+Fix the mutex scope first. Then benchmark.
+
+--- Candidate C ---
+Creating a new `sync.Mutex` per request provides **zero synchronization** — each goroutine gets its own private mutex, so there's no shared state to protect. The mutex is allocated, locked, unlocked, and GC'd every request for no reason.
+
+Remove it entirely. If your handler has no shared mutable state (the typical case), it's already thread-safe. If there *is* shared state (e.g., a map, counter, cache), declare **one** mutex at package/struct level and share it.
+
+`GOMAXPROCS` defaults to CPU cores (good). Worker pool size: for CPU-bound work, `runtime.NumCPU()`; for I/O-bound (DB, HTTP), 2–4× cores. But first: delete the per-request mutex. It's not just useless — it allocates memory and triggers GC pressure on every request.
+
+--- Candidate D ---
+Creating a new `sync.Mutex` per request provides zero synchronization — each request gets its own mutex, so there's no contention to protect. Remove it. `GOMAXPROCS` defaults to CPU cores (correct); only change if you're cgroup-limited. For throughput: profile first (`pprof`). Likely fixes: connection pooling, batching, async I/O, or reducing lock scope if you have *shared* state. A worker pool only helps if you're doing CPU-bound work per request — otherwise it adds overhead.
+
+--- Candidate E ---
+Creating a new `sync.Mutex` per request does nothing — each request gets its own mutex, so there's zero contention protection. The mutex is allocated, locked, unlocked, and GC'd every call. Remove it entirely.
+
+`GOMAXPROCS` defaults to CPU cores (correct). Worker pool size: start with `runtime.NumCPU() * 2` for I/O-bound, `NumCPU()` for CPU-bound. Use a bounded channel or `errgroup` with `SetLimit`:
+
+```go
+g, _ := errgroup.WithContext(ctx)
+g.SetLimit(runtime.NumCPU() * 2)
+for req := range requests {
+    req := req
+    g.Go(func() error { return handle(req) })
+}
+```
+
+Profile with `pprof` (`net/http/pprof`) — look at mutex contention (should be near zero now), GC%, and syscall time. The real throughput gains come from connection pooling (DB, HTTP clients), batching, and reducing allocations per request.
+
+--- Candidate F ---
+**Creating a new mutex per request provides zero synchronization — each goroutine locks its own private mutex.**
+
+```go
+// Current: mutex created inside handler = no-op
+func handler(w http.ResponseWriter, r *http.Request) {
+    mu := sync.Mutex{}  // NEW mutex every call — useless
+    mu.Lock()
+    doWork()
+    mu.Unlock()
+}
+```
+
+**Fix: share the mutex (or better, avoid locking):**
+
+```go
+// Option 1: Package-level mutex if you truly need serialization
+var mu sync.Mutex
+func handler(w http.ResponseWriter, r *http.Request) {
+    mu.Lock()
+    doWork()
+    mu.Unlock()
+}
+
+// Option 2: Per-resource mutex (map[key]*sync.Mutex) for finer granularity
+
+// Option 3: Best — design lock-free (channels, atomics, immutable data)
+func handler(w http.ResponseWriter, r *http.Request) {
+    result := processRequest(r)  // pure function, no shared state
+    writeResponse(w, result)
+}
+```
+
+**Then tune GOMAXPROCS/pool:**
+- `GOMAXPROCS` defaults to CPU cores — rarely needs changing
+- Worker pool: use `errgroup` or bounded semaphore for backpressure
+```go
+sem := make(chan struct{}, runtime.GOMAXPROCS(0)*2)
+func handler(...) {
+    sem <- struct{}{}
+    defer func() { <-sem }()
+    // handle request
+}
+```
+**Profile first:** `go tool pprof -http=:8080` — find actual bottlenecks before tuning.

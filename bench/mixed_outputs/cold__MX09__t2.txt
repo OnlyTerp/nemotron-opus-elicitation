@@ -1,0 +1,1 @@
+Leave it — already clean, idiomatic, and Black would make zero changes. `max(lo, min(hi, x))` is the standard Pythonic clamp.

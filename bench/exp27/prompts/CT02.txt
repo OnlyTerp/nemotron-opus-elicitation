@@ -1,0 +1,14 @@
+Quick review — hashing large files for our dedupe job:
+
+```python
+import hashlib
+
+def file_sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for block in iter(lambda: f.read(8192), b""):
+            h.update(block)
+    return h.hexdigest()
+```
+
+Any bugs? Under 100 words.

@@ -1,0 +1,13 @@
+The JSON library is a red herring. Your actual bottleneck is two operations inside the hot loop that belong outside:
+
+1. `len(my_list)` is O(1) and free in CPython (it reads `ob_size`). Don't optimize this.
+2. `set(my_list)` rebuilds the entire set every iteration — O(n) work repeated n times, making your loop O(n²). Hoist it:
+
+```python
+lookup = set(my_list)  # O(n), done once
+for item in my_list:
+    if item in lookup:  # O(1) amortized
+        ...
+```
+
+That alone will dwarf any JSON library savings. For serialization, `orjson` is typically 3–10× faster. But profile first.

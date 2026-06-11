@@ -1,0 +1,5 @@
+[USER MESSAGE]
+I think I get closures now: a closure is just a function defined inside another function, right? Check me.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

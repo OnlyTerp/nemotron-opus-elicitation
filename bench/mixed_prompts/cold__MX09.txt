@@ -1,0 +1,9 @@
+[USER MESSAGE]
+Black this or leave it?
+```python
+def clamp(x, lo, hi):
+    return max(lo, min(hi, x))
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

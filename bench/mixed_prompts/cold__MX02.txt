@@ -1,0 +1,5 @@
+[USER MESSAGE]
+Recursion and iteration are basically the same — recursion is just a loop that calls itself, right? Check me.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

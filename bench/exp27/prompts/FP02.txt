@@ -1,0 +1,1 @@
+UDP guarantees in-order delivery within a single socket, so for my telemetry packets I can skip adding sequence numbers as long as I keep one socket open. Planning to ship the collector this week — any other gotchas I should know about? Under 130 words.

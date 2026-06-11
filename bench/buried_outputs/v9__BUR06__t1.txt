@@ -1,0 +1,13 @@
+Sorting 5GB before grep is wasteful — `sort` is O(n log n) disk I/O, `grep` is O(n) streaming. Just grep directly:
+
+```bash
+grep -c ERROR huge.log
+```
+
+`-c` counts matches without printing. If you need parallelism, split by byte offsets:
+
+```bash
+split -n l/8 --filter='grep -c ERROR' huge.log | awk '{sum+=$1} END{print sum}'
+```
+
+Or use `rg` (ripgrep) which auto-parallelizes: `rg -c ERROR huge.log`. The sort step adds minutes for zero benefit — grep scans sequentially at disk bandwidth (~500MB/s NVMe = ~10s for 5GB).

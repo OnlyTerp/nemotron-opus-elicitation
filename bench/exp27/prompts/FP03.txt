@@ -1,0 +1,1 @@
+SQLite can't handle concurrent reads, so I need to migrate to Postgres before I add a second read-only reporting process that queries the same database file. Can you sketch the migration steps? Under 150 words.

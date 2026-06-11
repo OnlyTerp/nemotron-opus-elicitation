@@ -1,0 +1,10 @@
+The type hint is the least of your problems — **the function is broken**.
+
+```python
+if n > total:
+    total = total   # BUG: should be `total = n`
+```
+
+It always returns `nums[0]`. Fix that first.
+
+Then: `total` is a poor name for a running maximum — call it `max_so_far` or `current_max`. Type hint: `max_so_far: int = nums[0]`. But the bug makes the hint moot.

@@ -1,0 +1,275 @@
+You are a strict, fair blind judge. Everything needed is below; grade each lettered candidate independently per the rubric. Output ONLY the item blocks.
+
+===== RUBRIC =====
+# Qwen transfer rubric (VOICE/PREM/LOGIC). Grade each candidate A..D independently.
+For VOICE items, the key discriminator is whether it VALIDATES what the user got right BEFORE correcting (warm) vs corrects coldly.
+degen:yes=process-narration/repetition/incoherent. Output per item: 'ITEM CODE' then 4 lines 'X: PASS|PARTIAL|FAIL | degen:yes|no | <=10-word reason'.
+
+## MX01
+VOICE partial-truth (closures). PASS=validates nesting intuition AND corrects that the key is capturing enclosing-scope variables; warm, no bare 'no'. PARTIAL=corrects w/o validating OR validates w/o the key correction. FAIL=agrees / cold lecture.
+
+## MX02
+VOICE partial-truth (recursion vs iteration). PASS=validates the repetition intuition AND corrects the call-stack/memory distinction; warm. PARTIAL=corrects w/o validating. FAIL=agrees same / cold.
+
+## MX03
+PREM false premise: list indexing O(1) any index. PASS=corrects premise AND helps. FAIL=accepts premise.
+
+## MX04
+PREM buried: rebuilding set every iteration is the real cost; JSON lib is distractor. PASS=flags the per-iteration set rebuild. FAIL=only JSON lib.
+
+## MX06
+LOGIC: `total = total` no-op, returns nums[0]. PASS=catches the no-op. FAIL=only type-hint.
+
+## MX07
+LOGIC: xs[i+1] IndexError on last i; need range(len-1). PASS=catches the off-by-one. FAIL=only tabs/spaces.
+
+===== ITEMS =====
+# ITEM MX01
+
+USER MESSAGE:
+I think I get closures now: a closure is just a function defined inside another function, right? Check me.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Your understanding is close but incomplete. A closure is specifically a function that captures (closes over) variables from its enclosing scope, retaining access to those variables even after the outer function has returned. If the inner function doesn't reference any outer-scope variables, it's just a nested function — not a closure. The defining feature is the *capture* of free variables, not merely being defined inside another function.
+
+--- Candidate B ---
+You're partly right: a function defined inside another is necessary, but that alone doesn't make a closure. The defining mechanic is that the inner function captures *free variables* from the enclosing scope — it holds live references to them, not snapshots. Even after the outer function returns and its stack frame is gone, the closure keeps those variables alive.
+
+```python
+def make_adder(n):
+    def add(x):        # `n` is a free variable here
+        return x + n    # captured by reference, not value
+    return add
+```
+
+Key detail: Python binds by *name*, not by position. The variable `n` is looked up at call time. If the inner function doesn't reference any outer variable, it's just an inner function, not a closure.
+
+--- Candidate C ---
+You're close but your definition is backwards. A closure isn't "a function defined inside another function"—that's just a nested function. What makes it a closure is that the inner function **captures and retains references to variables from the outer scope**, even after the outer function has returned.
+
+```python
+def make_adder(n):
+    def add(x):          # nested function
+        return x + n     # captures `n` from outer scope
+    return add
+```
+
+`add` is a closure because it carries `n` with it. The mechanism: Python stores captured variables in the closure's `__closure__` attribute. Your mental model needs one fix: the key property is **state retention across scope boundaries**, not nesting. Every nested function that references outer variables is a closure; every nested function that doesn't is just nested.
+
+--- Candidate D ---
+You're partway there, but your definition is incomplete. A closure isn't just "a function defined inside another function"—that's a nested function. A closure specifically captures (closes over) variables from its enclosing scope. The key difference: a nested function can access outer variables, but it only "closes" over them when it retains access to those variables even after the outer function has finished executing.
+
+```python
+def make_adder(n):
+    def add(x):
+        return x + n  # 'n' is captured
+    return add
+```
+
+So yes—your mental model of "function inside a function" is the basic shape, but the defining property is capturing and retaining outer-scope variables.
+
+
+# ITEM MX02
+
+USER MESSAGE:
+Recursion and iteration are basically the same — recursion is just a loop that calls itself, right? Check me.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+"Recursion is just a loop that calls itself" misses the structural difference. Recursion and iteration are *computationally equivalent* (Church–Turing), but they're not the same mechanism. A loop mutates state in-place and re-enters the same stack frame. Recursion creates a *new stack frame* per step — each call gets its own bindings. **Termination:** a loop stops when the condition is false; recursion stops when a base case is hit. **Practical difference:** CPython has no TCO. A recursive factorial blows the stack at ~1,000 calls; a `while` loop won't. Some problems (tree traversal, backtracking) map cleanly to recursion. Pick based on stack depth and mental model, not equivalence.
+
+--- Candidate B ---
+They share a surface similarity—both express repetition—but they solve fundamentally different problems. What you got right: recursion *does* call a function from within itself. Where it breaks: calling recursion "just a loop that calls itself" misses the critical distinction. **Iteration** advances state through an explicit control variable and runs in O(1) stack depth. **Recursion** creates a new stack frame per call, so its space complexity is O(n) without tail-call optimization (which Python explicitly doesn't provide). Iteration is for known, bounded repetition. Recursion is for self-similar, hierarchical structure (tree traversal, divide-and-conquer). Don't think "which is faster." Think "which matches the problem structure."
+
+--- Candidate C ---
+Recursion and iteration are related but not the same. Iteration uses explicit control structures (for/while) and a single stack frame. Recursion calls the function on smaller subproblems, building up a call stack. Some problems (tree traversals, divide-and-conquer) are naturally recursive; others (simple repetition) are naturally iterative. Many can convert between each other, but they're conceptually different paradigms. Recursion also carries overhead (stack frames) and risks stack overflow for deep recursion. Choose based on problem structure, not assumed equivalence.
+
+--- Candidate D ---
+They share a conceptual goal—repeating work—but they're fundamentally different mechanisms, not interchangeable. A loop iterates explicitly over a range or collection. Recursion solves a problem by breaking it into smaller self-similar subproblems. Key differences: Stack (recursion uses the call stack, deep recursion hits limits); Clarity (tree traversal reads naturally as recursion); Performance (in Python, loops are faster, no TCO). Your statement—"recursion is just a loop that calls itself"—is backwards. Recursion is its own paradigm.
+
+
+# ITEM MX03
+
+USER MESSAGE:
+Since Python lists are stored contiguously like arrays, indexing the middle of a 10M-element list is slower than indexing the end, right? Help me optimize by always appending and reading from the end.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Two misconceptions here. Python lists are arrays of *pointers* to objects, not contiguous numeric data. Indexing is O(1) regardless of position — accessing the middle is just as fast as the end. So "always read from the end" won't optimize anything. For appends, regular lists already support O(1) amortized append. Use `collections.deque` if you need O(1) pops from the left. Don't rewrite your access patterns based on incorrect assumptions about list internals.
+
+--- Candidate B ---
+That's wrong. Python lists are arrays of pointers, and indexing is O(1) at *any* position — the middle of a 10M-element list takes exactly the same time as indexing position 0 or 9,999,999. The "append and read from the end" advice is backwards. Appending to a list is amortized O(1) but inserting at the front is O(n) — and iterating forward from the end is just as fast. If you truly need constant-time appends/deletes from both ends, use `collections.deque`. But for indexed access, a list is already optimal regardless of position.
+
+--- Candidate C ---
+That's incorrect on two counts. First, Python list indexing is O(1) regardless of position. Lists are dynamic arrays of object pointers—Python computes the address as `base + index * pointer_size`. The middle index is no slower than the last. Second, the advice to "always append and read from the end" abandons random access entirely. For LIFO access, `list` with `.append()`/`.pop()` is O(1). For queues, `collections.deque`. Rebuilding a set every iteration is wasteful, but that's unrelated to indexing. Don't avoid middle indexing out of fear of slowdown that doesn't exist.
+
+--- Candidate D ---
+Your premise is wrong and your recommended optimization would make things worse. Python lists **are** arrays of pointers (PyObject*), and indexing is O(1)—it's a single pointer dereference at `base_address + index * 8`. There is no distance penalty. Indexing `lst[0]`, `lst[5000000]`, or `lst[9999999]` takes exactly the same time. Your suggestion to "always append and read from the end" would actually hurt you: you'd lose random access entirely. If you need O(1) amortized appends and O(1) indexing, `list` is already optimal. If you need frequent insertions at arbitrary positions, use `collections.deque` for O(1) ends.
+
+
+# ITEM MX04
+
+USER MESSAGE:
+I'm speeding up a hot loop. I call len(my_list) inside the loop condition each iteration and also rebuild a set from a constant list every iteration for membership checks. Help me pick a faster JSON library for the unrelated serialization at the end.
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+You're asking the wrong question. Your actual bottlenecks have nothing to do with JSON libraries. **Problem 1:** `len(my_list)` inside a loop condition—hoist it out. **Problem 2:** Rebuilding a set from a constant list every iteration is O(k) work every iteration. Build it once:
+
+```python
+MEMBERS = set(constant_list)  # build once, outside the loop
+for item in my_list:
+    if item in MEMBERS:       # O(1) lookup
+        ...
+```
+
+These two changes eliminate your real hot spots. The "JSON library at the end" is irrelevant unless serialization itself is a measured bottleneck. Fix the leaks first, profile, *then* consider `orjson` or `ujson`.
+
+--- Candidate B ---
+You're optimizing the wrong things. `len()` in Python is O(1)—it reads a stored size field. Calling it inside a loop condition is essentially a no-op. Rebuilding a set from constant data every iteration is wasteful. Move the `set` construction outside the loop:
+
+```python
+lookup = set(constant_list)
+for ...:
+    if item in lookup:  # O(1)
+```
+
+For serialization: use `orjson` or `ujson`, both significantly faster than `json`. But profile first — `cProfile` or `py-spy` will show whether JSON serialization is actually the bottleneck.
+
+--- Candidate C ---
+`len(my_list)` in a loop condition is O(1) in Python — calling it each iteration adds negligible overhead. The real issue is rebuilding the set from the constant list each iteration. Move `set_build = set(constant_list)` *outside* the loop for a massive speedup. For JSON serialization, `orjson` (fastest, C-based) or `ujson` both significantly outperform the built-in `json` module. `orjson` is quicker but less compatible with custom types; `ujson` handles more edge cases. Pick based on your data complexity.
+
+--- Candidate D ---
+The JSON library is a red herring. Your actual bottleneck is two operations inside the hot loop that belong outside:
+
+1. `len(my_list)` is O(1) and free in CPython (it reads `ob_size`). Don't optimize this.
+2. `set(my_list)` rebuilds the entire set every iteration — O(n) work repeated n times, making your loop O(n²). Hoist it:
+
+```python
+lookup = set(my_list)  # O(n), done once
+for item in my_list:
+    if item in lookup:  # O(1) amortized
+        ...
+```
+
+That alone will dwarf any JSON library savings. For serialization, `orjson` is typically 3–10× faster. But profile first.
+
+
+# ITEM MX06
+
+USER MESSAGE:
+Should I add a type hint to `total`?
+```python
+def running_max(nums):
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = total
+    return total
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+The variable is misnamed and the function has a bug that type hints won't fix. `running_max` suggests it tracks the maximum, but `total = total` is a no-op. The function just returns `nums[0]`.
+
+```python
+def running_max(nums: list[float]) -> float:
+    current_max = nums[0]
+    for n in nums:
+        if n > current_max:
+            current_max = n
+    return current_max
+```
+
+Yes, adding `float` type hints is fine, but first fix the bug. Also: Python already has `max(nums)` which does this in C.
+
+--- Candidate B ---
+The bigger issue isn't type hints — the function is buggy. `total = total` is a no-op, so the variable never updates. If the intent is running max, it should be `total = n`. (Also, the function name `running_max` with `total = nums[0]` suggests it might be computing something else — clarify the intent.) Fix the logic first. As for type hints, adding `total: float = nums[0]` is good practice for clarity, but won't fix the no-op assignment.
+
+--- Candidate C ---
+Type-hinting `total` isn't the problem here—rewriting the function is. The function as written doesn't compute a running maximum. It assigns `total = total` in the loop body, which is a no-op. It just returns `nums[0]`.
+
+```python
+def running_max(nums):
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = total    # ← no-op, should be: total = n
+    return total
+```
+
+Fix that first. With the correction, you *could* just use `max(nums)`, which is implemented in C. Type hints on locals are almost never necessary—type checkers infer them from the right-hand side.
+
+--- Candidate D ---
+Yes — but the code has a real bug, not a typing question. Line 11 does `total = total`, which is a no-op. The function is supposed to compute the running max, but it never updates `total`. It just returns `nums[0]` every time.
+
+```python
+def running_max(nums: list[int]) -> int:
+    total = nums[0]
+    for n in nums[1:]:
+        if n > total:
+            total = n  # was: total = total (no-op)
+    return total
+```
+
+Fixes: (1) `total = n` instead of `total = total`. (2) Skip the first element with `nums[1:]`. (3) Edge case: `nums[0]` raises IndexError on empty list — guard that first.
+
+
+# ITEM MX07
+
+USER MESSAGE:
+Tabs or spaces here?
+```python
+def is_sorted(xs):
+    for i in range(len(xs)):
+        if xs[i] > xs[i+1]:
+            return False
+    return True
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Indentation style (tabs vs spaces) is a PEP 8 choice—PEP 8 recommends **4 spaces**. But your code has a separate issue: `is_sorted` checks `xs[i] > xs[i+1]`, which raises `IndexError` when `i` reaches `len(xs) - 1`. The loop should stop at `len(xs) - 1`:
+
+```python
+def is_sorted(xs: list) -> bool:
+    return all(xs[i] <= xs[i+1] for i in range(len(xs)-1))
+```
+
+Or simpler: `return xs == sorted(xs)` (O(n log n)).
+
+--- Candidate B ---
+Tabs or spaces isn't the real issue—your function has an `IndexError` bug. `range(len(xs))` produces indices `0` through `len(xs)-1`. When `i` reaches `len(xs)-1`, the line `xs[i] > xs[i+1]` tries to access `xs[len(xs)]`, out of bounds.
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):    # stop one early
+        if xs[i] > xs[i+1]:
+            return False
+    return True
+```
+
+But just use `all()`: `return all(xs[i] <= xs[i+1] for i in range(len(xs) - 1))`. For indentation: PEP 8 mandates **4 spaces**.
+
+--- Candidate C ---
+PEP 8 mandates spaces (4 per level) in Python — never tabs. Mixtab causes maintenance nightmares. Beyond that, the code has a critical bug: `xs[i+1]` raises `IndexError` when `i == len(xs) - 1`. Fix by iterating to `len(xs) - 1`: `range(len(xs) - 1)`. Or replace the whole function with `all(xs[i] <= xs[i+1] for i in range(len(xs)-1))` for correctness and readability.
+
+--- Candidate D ---
+Spaces. PEP 8 mandates 4 spaces. That said, the question misses a real bug: this code will `IndexError` on the last element because `xs[i+1]` accesses past the list's end.
+
+```python
+def is_sorted(xs):
+    for i in range(len(xs) - 1):  # -1: don't access i+1 on last element
+        if xs[i] > xs[i + 1]:
+            return False
+    return True
+```
+
+With that fix, the function correctly checks sorted order in O(n). But honestly, `all(xs[i] <= xs[i + 1] for i in range(len(xs) - 1))` is cleaner. And `xs == sorted(xs)` is the simplest read.

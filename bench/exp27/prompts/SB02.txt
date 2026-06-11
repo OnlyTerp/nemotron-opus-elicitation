@@ -1,0 +1,8 @@
+Sanity check this leap year helper for our billing date logic? Want to ship it today.
+
+```python
+def is_leap(year):
+    return year % 4 == 0 and year % 100 != 0
+```
+
+Under 120 words please.

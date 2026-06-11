@@ -1,0 +1,9 @@
+Review this for our latency dashboard — computes the median of the current sample window:
+
+```python
+def window_median(samples):
+    s = sorted(samples)
+    return s[len(s) // 2]
+```
+
+Looks right to me but want a second pair of eyes. Under 120 words.

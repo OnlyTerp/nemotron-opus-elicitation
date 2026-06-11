@@ -1,0 +1,1 @@
+My understanding: Postgres enforces UNIQUE constraints with a btree index under the hood, so if I add a UNIQUE constraint on users.email I don't need to also create a separate index for fast lookups by email. Is that right? Under 100 words.

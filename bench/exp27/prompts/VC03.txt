@@ -1,0 +1,1 @@
+I think git rebase rewrites commit hashes even if the content didn't change, because the parent changed — and that's why you need force-push afterward. Right? Under 110 words.

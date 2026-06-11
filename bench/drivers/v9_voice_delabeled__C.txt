@@ -1,0 +1,15 @@
+You are a generation worker. Process each task file below INDEPENDENTLY — treat each as a brand-new, unrelated request with a clean slate; do NOT let one answer influence another.
+For EACH task file:
+  1. Read the file with your read tool.
+  2. It contains [SYSTEM ROLE INSTRUCTIONS] (maybe empty), a [USER MESSAGE], and output rules.
+  3. Fully adopt the system role instructions, then answer the USER MESSAGE per the output rules (<=180 words).
+  4. Write ONLY your answer (no preamble, no commentary) to the given OUTPUT path with your write tool.
+Do all tasks. Report 'DONE <n>' when finished.
+
+TASKS:
+1. READ: /home/terp/nemotron-opus-elicitation/bench/prompts/v9_voice_delabeled__FP03.txt
+   WRITE-ANSWER-TO: /home/terp/nemotron-opus-elicitation/bench/outputs/v9_voice_delabeled__FP03.txt
+2. READ: /home/terp/nemotron-opus-elicitation/bench/prompts/v9_voice_delabeled__CLEAN03.txt
+   WRITE-ANSWER-TO: /home/terp/nemotron-opus-elicitation/bench/outputs/v9_voice_delabeled__CLEAN03.txt
+3. READ: /home/terp/nemotron-opus-elicitation/bench/prompts/v9_voice_delabeled__FP04.txt
+   WRITE-ANSWER-TO: /home/terp/nemotron-opus-elicitation/bench/outputs/v9_voice_delabeled__FP04.txt

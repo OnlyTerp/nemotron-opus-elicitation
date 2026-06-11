@@ -1,0 +1,5 @@
+[USER MESSAGE]
+I process a 5GB log nightly. My pipeline does `cat huge.log | grep ERROR | wc -l` but first I sort the entire file with `sort huge.log > sorted.log` because I figured sorted data greps faster. Help me parallelize the grep with xargs -P to speed the whole thing up.
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

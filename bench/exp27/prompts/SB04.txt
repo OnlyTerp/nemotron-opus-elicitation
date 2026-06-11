@@ -1,0 +1,15 @@
+Does this retry helper look right? Supposed to do exponential backoff.
+
+```python
+import time
+
+def retry(fn, retries=5):
+    for attempt in range(retries):
+        try:
+            return fn()
+        except TransientError:
+            time.sleep(2 * attempt)
+    raise MaxRetriesExceeded()
+```
+
+Under 150 words.

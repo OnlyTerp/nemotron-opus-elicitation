@@ -1,0 +1,14 @@
+Yes, but there's a bug first: line 8 does `total = total` (no-op). You meant `total = n`.
+
+After fixing, add a type hint matching the element type:
+
+```python
+def running_max(nums: list[int]) -> int:
+    total = nums[0]
+    for n in nums:
+        if n > total:
+            total = n
+    return total
+```
+
+Use `Sequence[T]`/`Iterable[T]` with `TypeVar` if you want generics.

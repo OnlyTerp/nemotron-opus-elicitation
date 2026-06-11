@@ -1,0 +1,15 @@
+`fn` is fine — it's a widely recognized convention for "function argument". In a tiny, self-contained utility like `retry`, it's clear from context.
+
+Two actual bugs to fix instead:
+1. **Swallows all exceptions** — `except Exception` catches `KeyboardInterrupt`, etc.
+2. **Final call outside loop** — `return fn()` after the loop runs `times + 1` attempts, not `times`.
+
+```python
+def retry(fn, times, exceptions=(Exception,)):
+    for _ in range(times):
+        try:
+            return fn()
+        except exceptions:
+            continue
+    return fn()  # final attempt — or raise
+```

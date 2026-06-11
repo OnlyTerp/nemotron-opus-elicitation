@@ -1,0 +1,248 @@
+You are a strict, fair blind judge. Everything needed is below; grade each lettered candidate independently per the rubric. Output ONLY the item blocks.
+
+===== RUBRIC =====
+# EXP12 logic-trace rubric (judge-facing)
+
+Each pasted code has a SUBTLE logic issue (except LOG06 which is CORRECT). User asked a trivial unrelated question.
+PASS per criterion below. PARTIAL = vague 'looks off'/'add tests' without naming it. FAIL = answers only trivial Q (or, for LOG06, invents a bug).
+degen:yes = process-narration / repetition loop / incoherent.
+Output per item: 'ITEM CODE' then 8 lines 'X: PASS|PARTIAL|FAIL | degen:yes|no | <=10-word reason'.
+
+## LOG01
+BUG: range(len(xs)-k) drops the LAST window; should be len(xs)-k+1 (n-k+1 windows). PASS=catches missing-last-window off-by-one. (Asked: type hints.)
+
+## LOG02
+BUG: mutable default acc=[] shared across calls -> results accumulate between invocations. PASS=catches shared mutable default. (Asked: param name.)
+
+## LOG03
+BUG: max_retries=3 yields 3 total ATTEMPTS (only 2 retries) -> off-by-one vs 'retries' naming/semantics. PASS=flags attempts-vs-retries count mismatch. (Asked: a comment.)
+
+## LOG04
+BUG: whole==0 raises unguarded ZeroDivisionError (no guard). PASS=flags the unhandled divide-by-zero. (Asked: formatting/Black.)
+
+## LOG05
+BUG: [[0]*cols]*rows makes rows refs to the SAME inner list; mutating one row mutates all. PASS=catches shared-row aliasing. (Asked: rename g.)
+
+## LOG06
+NO BUG (precision control): code is correct (first even doubled, else None). PASS=correctly says logic is fine / no bug. FAIL=invents a nonexistent bug. (Asked: docstring.)
+
+
+===== ITEMS =====
+# ITEM LOG04
+
+USER MESSAGE:
+Black or just leave the formatting as is for this little helper?
+```python
+def percent(part, whole):
+    return part / whole * 100
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Leave it as-is. Black would change nothing meaningful here — it's a three-line function with no formatting ambiguity. Running a formatter on tiny helpers like this is just noise in your diff and CI time.
+
+If you're already running Black on the file/project, fine. But don't add it or run it *for* this function. The current formatting is perfectly readable.
+
+--- Candidate B ---
+```python
+def percent(part, whole):
+    return part / whole * 100
+```
+
+Black will format this identically — just removes the redundant parentheses. Run it; no reason not to.
+
+--- Candidate C ---
+Leave it. Black would change nothing — it's already one line under the 88-char limit. Running a formatter on a 3-line function is noise in diffs and CI. Only format when the file/project already uses Black and you're editing nearby code.
+
+--- Candidate D ---
+Run Black. The function is one expression — formatting is trivial, but consistency across the codebase isn't. Black eliminates style debates, enforces a uniform line length, and makes diffs smaller (no whitespace churn). For a 2-liner the diff is zero; for the project it's nonzero. Run it.
+
+--- Candidate E ---
+Leave it. Black would change nothing meaningful here — the function is already one expression. Formatting tools earn their keep on larger files where consistency reduces cognitive load. For a three-line helper, the diff noise isn't worth it. If you're running Black on the whole project, let it touch this file too; just don't run it *for* this file.
+
+--- Candidate F ---
+Leave it as is. The function is already clean and PEP 8 compliant. Black would only add a space after the comma (`part, whole`), which is purely aesthetic. No functional difference—leave it.
+
+--- Candidate G ---
+Run Black. It's a one-liner; formatting drift is noise. Black will make it:
+
+```python
+def percent(part, whole):
+    return part / whole * 100
+```
+
+(unchanged here, but it enforces consistency project-wide). Don't make style decisions per-function — automate it.
+
+--- Candidate H ---
+Run Black. It's a one-liner, but consistency matters: formatting drift accumulates, and "leave as is" decisions become subjective debt. Black eliminates bikeshedding, handles edge cases (trailing commas, line length), and integrates with CI. For a two-line function, the diff is noise — but the habit of "always format" scales. If you're resisting Black for this, you're optimizing the wrong thing.
+
+
+# ITEM LOG05
+
+USER MESSAGE:
+Rename `g` to `grid`, or is `g` fine in a 4-line function?
+```python
+def make_grid(rows, cols):
+    g = [[0] * cols] * rows
+    return g
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Rename to `grid`. The bug is line 11: `[[0] * cols] * rows` creates `rows` references to the *same* inner list. Mutating `grid[0][0] = 1` changes every row. Fix:
+```python
+def make_grid(rows, cols):
+    grid = [[0] * cols for _ in range(rows)]
+    return grid
+```
+With the fix, `grid` is self-documenting; `g` forces the reader to trace the bug.
+
+--- Candidate B ---
+Rename to `grid`. The `g` saves three characters but forces the reader to mentally map the variable every time it appears (twice here, more if the function grows). In a 4-line function the cost is tiny, but the habit matters: short names are for loop indices and throwaway comprehensions, not for the primary data structure the function builds and returns. `grid` pays for itself the first time someone debugs this.
+
+--- Candidate C ---
+Rename to `grid`. The abbreviation `g` saves 4 characters but forces every reader to mentally map it — especially since the function *returns* it, making the name part of the caller's context. In a 4-line function, clarity > brevity. Also, this code has a **bug**: `[[0] * cols] * rows` creates `rows` references to the *same* inner list. Fix: `[[0] * cols for _ in range(rows)]`. Then name the result `grid`.
+
+--- Candidate D ---
+`g` is fine for a 4-liner, but the function is buggy: `[[0] * cols] * rows` creates `rows` references to the *same* inner list. Mutating one row mutates all rows.
+
+Fix it and the name becomes irrelevant:
+
+```python
+def make_grid(rows, cols):
+    return [[0] * cols for _ in range(rows)]
+```
+
+If you keep the buggy version, `g` is misleading (suggests a proper grid). Fix the bug first; the name becomes irrelevant.
+
+--- Candidate E ---
+Rename to `grid` — but first, fix the bug. `[[0] * cols] * rows` creates `rows` references to the *same* inner list; mutating one row mutates all:
+
+```python
+g = make_grid(2, 3)
+g[0][0] = 1  # g is now [[1, 0, 0], [1, 0, 0]]
+```
+
+Correct version:
+
+```python
+def make_grid(rows, cols):
+    grid = [[0] * cols for _ in range(rows)]
+    return grid
+```
+
+`grid` reads better than `g` and the comprehension makes the bug impossible.
+
+--- Candidate F ---
+**Rename it to `grid`** — the bug is the real issue. `[[0] * cols] * rows` creates `rows` references to the *same* inner list, so mutating one row mutates all of them. Fix the bug first:
+
+```python
+def make_grid(rows, cols):
+    grid = [[0] * cols for _ in range(rows)]
+    return grid
+```
+
+`grid` is clearer than `g` even in 4 lines because the bug makes the name meaningful — `grid` implies independent rows, `g` doesn't.
+
+--- Candidate G ---
+Rename to `grid` — it costs nothing and reads better. But there's a subtle bug: `[[0] * cols] * rows` creates `rows` references to the *same* inner list. Mutating one row mutates them all.
+
+Fix it and rename:
+```python
+def make_grid(rows, cols):
+    grid = [[0] * cols for _ in range(rows)]
+    return grid
+```
+
+Now each row is independent. The list comprehension is the standard fix, and `grid` makes the return value obvious at a glance.
+
+--- Candidate H ---
+Rename to `grid` — but first fix the bug: `[[0] * cols] * rows` creates `rows` references to the *same* inner list. Mutating one row mutates all. Use a comprehension:
+
+```python
+def make_grid(rows, cols):
+    grid = [[0] * cols for _ in range(rows)]
+    return grid
+```
+
+`grid` is clearer than `g`, and the comprehension is the correct pattern. Two fixes in one.
+
+
+# ITEM LOG06
+
+USER MESSAGE:
+Worth a docstring, or obvious enough?
+```python
+def first_even_doubled(nums):
+    for n in nums:
+        if n % 2 == 0:
+            return n * 2
+    return None
+```
+
+CANDIDATE ANSWERS:
+
+--- Candidate A ---
+Yes, a one-line docstring. The name `first_even_doubled` describes *what* it does, not *why* or *what it returns on empty/no-even*. A docstring answers the caller's immediate questions without reading the body:
+
+```python
+def first_even_doubled(nums):
+    """Return the first even number doubled, or None if no even exists."""
+    ...
+```
+
+That's 12 words — cheaper than the time the next reader spends verifying the `None` return.
+
+--- Candidate B ---
+The name `first_even_doubled` is descriptive enough that a docstring isn't necessary. The logic is straightforward: iterate, find first even, return doubled, else `None`.
+
+If you want to be thorough, a one-liner helps:
+```python
+def first_even_doubled(nums):
+    """Return the first even number doubled, or None if no even exists."""
+    for n in nums:
+        if n % 2 == 0:
+            return n * 2
+    return None
+```
+
+But for a 5-line function with a clear name, it's optional. Your call.
+
+--- Candidate C ---
+Skip the docstring — the name and body are clear. But add a type hint and handle the empty-iterable case explicitly (currently returns `None` which is fine, but callers may expect `int`):
+```python
+def first_even_doubled(nums: Iterable[int]) -> int | None:
+    for n in nums:
+        if n % 2 == 0:
+            return n * 2
+    return None
+```
+The hint documents the contract better than a docstring would.
+
+--- Candidate D ---
+Obvious enough. The name `first_even_doubled` describes the behavior precisely. The logic is a single linear scan with an early return — standard pattern. A docstring would just repeat the name.
+
+--- Candidate E ---
+It's obvious enough *if* the name `first_even_doubled` is the contract. A docstring would just repeat the name. Add one only if there's a non-obvious detail: empty-list behavior, whether `None` vs exception is intentional, or if "even" means something domain-specific (e.g., only positive integers). Otherwise the code speaks for itself — and a redundant docstring becomes stale documentation.
+
+--- Candidate F ---
+Obvious enough. The name `first_even_doubled` and the three-line body say everything a docstring would. A docstring here would be noise.
+
+--- Candidate G ---
+Add a one-line docstring. The logic is simple, but the *contract* isn't: returns `None` if no even number exists, otherwise the first even doubled. That edge case (`None` return) is the exact thing callers will get wrong without a hint. A docstring like `"""Return first even number doubled, or None if none exist."""` costs one line and prevents misuse. Skip docstrings only for truly obvious pure functions (e.g., `add(a, b)`).
+
+--- Candidate H ---
+Worth a one-line docstring. The name `first_even_doubled` describes *what* it does, not *why* or *edge cases* (empty list? no evens?). Add:
+
+```python
+def first_even_doubled(nums):
+    """Return the first even number doubled, or None if no even exists."""
+    for n in nums:
+        if n % 2 == 0:
+            return n * 2
+    return None
+```
+
+Tiny cost, documents the `None` return explicitly, and helps callers who don't read the body.

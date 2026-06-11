@@ -1,0 +1,8 @@
+We store display names in a MySQL VARCHAR(255) utf8mb4 column. A teammate said to truncate by bytes to be safe, so I wrote:
+
+```python
+def truncate_for_db(s, max_bytes=255):
+    return s.encode("utf-8")[:max_bytes].decode("utf-8")
+```
+
+Good to go? Under 130 words.

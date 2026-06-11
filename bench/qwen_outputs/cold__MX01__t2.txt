@@ -1,0 +1,10 @@
+You're partway there, but your definition is incomplete. A closure isn't just "a function defined inside another function"—that's a nested function. A closure specifically captures (closes over) variables from its enclosing scope. The key difference: a nested function can access outer variables, but it only "closes" over them when it retains access to those variables even after the outer function has finished executing.
+
+```python
+def make_adder(n):
+    def add(x):
+        return x + n  # 'n' is captured
+    return add
+```
+
+So yes—your mental model of "function inside a function" is the basic shape, but the defining property is capturing and retaining outer-scope variables.

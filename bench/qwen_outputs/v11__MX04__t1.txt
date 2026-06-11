@@ -1,0 +1,10 @@
+You're asking the wrong question. Your actual bottlenecks have nothing to do with JSON libraries. **Problem 1:** `len(my_list)` inside a loop condition—hoist it out. **Problem 2:** Rebuilding a set from a constant list every iteration is O(k) work every iteration. Build it once:
+
+```python
+MEMBERS = set(constant_list)  # build once, outside the loop
+for item in my_list:
+    if item in MEMBERS:       # O(1) lookup
+        ...
+```
+
+These two changes eliminate your real hot spots. The "JSON library at the end" is irrelevant unless serialization itself is a measured bottleneck. Fix the leaks first, profile, *then* consider `orjson` or `ujson`.

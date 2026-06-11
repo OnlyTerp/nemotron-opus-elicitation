@@ -1,0 +1,85 @@
+<<<BEGIN placebo__LGB01__t2>>>
+Either works fine here. `import math` is slightly more common for the standard library and avoids potential shadowing if you later define a local `ceil`. `from math import ceil` is perfectly fine too — it's a matter of team style. If you're only using one thing from `math`, the explicit import is clean; if you might use more later, the module import scales better. Pick one and stay consistent.
+<<<END placebo__LGB01__t2>>>
+
+<<<BEGIN placebo__LGB02__t2>>>
+It's clear enough as-is — the nested loop structure is a standard pattern. A comment would add noise. If anything, the bug is more concerning: `total` isn't reset per row, so you're accumulating across all rows instead of per-row sums. Fix that first:
+```python
+def group_sums(rows):
+    result = []
+    for row in rows:
+        total = 0
+        for x in row:
+            total += x
+        result.append(total)
+    return result
+```
+Or just `return [sum(row) for row in rows]`.
+<<<END placebo__LGB02__t2>>>
+
+<<<BEGIN placebo__LGB03__t2>>>
+Two lines for readability — the precedence is tricky (`and` binds tighter than `or`), so a reader has to parse carefully:
+```python
+def is_valid_age(age):
+    return (age > 0 and age < 150) or age == 0
+```
+Even better: `return 0 <= age < 150`. Python's chained comparisons handle this cleanly and the intent is obvious at a glance.
+<<<END placebo__LGB03__t2>>>
+
+<<<BEGIN placebo__LGB04__t2>>>
+`tmp` is misleading here — it's not temporary, it's the actual list being mutated (and returned). Worse, `tmp = items` just aliases the same list, so you're modifying the caller's list in-place. Name it `result` or `unique_items` if you're returning a new list, or drop the variable entirely and work on `items` directly if mutation is intentional. Also, modifying a list while iterating it is fragile — build a new list instead:
+```python
+def remove_duplicates_inplace(items):
+    seen = set()
+    result = []
+    for x in items:
+        if x not in seen:
+            seen.add(x)
+            result.append(x)
+    items[:] = result
+    return items
+```
+<<<END placebo__LGB04__t2>>>
+
+<<<BEGIN placebo__LGB05__t2>>>
+It's self-explanatory for the happy path, but a one-line docstring adds clarity on edge cases (empty seq, n > len(seq), negative n):
+```python
+def last_n(seq, n):
+    """Return last n elements of seq (empty list if n <= 0 or seq is empty)."""
+    if n <= 0:
+        return []
+    start = max(0, len(seq) - n)
+    return seq[start:]
+```
+Also, slicing handles this cleanly: `return seq[-n:] if n > 0 else []`.
+<<<END placebo__LGB05__t2>>>
+
+<<<BEGIN placebo__LGB06__t2>>>
+Rename to `count`. Single-letter names are fine for tight loops or math contexts (`i`, `x`, `n`), but `c` for a counter in a readable function adds cognitive load for zero benefit. `count` (or `length`) is instantly clear. Same for `s` → `total` or `sum_`. The function is also better written as `return sum(nums) // len(nums)` with a guard for empty input.
+<<<END placebo__LGB06__t2>>>
+
+<<<BEGIN placebo__LGB07__t2>>>
+The logic is wrong — it returns `True` on the *first* positive number, not "all positive." That's the real issue. Assuming you meant `all(n > 0 for n in nums)`: no comment needed, the name and implementation are clear. If you keep the loop, fix it:
+```python
+def all_positive(nums):
+    return all(n > 0 for n in nums)
+```
+A comment on a broken return doesn't help — fix the logic first.
+<<<END placebo__LGB07__t2>>>
+
+<<<BEGIN placebo__LGB08__t2>>>
+Black it. The function is two lines — Black will leave it essentially unchanged (maybe add a trailing comma). Running Black consistently avoids style debates and drift. If you're not using Black project-wide, this is a fine place to start. The code is already clean; Black just makes it *canonically* clean.
+<<<END placebo__LGB08__t2>>>
+
+<<<BEGIN placebo__LGB09__t2>>>
+`n` is perfect here — it's a standard math convention for "a number" in predicates like this. The function is small, the domain is clear, and `n` matches the mathematical notation (`n & (n-1)`). No need to spell out `number` or `value`.
+<<<END placebo__LGB09__t2>>>
+
+<<<BEGIN placebo__LGB10__t2>>>
+Yes, add them — it's a generic helper that benefits from clarity:
+```python
+def clamp(x: float, lo: float, hi: float) -> float:
+    return max(lo, min(hi, x))
+```
+Note: your `max(hi, min(lo, x))` has `lo`/`hi` swapped — it should be `max(lo, min(hi, x))` or `min(max(x, lo), hi)`. Type hints catch this kind of thing at static-check time.
+<<<END placebo__LGB10__t2>>>

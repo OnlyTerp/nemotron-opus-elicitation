@@ -1,0 +1,17 @@
+Opening/closing a connection per INSERT is your throughput killer — each `connect()` does TCP handshake, auth, and backend process fork (~1-5ms). Partitions won't fix this. Use a connection pool:
+
+```python
+from psycopg2.pool import ThreadedConnectionPool
+pool = ThreadedConnectionPool(1, 20, dsn)  # min/max conns
+
+def write_batch(events):
+    conn = pool.getconn()
+    try:
+        with conn.cursor() as cur:
+            execute_values(cur, "INSERT INTO events ... VALUES %s", events)
+        conn.commit()
+    finally:
+        pool.putconn(conn)
+```
+
+Batch 100-1000 rows per `execute_values` (from `psycopg2.extras`). Tune pool size to CPU cores × 2-4. If you still need partitions later, hash-partition on a high-cardinality column (event_id, tenant_id) with `PARTITION BY HASH` — 4-8 partitions per CPU core, but fix the connection pattern first.

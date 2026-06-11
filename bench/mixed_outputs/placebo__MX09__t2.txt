@@ -1,0 +1,1 @@
+Leave it. Black makes no change — `max(lo, min(hi, x))` is the standard clamp idiom and already fits one line. Correct and optimal.

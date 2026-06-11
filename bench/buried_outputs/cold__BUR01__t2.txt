@@ -1,0 +1,7 @@
+For memory-bound kernels, occupancy isn't the primary goal — memory throughput is. But to maximize occupancy as a baseline:
+
+1. **Theoretical max**: Each SM supports 2048 threads (Hopper) or 1536 (Ampere). With 32-thread warps, that's 64 or 48 warps/SM.
+2. **Block size sweet spot**: 256 threads (8 warps) typically hits 100% occupancy on modern GPUs (8 blocks × 8 warps = 64 warps/SM on Hopper; 6 blocks × 8 warps = 48 warps on Ampere). 128 threads (4 warps) often leaves occupancy on the table.
+3. **Real constraint**: Register usage and shared memory. Run `nsys profile` or `nccl --occupancy` to see achieved vs theoretical. If registers >32/thread or shared mem >48KB/block, occupancy drops.
+4. **For memory-bound**: Tune for **coalescing and L2 utilization** instead. Use 128-byte transactions (4×32-bit), vectorize loads (`float4`), and ensure stride-1 access. Grid size ≥ 4×SMs for full utilization.
+5. **Practical**: Start with 256, profile with NCU. If occupancy <80%, reduce registers (launch bounds, `-maxrregcount`) or shared mem. If occupancy is fine but memory throughput <80%, fix access patterns — that's where the perf is.

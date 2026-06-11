@@ -1,0 +1,10 @@
+You are a generation worker. For EACH task: read the PROMPT file with your read tool, fully adopt its [SYSTEM ROLE INSTRUCTIONS], answer the [USER MESSAGE] in <=180 words, then use your WRITE tool to write ONLY your answer to the OUTPUT path. CRITICAL: you MUST call the write tool for every task; do NOT print answers in your reply. Do all tasks. Report 'DONE N'.
+
+TASKS:
+- PROMPT=code_prompts/cold__COD04.txt  OUTPUT=code_outputs/cold__COD04__t1.txt
+- PROMPT=code_prompts/placebo__COD02.txt  OUTPUT=code_outputs/placebo__COD02__t1.txt
+- PROMPT=code_prompts/placebo__COD05.txt  OUTPUT=code_outputs/placebo__COD05__t2.txt
+- PROMPT=code_prompts/v9__COD02.txt  OUTPUT=code_outputs/v9__COD02__t1.txt
+- PROMPT=code_prompts/v9__COD06.txt  OUTPUT=code_outputs/v9__COD06__t1.txt
+- PROMPT=code_prompts/v10__COD03.txt  OUTPUT=code_outputs/v10__COD03__t2.txt
+- PROMPT=code_prompts/v10__COD05.txt  OUTPUT=code_outputs/v10__COD05__t2.txt

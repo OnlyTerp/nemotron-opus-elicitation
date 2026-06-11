@@ -1,0 +1,10 @@
+You're close but your definition is backwards. A closure isn't "a function defined inside another function"—that's just a nested function. What makes it a closure is that the inner function **captures and retains references to variables from the outer scope**, even after the outer function has returned.
+
+```python
+def make_adder(n):
+    def add(x):          # nested function
+        return x + n     # captures `n` from outer scope
+    return add
+```
+
+`add` is a closure because it carries `n` with it. The mechanism: Python stores captured variables in the closure's `__closure__` attribute. Your mental model needs one fix: the key property is **state retention across scope boundaries**, not nesting. Every nested function that references outer variables is a closure; every nested function that doesn't is just nested.

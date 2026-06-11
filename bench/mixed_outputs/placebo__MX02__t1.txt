@@ -1,0 +1,7 @@
+They're equivalent in *computational power* (anything recursion can do, iteration can do, and vice versa), but they're not "basically the same" in practice.
+
+- **Stack usage**: Recursion consumes call stack; deep recursion hits stack overflow. Iteration uses constant stack space.
+- **Tail calls**: Some languages eliminate tail calls; Python doesn't.
+- **Readability**: Recursion shines for tree/graph traversal; iteration wins for simple loops.
+
+Rule of thumb: use recursion when the problem structure is recursive and depth is bounded; use iteration for simple repetition.

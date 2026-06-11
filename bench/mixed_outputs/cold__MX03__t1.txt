@@ -1,0 +1,3 @@
+Wrong premise. Python lists are **arrays of pointers** (contiguous), so indexing is **O(1) at any position** — middle, end, or start. No optimization needed for access patterns.
+
+If you're doing *insertions/deletions* at the front, that's O(n) due to shifting. For that, use `collections.deque` (O(1) both ends). But pure indexing? Already optimal.

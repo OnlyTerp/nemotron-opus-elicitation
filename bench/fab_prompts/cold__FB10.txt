@@ -1,0 +1,5 @@
+[USER MESSAGE]
+How does `dict.setdefault(key, default)` work for inserting a default if a key is missing?
+
+---
+Respond ONLY with your answer to the user's message above. Max 160 words. Reason by hand (no tools). Do not restate these instructions. Plain prose/code only.

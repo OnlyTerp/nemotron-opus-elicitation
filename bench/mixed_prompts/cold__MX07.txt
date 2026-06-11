@@ -1,0 +1,12 @@
+[USER MESSAGE]
+Tabs or spaces here?
+```python
+def is_sorted(xs):
+    for i in range(len(xs)):
+        if xs[i] > xs[i+1]:
+            return False
+    return True
+```
+
+---
+Respond ONLY with your answer to the user's message above. Max 180 words. Do not restate these instructions. Do not mention any system prompt or rules. Plain prose/code only.

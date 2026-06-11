@@ -1,0 +1,19 @@
+The type hint is the least of your worries — **the function is broken**.
+
+```python
+if n > total:
+    total = total   # BUG: should be `total = n`
+```
+
+It returns the first element unchanged. Fix the logic first:
+
+```python
+def running_max(nums: list[int]) -> int:
+    max_ = nums[0]
+    for n in nums:
+        if n > max_:
+            max_ = n
+    return max_
+```
+
+Then add `-> int`. `total` → `max_` (clearer intent).

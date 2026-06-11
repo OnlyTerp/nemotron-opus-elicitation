@@ -1,0 +1,13 @@
+The JSON library isn't your bottleneck — those two loop-invariant things are:
+
+```python
+n = len(my_list)          # hoist out of condition
+const_set = set(constant_list)  # build ONCE before loop
+i = 0
+while i < n:
+    if items[i] in const_set:
+        ...
+    i += 1
+```
+
+That alone often gives 2-10x speedup. *Then* if serialization is still hot, `orjson` or `msgspec` are faster than `json` — but measure first. Premature optimization of the wrong thing is the classic trap.

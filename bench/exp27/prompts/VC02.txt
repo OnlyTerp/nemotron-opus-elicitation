@@ -1,0 +1,1 @@
+My understanding is that React's useEffect with an empty dependency array runs exactly once per mount, so it's safe to use for one-time subscriptions — am I right? Under 130 words.

@@ -1,0 +1,8 @@
+Indentation style (tabs vs spaces) is a PEP 8 choice—PEP 8 recommends **4 spaces**. But your code has a separate issue: `is_sorted` checks `xs[i] > xs[i+1]`, which raises `IndexError` when `i` reaches `len(xs) - 1`. The loop should stop at `len(xs) - 1`:
+
+```python
+def is_sorted(xs: list) -> bool:
+    return all(xs[i] <= xs[i+1] for i in range(len(xs)-1))
+```
+
+Or simpler: `return xs == sorted(xs)` (O(n log n)).

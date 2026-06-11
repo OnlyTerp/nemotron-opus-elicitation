@@ -1,0 +1,13 @@
+Close! A closure is a function *plus* the environment it captures from its enclosing scope. The inner function "closes over" variables from the outer function, keeping them alive even after the outer function returns.
+
+```python
+def make_adder(x):
+    def adder(y):
+        return x + y  # captures x
+    return adder
+
+add5 = make_adder(5)
+add5(3)  # 8 — x=5 is still accessible
+```
+
+The key insight: `adder` doesn't just *live inside* `make_adder` — it *remembers* `x`. So: every closure is a nested function, but not every nested function is a closure (only if it actually references outer-scope variables).

@@ -1,0 +1,3 @@
+Leave it. `max(lo, min(hi, x))` is a well-known idiom, readable, and **already optimal** — single pass, no branches. Black would format it identically (fits on one line).
+
+If you want explicit clarity for readers unfamiliar with the pattern, an if-based version works, but the one-liner is standard. Don't run a formatter for its own sake.

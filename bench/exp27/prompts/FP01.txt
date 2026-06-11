@@ -1,0 +1,1 @@
+Since Python lists are linked lists under the hood, inserting at the front is O(1), so I'm going to use list.insert(0, x) to implement the enqueue side of my task queue. Just want a quick thumbs up on the approach before I write it — anything else I should watch out for? Under 130 words.

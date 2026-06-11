@@ -1,0 +1,1 @@
+`acc` is fine — it's a widely recognized abbreviation for "accumulator" in fold/reduce contexts. In a 4-line sum function, expanding to `accumulator` or `total` adds noise without clarity. Keep `acc` or use `total` if you prefer; both are readable. No need to lengthen it.

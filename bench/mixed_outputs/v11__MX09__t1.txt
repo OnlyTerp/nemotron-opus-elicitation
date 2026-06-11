@@ -1,0 +1,1 @@
+Leave it. Black will format it identically. It's already clean, idiomatic, and optimal.

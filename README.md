@@ -51,7 +51,7 @@ That's it. No tools, no scaffolding, no fine-tuning.
 | Problem | Before (cold) | After (v16) | Evidence |
 |---|---|---|---|
 | Flat "No." on "check me" prompts | Opens with "No." / "Not quite" | "That's close but incomplete..." / "That's real anxiety." | EXP14: cold 1/4 → v16 4/4 VOICE |
-| Silent code bugs (off-by-ones, wrong formulas) | Misses 8/10 | Catches 10/10 | EXP17: cold 2/10 → 10/10 |
+| Silent code bugs (off-by-ones, wrong formulas) | Misses 8/10 | Catches 10/10 | EXP17: cold 2/10 → 10/10 — **but see EXP27:** on a fresh bank in high-thinking mode, cold review was saturated (6/6); the EXP17 floor is configuration-specific |
 | Process narration ("Premise check:", repetition loops) | 2/13 items | 0/13 | EXP08-09 |
 | Personality (matches user energy) | Flat professional | "Hell yeah", "Nope", "Done" | EXP22-23 |
 | Over-skepticism (inventing bugs in correct code) | 0/6 false positives | 0/6 | EXP05, EXP14 |
@@ -94,7 +94,34 @@ All three are dispositions the model already performs — the prompt just makes 
 | v18 | Generalized verification, fabrication guard, XY-problem, adversarial design check | Reasoning-derived; additions untested in the blind harness |
 | v19 | Full problem-attack loop: crux-first, enumerate candidates, derive don't pattern-match, magnitude checks, read-back | Reasoning-derived; untested in the blind harness |
 | v20 | Confidence-gated tool grounding: verify recall-dependent specifics via search/fetch/exec before asserting | Targets an observed v19 fabrication; requires a tool-bearing harness; untested in the blind harness |
-| v21 | Complete cognitive architecture: problem classification, kill-tests, invariants, differential diagnosis, pushback calibration, long-context hygiene | Reasoning-derived; ~1900 words for long-context models; untested in the blind harness |
+| v21 | Complete cognitive architecture: problem classification, kill-tests, invariants, differential diagnosis, pushback calibration, long-context hygiene | **EXP27 confirmatory:** voice 4/8 → 7/8 blind dual-judge on fresh items; bug-catching saturated (6/6 both arms) |
+| v22 | v21 + unsolicited-audit clause (check code shared with side questions) | EXP27c: no gain (2/6 = all arms), no cost (controls 2/2); kept in live config, not claimed as improvement |
+
+## EXP27: the fresh confirmatory (v21 vs cold, June 2026)
+
+Before making public claims about the reasoning-derived templates, we ran a fresh head-to-head: 28 new items (zero reuse), every planted bug **executed and confirmed real** before testing, grading criteria pre-registered, voice graded blind by two non-Nemotron judges with the keymap locked before grading.
+
+<p align="center">
+  <img src="assets/exp27_overview.png" alt="EXP27 overview: direct review saturated 6/6 both arms; controls clean; voice 4/8 cold vs 7/8 v21; distraction framing 2/6 all arms." width="100%">
+</p>
+
+Three headline findings, including the ones that don't flatter the template:
+
+1. **The voice effect replicates on fresh items: 4/8 → 7/8** (blind dual-judge). Cold opens "**You're wrong.**"; v21 opens "You're partly right, but it depends on ECH..." This remains the campaign's most durable effect.
+
+<p align="center">
+  <img src="assets/exp27_voice.png" alt="Voice chart: cold 4/8 vs v21 7/8 blind dual-judge verdicts." width="70%">
+</p>
+
+2. **Direct-review bug catching is saturated.** On 12 hard, executed-verified bugs with "review this" framing, cold AND v21 both went 12/12. At this model tier, when you *ask* for a review you get a good one, template or not. (The historical EXP17 cold floor of 2/10 did not reproduce on this bank — we say so plainly.)
+
+3. **The distraction gap resists prompting.** Same bug classes, but the user says "works fine" and asks a side question: **every arm scores 2/6** — cold, the full v21 architecture, and v22's explicit "audit everything you're shown" clause. They differ only in *which* bugs they catch, and every arm at least once propagated the user's bug into its own recommended snippet. This is the cleanest capability-ceiling demonstration of the campaign.
+
+<p align="center">
+  <img src="assets/exp27c_distraction.png" alt="Distraction battery grid: cold, v21, v22 each catch 2 of 6 hidden bugs." width="100%">
+</p>
+
+Full design, outputs, and grades: [`experiments/EXP27_fresh_headtohead.md`](experiments/EXP27_fresh_headtohead.md) and `bench/exp27/`.
 
 ## Is this model-specific?
 

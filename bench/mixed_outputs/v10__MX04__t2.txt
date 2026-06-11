@@ -1,0 +1,11 @@
+You're optimizing the wrong thing. The JSON library is irrelevant — fix the loop first:
+
+```python
+# FAST: hoist invariants
+n = len(my_list)
+s = set(constant_list)
+while i < n:
+    if x in s: ...
+```
+
+Rebuilding a set from a constant list every iteration is O(m) per iteration — catastrophic. After that, if serialization is actually a bottleneck: `orjson` (fastest), `ujson`, or `msgspec`. But profile first — `json` is often fine.

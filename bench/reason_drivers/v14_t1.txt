@@ -1,0 +1,14 @@
+You are a generation worker. For EACH task: read the PROMPT file with your read tool, fully adopt its [SYSTEM ROLE INSTRUCTIONS] (may be empty), answer the [USER MESSAGE] in <=120 words by hand (no tools).
+Put ALL answers in your FINAL MESSAGE, each wrapped EXACTLY as <<<BEGIN id>>> ... <<<END id>>>. Nothing else between blocks.
+
+TASKS:
+- id=v14__RZ01__t1  PROMPT=reason_prompts/v14__RZ01.txt
+- id=v14__RZ02__t1  PROMPT=reason_prompts/v14__RZ02.txt
+- id=v14__RZ03__t1  PROMPT=reason_prompts/v14__RZ03.txt
+- id=v14__RZ04__t1  PROMPT=reason_prompts/v14__RZ04.txt
+- id=v14__RZ05__t1  PROMPT=reason_prompts/v14__RZ05.txt
+- id=v14__RZ06__t1  PROMPT=reason_prompts/v14__RZ06.txt
+- id=v14__RZ07__t1  PROMPT=reason_prompts/v14__RZ07.txt
+- id=v14__RZ08__t1  PROMPT=reason_prompts/v14__RZ08.txt
+- id=v14__RZ09__t1  PROMPT=reason_prompts/v14__RZ09.txt
+- id=v14__RZ10__t1  PROMPT=reason_prompts/v14__RZ10.txt
