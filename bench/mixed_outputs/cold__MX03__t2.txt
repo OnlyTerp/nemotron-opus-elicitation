@@ -1,1 +1,0 @@
-False. Python lists are arrays of pointers — indexing is O(1) *anywhere*. No slowdown in the middle. Appending/reading from the end is fine for other reasons (amortized O(1) append), but random access is constant time everywhere. Your premise is wrong; no optimization needed here.

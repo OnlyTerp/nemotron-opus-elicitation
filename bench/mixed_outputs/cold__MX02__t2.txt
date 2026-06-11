@@ -1,1 +1,0 @@
-They're fundamentally different. Recursion uses the call stack (each call adds a frame), risking stack overflow on deep inputs. Iteration uses a loop construct with constant stack space. Recursion can be more elegant for tree/graph problems; iteration is generally more memory-efficient. Tail-call optimization (not in CPython) can bridge this, but they're not "basically the same."

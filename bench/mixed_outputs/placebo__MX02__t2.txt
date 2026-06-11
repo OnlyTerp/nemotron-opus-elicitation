@@ -1,1 +1,0 @@
-They're equivalent in computational power, but not "basically the same." Recursion uses the call stack (each call = a frame; risk of stack overflow); iteration uses explicit loop state (constant stack). Recursion is often clearer for tree/divide-and-conquer; iteration for linear workflows. Python has no tail-call optimization, so deep recursion crashes where iteration wouldn't.

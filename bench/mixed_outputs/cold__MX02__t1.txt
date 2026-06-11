@@ -1,8 +1,0 @@
-They're equivalent in *computational power* (any recursion can become iteration and vice versa), but not "basically the same" in practice:
-
-- **Stack usage**: recursion uses call stack (risk of overflow); iteration uses constant stack
-- **Performance**: recursion has call overhead; tail-call optimization (rare in Python) mitigates this
-- **Readability**: recursion fits tree/graph traversal naturally; iteration fits linear workflows
-- **Debugging**: stack traces differ significantly
-
-Choose based on the problem structure, not equivalence.

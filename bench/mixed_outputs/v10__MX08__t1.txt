@@ -1,3 +1,0 @@
-`acc` is fine — it's a standard abbreviation for "accumulator" in reduce/fold contexts. Renaming to `total` or `running_sum` adds noise without clarity in a 4-line function.
-
-What matters: the function name `total` shadows nothing critical, but just use `sum(nums)` — it's implemented in C and faster. The code itself is correct.

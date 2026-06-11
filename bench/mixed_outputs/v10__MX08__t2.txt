@@ -1,1 +1,0 @@
-`acc` → `total` or `sum_`. `acc` is terse but recognizable; `total` is clearer and same length. The code is correct (a plain sum). Or just use `sum(nums)` — it's implemented in C, faster, and readable.

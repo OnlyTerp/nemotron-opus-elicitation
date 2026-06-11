@@ -1,1 +1,0 @@
-Black will leave it unchanged — it's already idiomatic single-line. The `max(lo, min(hi, x))` pattern is standard. Black only reformats when it deviates from its style (e.g., line length, spacing). This passes `black --check`.

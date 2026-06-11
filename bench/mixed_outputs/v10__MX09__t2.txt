@@ -1,8 +1,0 @@
-Black it. It's already clean; Black will only normalize spacing:
-
-```python
-def clamp(x, lo, hi):
-    return max(lo, min(hi, x))
-```
-
-No harm, enforces consistency. The logic is correct. Run Black on the whole project, not file-by-file.

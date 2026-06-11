@@ -1,9 +1,0 @@
-**Spaces (4)** — PEP 8 standard. The code already uses spaces. Tabs cause inconsistency across editors and break tools like Black. Also, your loop has an off-by-one error: `range(len(xs))` goes to `len(xs)-1`, but `xs[i+1]` accesses `len(xs)` on the last iteration. Fix:
-
-```python
-def is_sorted(xs):
-    for i in range(len(xs) - 1):
-        if xs[i] > xs[i + 1]:
-            return False
-    return True
-```

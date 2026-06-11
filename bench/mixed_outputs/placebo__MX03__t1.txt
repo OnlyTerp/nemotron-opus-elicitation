@@ -1,3 +1,0 @@
-Actually, Python lists *are* arrays of pointers — but indexing is **O(1) everywhere**. The list object holds a contiguous C array of `PyObject*` pointers. `lst[i]` is a single pointer dereference. Middle, end, beginning — all the same speed.
-
-What *is* slow: inserting/deleting at the front or middle (`O(n)` shift). Reading? Constant time. If you're doing millions of index lookups and it's slow, the bottleneck is what you're doing with the element, not the indexing. For fast front inserts, `collections.deque` gives O(1) both ends. But don't optimize indexing — it's already optimal.

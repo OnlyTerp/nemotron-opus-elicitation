@@ -1,5 +1,0 @@
-[USER MESSAGE]
-Show me how to use `itertools.flatten()` to flatten a list of lists.
-
----
-Respond ONLY with your answer to the user's message above. Max 160 words. Reason by hand (no tools). Do not restate these instructions. Plain prose/code only.

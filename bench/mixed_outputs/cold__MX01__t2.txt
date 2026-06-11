@@ -1,1 +1,0 @@
-Not quite. A closure is a function that *captures* variables from its enclosing scope. A nested function alone isn't a closure unless it references variables from outside its own body. Just being defined inside another function makes it a nested function — it becomes a closure only when it "closes over" free variables.

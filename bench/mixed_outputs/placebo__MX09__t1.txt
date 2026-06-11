@@ -1,8 +1,0 @@
-Leave it — it's already clean. Black would produce essentially the same thing:
-
-```python
-def clamp(x, lo, hi):
-    return max(lo, min(hi, x))
-```
-
-The logic is the standard "clamp" idiom: `min` caps the upper bound, `max` enforces the lower bound. The one-liner is idiomatic Python. Run Black on it — it'll confirm it's already formatted. No change needed.

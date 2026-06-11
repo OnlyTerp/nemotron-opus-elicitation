@@ -1,1 +1,0 @@
-`acc` is fine for a 3-line accumulator loop — it's a widely recognized abbreviation. `total` or `sum_` (trailing underscore to avoid shadowing builtin `sum`) are also good. The code is correct. Or just `return sum(nums)` — the builtin is C-optimized and handles empty lists.

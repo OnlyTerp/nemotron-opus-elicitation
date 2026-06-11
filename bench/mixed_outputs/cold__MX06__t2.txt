@@ -1,1 +1,0 @@
-The bug matters more: `total = total` does nothing; you meant `total = n`. For type hints: `def running_max(nums: list[int]) -> int:` and `total: int = nums[0]` helps but isn't required — inference is clear.

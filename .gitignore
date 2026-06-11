@@ -66,3 +66,27 @@ bench/*.py
 # Keep these (the source of truth)
 # bench/testbank*.md
 # bench/grade_*.txt (rubrics)
+
+# More bench intermediates (regenerable; keep testbanks/rubrics/exp27 docs)
+bench/buried_blind/
+bench/buried_drivers/
+bench/buried_outputs/
+bench/buried_prompts/
+bench/code_retry/
+bench/code_retry2/
+bench/drivers/
+bench/fab_drivers/
+bench/fab_prompts/
+bench/logic2_raw/
+bench/logic2_retry/
+bench/mixed_drivers/
+bench/mixed_outputs/
+bench/mixed_prompts/
+bench/multiturn/
+bench/qwen_drivers/
+bench/qwen_outputs/
+bench/reason_drivers/
+bench/grade_*.txt
+bench/*_bad.txt
+bench/raw_g2.txt
+bench/__pycache__/

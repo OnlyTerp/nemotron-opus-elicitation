@@ -1,5 +1,0 @@
-Loading the entire 8GB CSV in `__getitem__` per sample is the disaster — `num_workers` and `pin_memory` are irrelevant when your dataset reads 8GB from disk for every single row.
-
-Fix the dataset: load the CSV **once** in `__init__` (or use `pandas.read_csv(..., chunksize=...)` + memory-mapped numpy arrays). Better: convert to Parquet/Feather/HDF5/LMDB — columnar formats let you read only needed columns/rows. `num_workers>0` only helps if `__getitem__` is fast; currently it serializes 8GB reads across workers, multiplying I/O.
-
-If you must keep CSV: `self.df = pd.read_csv(path)` in `__init__`, then `__getitem__` just does `self.df.iloc[idx]`. `pin_memory=True` helps GPU transfer *after* data is in RAM — it does not fix disk I/O. Profile with `torch.profiler` — you'll see 99% time in `read_csv`.

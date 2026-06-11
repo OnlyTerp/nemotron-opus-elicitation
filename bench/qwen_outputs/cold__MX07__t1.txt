@@ -1,1 +1,0 @@
-PEP 8 mandates spaces (4 per level) in Python — never tabs. Mixtab causes maintenance nightmares. Beyond that, the code has a critical bug: `xs[i+1]` raises `IndexError` when `i == len(xs) - 1`. Fix by iterating to `len(xs) - 1`: `range(len(xs) - 1)`. Or replace the whole function with `all(xs[i] <= xs[i+1] for i in range(len(xs)-1))` for correctness and readability.

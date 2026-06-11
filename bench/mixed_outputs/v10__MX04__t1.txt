@@ -1,6 +1,0 @@
-You're optimizing the wrong thing. The JSON library is irrelevant — your loop has two **obvious, massive inefficiencies**:
-
-1. `len(my_list)` in the condition: **hoist it out** — `n = len(my_list); for i in range(n):`
-2. Rebuilding a `set` from a constant list every iteration: **move it outside the loop** — `const_set = set(const_list)`
-
-Those two changes drop the loop from O(n·m) to O(n + m). `orjson`/`ujson` are 2-5× faster than `json`, but they won't fix algorithmic waste. Fix the loop first; then benchmark serialization if it's still a bottleneck.

@@ -1,5 +1,0 @@
-You're optimizing the wrong thing. The JSON library is irrelevant — the hot loop's real problems:
-1. **Hoist `len(my_list)`** out of the condition: `n = len(my_list); for i in range(n):`
-2. **Hoist the set construction** out of the loop: `const_set = set(constant_list)` once, then use it inside.
-
-Fix those first. They're O(n) vs O(1) per iteration. JSON serialization happens once at the end — use `orjson` or `ujson` if you care, but it's not your bottleneck.

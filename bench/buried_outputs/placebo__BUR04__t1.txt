@@ -1,5 +1,0 @@
-Loading the entire 8GB CSV in `__getitem__` is your bottleneck — you're reading 8GB *per sample*. `num_workers` and `pin_memory` are irrelevant until you fix the I/O pattern.
-
-Fix: load the CSV **once** in `__init__` (or use `pd.read_csv` with `chunksize` for memory mapping). Better: convert to Parquet/Feather and use `torchdata.datapipes` or `datasets` library for memory-mapped, columnar access with fast random reads.
-
-Then: `num_workers=4-8` (match CPU cores), `pin_memory=True` (if GPU), `persistent_workers=True`. But the CSV-in-__getitem__ must go first — no DataLoader tuning compensates for O(n) per-sample I/O.

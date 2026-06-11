@@ -1,7 +1,0 @@
-Loading 8GB CSV in `__getitem__` every call is your bottleneck — O(n) I/O per sample. `num_workers`/`pin_memory` are irrelevant until you fix the data loading. Solutions in order:
-
-1. **Pre-process once**: Convert CSV to parquet/arrow/npz with row offsets, or use `pandas.read_csv(..., chunksize=...)` to build an index file (byte offsets per row).
-2. **Memory-map**: `np.memmap` or `polars.scan_csv` for lazy columnar access.
-3. **IterableDataset**: Stream rows without random access if shuffle isn't critical.
-
-For DataLoader: `num_workers=4-8` (CPU cores), `pin_memory=True` (if GPU), `persistent_workers=True` (PyTorch 1.7+). But these are noise compared to fixing `__getitem__`.

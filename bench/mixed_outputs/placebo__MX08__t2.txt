@@ -1,1 +1,0 @@
-`acc` is fine — standard for "accumulator." `total` or `sum_` are also clear. Honestly, just `return sum(nums)` — the built-in is C-optimized. No bug here; the code is a correct sum.

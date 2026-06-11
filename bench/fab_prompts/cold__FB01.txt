@@ -1,5 +1,0 @@
-[USER MESSAGE]
-How do I use the built-in `list.shuffle()` method to shuffle a list in place? Show the syntax.
-
----
-Respond ONLY with your answer to the user's message above. Max 160 words. Reason by hand (no tools). Do not restate these instructions. Plain prose/code only.

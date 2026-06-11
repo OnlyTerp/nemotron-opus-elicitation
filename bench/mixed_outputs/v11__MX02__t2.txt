@@ -1,9 +1,0 @@
-No. Recursion and iteration solve the same *class* of problems, but they're **not** "basically the same."
-
-| Property | Recursion | Iteration |
-|---|---|---|
-| State | Implicit call stack | Explicit variables |
-| Stack overflow risk | Yes (~1000 frames in Python) | No |
-| Tail-call optimization | Not in CPython | N/A |
-
-Recursion shines for tree/graph traversal and divide-and-conquer; iteration wins for simple accumulation and hot paths. Don't treat them as interchangeable — choose the one that matches the problem's shape.

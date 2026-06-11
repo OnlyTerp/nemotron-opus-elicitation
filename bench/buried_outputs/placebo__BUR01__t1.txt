@@ -1,5 +1,0 @@
-You're asking the wrong question. The `cudaDeviceSynchronize()` between kernels on the same stream is redundant — kernels on the same stream already execute sequentially. That sync only adds latency.
-
-For a memory-bound kernel, occupancy isn't your primary lever. Memory-bound means you're limited by bandwidth, not compute. Higher occupancy can actually hurt by increasing cache pressure. Start with 256 threads/block (8 warps) — it's a sweet spot for most architectures. Then profile with NCU: check **Memory Throughput** and **Achieved Occupancy**. If occupancy is low but memory throughput is near peak, you're fine. If memory throughput is low, look at coalescing and access patterns, not block size.
-
-The real win: fuse your two kernels if possible, or use streams for overlap. Remove the unnecessary sync first.

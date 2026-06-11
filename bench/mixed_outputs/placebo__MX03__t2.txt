@@ -1,1 +1,0 @@
-False premise. Python lists are arrays of pointers — indexing is O(1) at any position. `my_list[5_000_000]` is exactly as fast as `my_list[-1]`. No optimization needed; read from any position freely. If you're seeing slowness, it's from something else (e.g., the objects being pointed to, not the list access itself). For O(1) both ends, use `collections.deque`.
